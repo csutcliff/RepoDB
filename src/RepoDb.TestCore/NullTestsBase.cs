@@ -470,9 +470,6 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
         public string? VAL3 { get; set; }
     }
 
-    public virtual string AltVarChar => "varchar";
-    public virtual string VarCharName => "varchar";
-
     [TestMethod]
     public async Task FieldLengthTest()
     {
@@ -935,6 +932,27 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
         {
             GlobalConfiguration.Setup(GlobalConfiguration.Options with { SqlServerIdentityInsert = false });
         }
+    }
+
+    [TestMethod]
+    public async Task CheckSpecialStringQueries()
+    {
+        using var sql = await CreateOpenConnectionAsync();
+
+        if (!await sql.SchemaObjectExistsAsync<RelatedTable>(cancellationToken: TestContext.CancellationToken))
+        {
+            await sql.CreateTableAsync<RelatedTable>();
+        }
+
+        await sql.QueryAsync<RelatedTable>(x => x.Name.StartsWith("A"));
+        await sql.QueryAsync<RelatedTable>(x => x.Name.EndsWith("A"));
+        await sql.QueryAsync<RelatedTable>(x => x.Name.Equals("A"));
+        await sql.QueryAsync<RelatedTable>(x => x.Name.Trim() == "A");
+        await sql.QueryAsync<RelatedTable>(x => x.Name.TrimStart() == "A");
+        await sql.QueryAsync<RelatedTable>(x => x.Name.TrimEnd() == "A");
+        await sql.QueryAsync<RelatedTable>(x => x.Name.ToUpper() == "A");
+        await sql.QueryAsync<RelatedTable>(x => x.Name.ToLower() == "a");
+        await sql.QueryAsync<RelatedTable>(x => x.Name.Length == 1, trace: new DiagnosticsTracer());
     }
 }
 

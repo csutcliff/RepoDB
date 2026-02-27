@@ -321,6 +321,7 @@ public static class DbCommandExtension
         DbType? dbType,
         Type? fallbackType)
     {
+        bool haveDbtype = (dbType is { });
         // DbType
         valueType ??= TypeCache.Get(dbField?.Type).UnderlyingType ?? fallbackType;
         dbType ??= classProperty?.DbType ?? (dbField?.Type ?? fallbackType ?? valueType)?.GetDbType();
@@ -332,7 +333,7 @@ public static class DbCommandExtension
         InvokePropertyHandler(classProperty, parameter, ref valueType, ref value);
 
         // Automatic Conversion
-        var converted = AutomaticConvert(dbField, ref valueType, ref value);
+        var converted = !haveDbtype && AutomaticConvert(dbField, ref valueType, ref value);
         parameter.Value = value ?? DBNull.Value;
         if (converted)
         {
@@ -505,6 +506,7 @@ public static class DbCommandExtension
             var dbField = GetDbField(kvp.Key, dbFields);
             var value = kvp.Value;
             ClassProperty? classProperty = null;
+            DbType? dbType = null;
 
             try
             {
@@ -514,6 +516,7 @@ public static class DbCommandExtension
                     value = commandParameter.Value;
                     dbField ??= GetDbField(commandParameter.Field.FieldName, dbFields);
                     classProperty = PropertyCache.Get(commandParameter.MappedToType, commandParameter.Field.FieldName, true);
+                    dbType ??= commandParameter.DbType;
                 }
                 var parameter = CreateParameterIf(kvp.Key, value) ??
                     CreateParameter(command,
@@ -523,7 +526,7 @@ public static class DbCommandExtension
                         classProperty,
                         dbField,
                         null,
-                        null,
+                        dbType,
                         null);
                 command.Parameters.Add(parameter);
             }

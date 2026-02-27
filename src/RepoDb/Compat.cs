@@ -202,7 +202,10 @@ namespace RepoDb
                     Throw(new ArgumentNullException(paramName, "Argument cannot be null or whitespace."));
                 }
             }
+        }
 
+        extension(ArgumentException)
+        {
             public static void ThrowIfNullOrEmpty([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
             {
                 if (string.IsNullOrEmpty(argument))
