@@ -82,7 +82,7 @@ The execute methods below support all the RDBMS data providers.
 - [ExecuteReader](https://repodb.net/operation/executereader)
 - [ExecuteQueryMultiple](https://repodb.net/operation/executequerymultiple)
 
-Whereas the fluent methods below only support the [SQL Server](https://www.nuget.org/packages/AmpScm.RepoDb.SqlServer), [SQLite](https://www.nuget.org/packages/AmpScm.RepoDb.SqLite.Microsoft), [MySQL](https://www.nuget.org/packages/AmpScm.RepoDb.MySql) and [PostgreSQL](https://www.nuget.org/packages/AmpScm.RepoDb.PostgreSql) RDBMS data providers.
+Whereas the fluent methods below only support the [SQL Server](https://www.nuget.org/packages/AmpScm.RepoDb.SqlServer), [SQLite](https://www.nuget.org/packages/AmpScm.RepoDb.SqLite.Microsoft), [MySQL](https://www.nuget.org/packages/AmpScm.RepoDb.MySql), [Oracle](https://www.nuget.org/packages/AmpScm.RepoDb.Oracle) and [PostgreSQL](https://www.nuget.org/packages/AmpScm.RepoDb.PostgreSql) RDBMS data providers.
 
 - [Query](https://repodb.net/operation/query)
 - [Insert](https://repodb.net/operation/insert)
@@ -106,13 +106,13 @@ You can always target the version when installing the library, even it is on a s
 
 ## .NET Type Coercion
 
-By default, RepoDb does not do the automatic .NET CLR Type conversion during the serialization and deserialization process. The coercion support is completely dependent to the ADO.NET coercion capability. But when types like enums are used
-additional handling is generated in the entity layer to 'do the right thing'. What the right thing is in your case can be configured using the `EnumHandling` property when initializing using the `GlobalConfigurationOptions` instance
-passed to `GlobalConfiguration.Setup()` when initializing RepoDb. Whether strings or integers are used in the database is usually found by identifying the schema on first use, but when using custom queries the `EnumDefaultDatabaseType` setting
-is used first.
+This fork of RepoDB does more type conversions than the original, but only if the transforms can be calculated from the entity and database structure. In that case the conversions will be compiled into the
+generated insert/extract logic. It still is quite strict compared to some other ORM implementations that just switch types on the fly, but it should help improving compatibility between databases.
 
 If needed the library allows you to register custom conversion classes. For recently added .Net classes the AmpScm fork adds DateOnly and TimeOnly support out of the box, and also improves quite a few
 of the standard conversions (e.g. enums) with proper `NULL` support.
+
+Some support for Json typed columns is now also available, as is support for types that convert itself to/from strings using IParsable/IFormattable.
 
 **Note:** The exception that is being thrown is dependent to what the underlying ADO.NET coercion exception. If the [Automatic](https://repodb.net/enumeration/conversiontype) conversion is used, the extracted value will always be evaluated and an additional conversion logic will be used (if needed). The conversion logic is through the AOT compilation of [System.Linq.Expressions.Expression.Convert](https://docs.microsoft.com/en-us/dotnet/api/system.linq.expressions.expression.convert?view=netcore-3.1) and/or [System.Convert](https://docs.microsoft.com/en-us/dotnet/api/system.convert?view=netcore-3.1).
 
