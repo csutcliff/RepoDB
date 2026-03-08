@@ -1211,6 +1211,7 @@ public static partial class DbConnectionExtension
         connection.EnsureOpen();
         using var myTransaction = (transaction is null && Transaction.Current is null) ? connection.BeginTransaction() : null;
         transaction ??= myTransaction;
+        BaseDbHelper? dbh = null;
 
         // Create the command
         using (var command = (DbCommand)connection.CreateCommand("", CommandType.Text, commandTimeout, transaction))
@@ -1247,6 +1248,8 @@ public static partial class DbConnectionExtension
                 {
                     context.MultipleDataEntitiesParametersSetterFunc?.Invoke(command, batchItems.OfType<object?>().AsList());
                 }
+
+                (dbh ??= GetDbHelper(connection) as BaseDbHelper)?.PrepareForBatchOperation(command, batchItems.Count);
 
                 // Prepare the command
                 if (doPrepare)

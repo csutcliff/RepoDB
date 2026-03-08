@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Transactions;
 using RepoDb.Contexts.Execution;
 using RepoDb.Contexts.Providers;
+using RepoDb.DbSettings;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
 using RepoDb.StatementBuilders;
@@ -1262,6 +1263,7 @@ public static partial class DbConnectionExtension
         connection.EnsureOpen();
         using var myTransaction = (transaction is null && Transaction.Current is null) ? connection.BeginTransaction() : null;
         transaction ??= myTransaction;
+        BaseDbHelper? dbh = null;
 
         // Create the command
         using (var command = (DbCommand)connection.CreateCommand("", CommandType.Text, commandTimeout, transaction))
@@ -1301,6 +1303,8 @@ public static partial class DbConnectionExtension
                 {
                     context.MultipleDataEntitiesParametersSetterFunc?.Invoke(command, batchItems.OfType<object?>().AsList());
                 }
+
+                (dbh ??= GetDbHelper(connection) as BaseDbHelper)?.PrepareForBatchOperation(command, batchItems.Count);
 
                 // Prepare the command
                 if (doPrepare)
@@ -1423,184 +1427,116 @@ public static partial class DbConnectionExtension
         int maxBatchSize = dbSetting.IsMultiStatementExecutable
             ? Math.Min(batchSize <= 0 ? dbSetting.MaxParameterCount / fields.Concat(qualifiers).Select(x => x.FieldName).Distinct().Count() : batchSize, dbSetting.MaxQueriesInBatchCount)
             : 1;
-        batchSize = Math.Min(batchSize <= 0 ? Constant.DefaultBatchOperationSize : batchSize, entities.Count());
 
         // Get the context
         var entityType = GetEntityType(entities);
-        var context = await MergeAllExecutionContextProvider.CreateAsync(entityType,
-            connection,
-            entities,
-            tableName,
-            qualifiers,
-            Math.Min(maxBatchSize, entities.Count()),
-            fields,
-            noUpdateFields,
-            hints,
-            transaction,
-            statementBuilder,
-            cancellationToken).ConfigureAwait(false);
+        MergeAllExecutionContext? context = null;
         var result = 0;
 
         await connection.EnsureOpenAsync(cancellationToken).ConfigureAwait(false);
 
         using var myTransaction = (transaction is null && Transaction.Current is null) ? await connection.BeginTransactionAsync(cancellationToken).ConfigureAwait(false) : null;
         transaction ??= myTransaction;
+        BaseDbHelper? dbh = null;
 
         // Create the command
-        using (var command = (DbCommand)connection.CreateCommand(context.CommandText,
-            CommandType.Text, commandTimeout, transaction))
+        using (var command = (DbCommand)connection.CreateCommand("", CommandType.Text, commandTimeout, transaction))
         {
-            // Directly execute if the entities is only 1 (performance)
-            if (batchSize == 1)
+            int? positionIndex = null;
+            bool doPrepare = dbSetting.IsPreparable;
+
+            // Iterate the batches
+            foreach (var batchItems in entities.ChunkOptimally(maxBatchSize))
             {
-                // Much better to use the actual single-based setter (performance)
-                foreach (var entity in entities.AsList())
+                if (batchItems.Count != context?.BatchSize)
                 {
-                    // Set the values
-                    context.SingleDataEntityParametersSetterFunc?.Invoke(command, entity);
+                    // Get a new execution context from cache
+                    context = await MergeAllExecutionContextProvider.CreateAsync(entityType,
+                        connection,
+                        entities,
+                        tableName,
+                        qualifiers,
+                        batchItems.Count,
+                        fields,
+                        noUpdateFields,
+                        hints,
+                        transaction,
+                        statementBuilder,
+                        cancellationToken).ConfigureAwait(false);
 
-                    // Prepare the command
-                    if (dbSetting.IsPreparable)
-                    {
-                        await command.PrepareAsync(cancellationToken).ConfigureAwait(false);
-                    }
-
-                    // Before Execution
-                    var traceResult = await Tracer
-                        .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
-
-                    // Silent cancellation
-                    if (traceResult?.CancellableTraceLog?.IsCancelled == true)
-                    {
-                        return result;
-                    }
-
-                    // Actual Execution
-                    var returnValue = Converter.DbNullToNull(await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false));
-
-                    // After Execution
-                    await Tracer
-                        .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
-
-                    // Set the return value
-                    if (returnValue is not null)
-                    {
-                        context.KeyPropertySetterFunc?.Invoke(entity, returnValue);
-                    }
-
-                    // Iterate the result
-                    result++;
+                    // Set the command properties
+                    command.CommandText = context.CommandText;
+                    doPrepare = dbSetting.IsPreparable;
                 }
-            }
-            else
-            {
-                int? positionIndex = null;
-                bool doPrepare = dbSetting.IsPreparable;
 
-                // Iterate the batches
-                foreach (var batchItems in entities.Split(batchSize))
+                // Set the values
+                if (batchItems.Count == 1)
                 {
-                    if (batchItems.Length != context.BatchSize)
-                    {
-                        // Get a new execution context from cache
-                        context = await MergeAllExecutionContextProvider.CreateAsync(entityType,
-                            connection,
-                            entities,
-                            tableName,
-                            qualifiers,
-                            batchItems.Length,
-                            fields,
-                            noUpdateFields,
-                            hints,
-                            transaction,
-                            statementBuilder,
-                            cancellationToken).ConfigureAwait(false);
+                    context.SingleDataEntityParametersSetterFunc?.Invoke(command, batchItems.First());
+                }
+                else
+                {
+                    context.MultipleDataEntitiesParametersSetterFunc?.Invoke(command, batchItems.OfType<object?>().AsList());
+                }
 
-                        // Set the command properties
-                        command.CommandText = context.CommandText;
-                        doPrepare = dbSetting.IsPreparable;
-                    }
+                (dbh ??= GetDbHelper(connection) as BaseDbHelper)?.PrepareForBatchOperation(command, batchItems.Count);
 
-                    // Set the values
-                    if (batchItems.Length == 1)
-                    {
-                        context.SingleDataEntityParametersSetterFunc?.Invoke(command, batchItems.First());
-                    }
-                    else
-                    {
-                        context.MultipleDataEntitiesParametersSetterFunc?.Invoke(command, batchItems.OfType<object?>().AsList());
-                    }
+                // Prepare the command
+                if (doPrepare)
+                {
+                    await command.PrepareAsync(cancellationToken).ConfigureAwait(false);
+                    doPrepare = false;
+                }
 
-                    // Prepare the command
-                    if (doPrepare)
-                    {
-                        await command.PrepareAsync(cancellationToken).ConfigureAwait(false);
-                        doPrepare = false;
-                    }
+                // Before Execution
+                var traceResult = await Tracer
+                    .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
 
-                    // Actual Execution
-                    if (context.KeyPropertySetterFunc == null)
-                    {
-                        // Before Execution
-                        var traceResult = await Tracer
-                            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
+                // Silent cancellation
+                if (traceResult?.CancellableTraceLog?.IsCancelled == true)
+                {
+                    return result;
+                }
 
-                        // Silent cancellation
-                        if (traceResult?.CancellableTraceLog?.IsCancelled == true)
-                        {
-                            return result;
-                        }
 
-                        // No identity setters
-                        result += await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
-
-                        // After Execution
-                        await Tracer
-                            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        // Before Execution
-                        var traceResult = await Tracer
-                            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
-
-                        // Silent cancellation
-                        if (traceResult?.CancellableTraceLog?.IsCancelled == true)
-                        {
-                            return result;
-                        }
-
-                        // Set the identity back
+                // Actual Execution
+                if (context.KeyPropertySetterFunc == null)
+                {
+                    // No identity setters
+                    result += await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    // Set the identity back
 #if NET
-                        await
+                    await
 #endif
-                        using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+                    using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
 
-                        // Get the results.
-                        var position = 0;
-                        do
+                    // Get the results.
+                    var position = 0;
+                    do
+                    {
+                        while (position < batchItems.Count && await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
                         {
-                            while (position < batchItems.Length && await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+                            var value = Converter.DbNullToNull(reader.GetValue(0));
+                            if (value is not null)
                             {
-                                var value = Converter.DbNullToNull(reader.GetValue(0));
-                                if (value is not null)
-                                {
-                                    positionIndex ??= (reader.FieldCount > 1) && string.Equals(BaseStatementBuilder.RepoDbOrderColumn, reader.GetName(reader.FieldCount - 1), StringComparison.OrdinalIgnoreCase) ? reader.FieldCount - 1 : -1;
-                                    var index = positionIndex >= 0 && positionIndex < reader.FieldCount ? reader.GetInt32(positionIndex.Value) : position;
-                                    context.KeyPropertySetterFunc.Invoke(batchItems[index], value);
-                                }
-                                position++;
+                                positionIndex ??= (reader.FieldCount > 1) && string.Equals(BaseStatementBuilder.RepoDbOrderColumn, reader.GetName(reader.FieldCount - 1), StringComparison.OrdinalIgnoreCase) ? reader.FieldCount - 1 : -1;
+                                var index = positionIndex >= 0 && positionIndex < reader.FieldCount ? reader.GetInt32(positionIndex.Value) : position;
+                                context.KeyPropertySetterFunc.Invoke(batchItems.GetAt(index), value);
                             }
+                            position++;
                         }
-                        while (position < batchItems.Length && await reader.NextResultAsync(cancellationToken).ConfigureAwait(false));
-
-                        result += batchItems.Length;
-
-                        // After Execution
-                        await Tracer
-                            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
                     }
+                    while (position < batchItems.Count && await reader.NextResultAsync(cancellationToken).ConfigureAwait(false));
+
+                    result += batchItems.Count;
                 }
+
+                // After Execution
+                await Tracer
+                    .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
             }
         }
 

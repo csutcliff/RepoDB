@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Oracle.ManagedDataAccess.Types;
 using RepoDb.Interfaces;
 
 namespace RepoDb.Resolvers;
@@ -71,7 +72,7 @@ public sealed partial class OracleDbTypeToClientTypeResolver : IResolver<string,
             // JSON (Oracle 21c+ supports JSON natively as datatype)
             "json" => typeof(string),
 
-            "vector" => typeof(float[]), // Oracle 21c+ supports vector types for AI/ML workloads
+            "vector" => typeof(OracleVector), // Oracle 21c+ supports vector types for AI/ML workloads
 
             // Defaults
             _ when RemoveParens.IsMatch(dbTypeName) => Resolve(RemoveParens.Replace(dbTypeName, "")),

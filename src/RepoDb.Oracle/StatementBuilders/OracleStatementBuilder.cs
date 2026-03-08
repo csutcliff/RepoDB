@@ -132,7 +132,7 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
 
     public override string CreateMergeAll(string tableName, IEnumerable<Field> fields, IEnumerable<Field>? noUpdateFields, IEnumerable<Field>? qualifiers, int batchSize, IEnumerable<DbField> keyFields, string? hints = null)
     {
-        throw new NotImplementedException();
+        return "/*FORALL*/" + CreateMerge(tableName, fields, noUpdateFields, keyFields, qualifiers, hints);
     }
 
     public override string CreateSkipQuery(string tableName, IEnumerable<Field> fields, int skip, int take, IEnumerable<OrderField>? orderBy = null, QueryGroup? where = null, string? hints = null)

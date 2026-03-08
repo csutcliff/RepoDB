@@ -217,7 +217,7 @@ ORDER BY C.COLUMN_ID
 
     public override object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
-        switch(value)
+        switch (value)
         {
 #if NET
             case DateOnly dateOnly:
@@ -226,12 +226,15 @@ ORDER BY C.COLUMN_ID
             case TimeOnly to:
                 return to.ToTimeSpan();
 #endif
-            case float[]:
+            case OracleVector vector:
+                (parameter as OracleParameter)?.OracleDbType = vector.ProviderType;
+                return value;
+            case float[] floats:
                 (parameter as OracleParameter)?.OracleDbType = OracleDbType.Vector_Float32;
-                return value;
-            case double[]:
+                return new OracleVector(floats);
+            case double[] doubles:
                 (parameter as OracleParameter)?.OracleDbType = OracleDbType.Vector_Float64;
-                return value;
+                return new OracleVector(doubles);
             default:
                 return base.ParameterValueToDb(value, parameter);
         }
@@ -384,11 +387,14 @@ ORDER BY C.COLUMN_ID
 
     static OracleDbHelper()
     {
-        ProviderSpecificTypeTransforms.TryAdd((typeof(ReadOnlyMemory<float>), typeof(float[])),
-            (fromExpr) => Expression.Convert(Expression.Call(fromExpr, "ToArray", null, []), typeof(float[]))
+        ProviderSpecificTypeTransforms.TryAdd((typeof(ReadOnlyMemory<float>), typeof(OracleVector)),
+            (fromExpr) => Expression.New(typeof(OracleVector).GetConstructor(new[] { typeof(float[]) })!, [Expression.Convert(Expression.Call(fromExpr, "ToArray", null, []), typeof(float[]))])
+        );
+        ProviderSpecificTypeTransforms.TryAdd((typeof(OracleVector), typeof(ReadOnlyMemory<float>)),
+            (fromExpr) => Expression.New(typeof(ReadOnlyMemory<float>).GetConstructor(new[] { typeof(float[]) })!, [Expression.Call(fromExpr, typeof(OracleVector).GetMethod(nameof(OracleVector.ToFloatArray))!, [])])
         );
         ProviderSpecificTypeTransforms.TryAdd((typeof(float[]), typeof(ReadOnlyMemory<float>)),
-            (fromExpr) => Expression.New(typeof(ReadOnlyMemory<float>).GetConstructor(new[] { typeof(float[]) })!, [ fromExpr ])
+            (fromExpr) => Expression.New(typeof(ReadOnlyMemory<float>).GetConstructor(new[] { typeof(float[]) })!, [fromExpr])
         );
     }
 }

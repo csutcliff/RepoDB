@@ -876,7 +876,7 @@ public static class DbCommandExtension
             }
             else if (fromType == StaticType.Guid && targetType == StaticType.String)
             {
-                return AutomaticConvertGuidToString(value);
+                return value?.ToString();
             }
             else if (fromType == StaticType.DateTimeOffset && targetType == StaticType.DateTime && value is DateTimeOffset dto)
             {
@@ -1108,14 +1108,6 @@ public static class DbCommandExtension
             .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken);
         return result;
     }
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    private static string? AutomaticConvertGuidToString(object? value) =>
-        value?.ToString();
 
 #if NET
     private static DateTime? AutomaticConvertDateOnlyToDateTime(object? value) =>

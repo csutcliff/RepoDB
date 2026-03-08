@@ -689,19 +689,20 @@ public static partial class DbConnectionExtension
                     doPrepare = false;
                 }
 
+
+                // Before Execution
+                var traceResult = await Tracer
+                    .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
+
+                // Silent cancellation
+                if (traceResult?.CancellableTraceLog?.IsCancelled == true)
+                {
+                    return result;
+                }
+
                 // Actual Execution
                 if (context.IdentitySetterFunc == null || fetchIdentity is { })
                 {
-                    // Before Execution
-                    var traceResult = await Tracer
-                        .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
-
-                    // Silent cancellation
-                    if (traceResult?.CancellableTraceLog?.IsCancelled == true)
-                    {
-                        return result;
-                    }
-
                     // No identity setters
                     result += await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
@@ -714,22 +715,9 @@ public static partial class DbConnectionExtension
                             context.IdentitySetterFunc.Invoke(batchItems.GetAt(position++), value);
                         }
                     }
-
-                    // After Execution
-                    await Tracer
-                        .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
-                    // Before Execution
-                    var traceResult = await Tracer
-                        .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
-
-                    if (traceResult?.CancellableTraceLog?.IsCancelled == true)
-                    {
-                        return result;
-                    }
-
                     // Set the identity back
 #if NET
                     await
@@ -756,11 +744,9 @@ public static partial class DbConnectionExtension
 
                     // Set the result
                     result += batchItems.Count;
-
-                    // After Execution
-                    await Tracer
-                        .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
                 }
+                // After Execution
+                await Tracer.InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
             }
         }
 

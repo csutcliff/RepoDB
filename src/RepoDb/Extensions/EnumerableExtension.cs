@@ -111,7 +111,7 @@ public static class EnumerableExtension
         if (array.Length == 0)
             yield break;
 
-        if (array.Length <= MinOptimalChunkSize)
+        if (array.Length <= maxChunkSize)
         {
             yield return new ArraySegment<T>(array);
             yield break;
