@@ -4,6 +4,9 @@ using RepoDb.Interfaces;
 
 namespace RepoDb.Resolvers;
 
+/// <summary>
+/// 
+/// </summary>
 public sealed partial class OracleDbTypeToClientTypeResolver : IResolver<string, Type>
 {
 #if NET9_0_OR_GREATER

@@ -27,13 +27,10 @@ public static class PostgreSqlBootstrap
     [Obsolete("This class will soon to be hidden as internal class. Use the 'GlobalConfiguration.Setup().UsePostgreSql()' method instead.")]
     public static void Initialize() => InitializeInternal();
 
-    /// <summary>
-    ///
-    /// </summary>
     internal static void InitializeInternal()
     {
         // Skip if already initialized
-        if (IsInitialized == true)
+        if (IsInitialized)
         {
             return;
         }

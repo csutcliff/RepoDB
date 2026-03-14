@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Npgsql;
+﻿using Npgsql;
 using RepoDb.Exceptions;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -75,15 +74,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
 
     #region CreateInsert
 
-    /// <summary>
-    /// Creates a SQL Statement for insert operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be inserted.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for insert operation.</returns>
+    /// <inheritdoc />
     public override string CreateInsert(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<DbField> keyFields,
@@ -147,16 +138,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
 
     #region CreateInsertAll
 
-    /// <summary>
-    /// Creates a SQL Statement for insert-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be inserted.</param>
-    /// <param name="batchSize">The batch size of the operation.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for insert operation.</returns>
+    /// <inheritdoc />
     public override string CreateInsertAll(string tableName,
         IEnumerable<Field> fields,
         int batchSize,
@@ -181,14 +163,14 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
 
         // Primary Key
         if (primaryField != null &&
-            primaryField.HasDefaultValue == false &&
+            !primaryField.HasDefaultValue &&
             !string.Equals(primaryField.FieldName, identityField?.FieldName, StringComparison.OrdinalIgnoreCase))
         {
             var isPresent = fields
                 .FirstOrDefault(f =>
                     string.Equals(f.FieldName, primaryField.FieldName, StringComparison.OrdinalIgnoreCase)) != null;
 
-            if (isPresent == false)
+            if (!isPresent)
             {
                 throw new PrimaryFieldNotFoundException($"As the primary field '{primaryField.FieldName}' is not an identity nor has a default value, it must be present on the insert operation.");
             }
@@ -242,16 +224,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
 
     #region CreateMerge
 
-    /// <summary>
-    /// Creates a SQL Statement for merge operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMerge(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -355,17 +328,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
 
     #region CreateMergeAll
 
-    /// <summary>
-    /// Creates a SQL Statement for merge-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="batchSize">The batch size of the operation.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMergeAll(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -630,7 +593,10 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
     }
     #endregion
 
+    /// <inheritdoc />
     public override string? JsonColumnType => "json";
+    /// <inheritdoc />
     public override string? VectorColumnType => "vector";
+    /// <inheritdoc />
     public override string IdentityDefinition => "GENERATED ALWAYS AS IDENTITY";
 }

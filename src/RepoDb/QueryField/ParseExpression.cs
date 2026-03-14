@@ -13,12 +13,6 @@ public partial class QueryField
     /// </summary>
     protected internal virtual bool NoParametersNeeded => Operation is Operation.IsNotNull or Operation.IsNull;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="field"></param>
-    /// <returns></returns>
     private static ClassProperty? GetTargetProperty<TEntity>(Field field)
         where TEntity : class
     {
@@ -30,11 +24,6 @@ public partial class QueryField
             ?? properties.GetByPropertyName(field.FieldName);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expressionType"></param>
-    /// <returns></returns>
     internal static Operation GetOperation(ExpressionType expressionType)
     {
         return expressionType switch
@@ -49,13 +38,6 @@ public partial class QueryField
         };
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="field"></param>
-    /// <param name="enumerable"></param>
-    /// <param name="unaryNodeType"></param>
-    /// <returns></returns>
     private static QueryField ToIn(Field field,
         System.Collections.IEnumerable enumerable,
         ExpressionType? unaryNodeType = null)
@@ -68,7 +50,7 @@ public partial class QueryField
         System.Collections.IEnumerable enumerable,
         ExpressionType? unaryNodeType = null)
     {
-        var operation = (unaryNodeType == ExpressionType.Not || unaryNodeType == ExpressionType.NotEqual) ?
+        var operation = (unaryNodeType is ExpressionType.Not or ExpressionType.NotEqual) ?
             Operation.NotEqual : Operation.Equal;
         foreach (var item in enumerable)
         {
@@ -76,13 +58,6 @@ public partial class QueryField
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="field"></param>
-    /// <param name="value"></param>
-    /// <param name="unaryNodeType"></param>
-    /// <returns></returns>
     private static QueryField ToLike(Field field,
         object? value,
         ExpressionType? unaryNodeType = null)
@@ -91,27 +66,21 @@ public partial class QueryField
         return new QueryField(field, operation, value, null, false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="methodName"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private static string ConvertToLikeableValue(string methodName,
         string value)
     {
         if (methodName == nameof(string.Contains))
         {
-            value = value.StartsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat("%", value);
-            value = value.EndsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat(value, "%");
+            value = value.StartsWith('%') ? value : string.Concat("%", value);
+            value = value.EndsWith('%') ? value : string.Concat(value, "%");
         }
         else if (methodName == nameof(string.StartsWith))
         {
-            value = value.EndsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat(value, "%");
+            value = value.EndsWith('%') ? value : string.Concat(value, "%");
         }
         else if (methodName == nameof(string.EndsWith))
         {
-            value = value.StartsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat("%", value);
+            value = value.StartsWith('%') ? value : string.Concat("%", value);
         }
         return value;
     }
@@ -120,12 +89,6 @@ public partial class QueryField
      * Binary
      */
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     internal static QueryGroup Parse<TEntity>(BinaryExpression expression)
         where TEntity : class
     {
@@ -203,12 +166,6 @@ public partial class QueryField
         return new QueryGroup(check.AsEnumerable());
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="enumType"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private static object? ToEnumValue(Type enumType,
         object? value)
     {
@@ -255,13 +212,6 @@ public partial class QueryField
      * MethodCall
      */
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <param name="unaryNodeType"></param>
-    /// <returns></returns>
     internal static IEnumerable<QueryField>? Parse<TEntity>(MethodCallExpression expression,
     ExpressionType? unaryNodeType = null)
     where TEntity : class
@@ -287,8 +237,8 @@ public partial class QueryField
         {
             return ParseContains<TEntity>(expression, unaryNodeType)?.AsEnumerable();
         }
-        else if (expression.Method.Name == nameof(string.StartsWith) ||
-            expression.Method.Name == nameof(string.EndsWith))
+        else if (expression.Method.Name is (nameof(string.StartsWith)) or
+            (nameof(string.EndsWith)))
         {
             return ParseStartEndsWith<TEntity>(expression, unaryNodeType)?.AsEnumerable();
         }
@@ -304,13 +254,6 @@ public partial class QueryField
             return null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    ///
-    /// <returns></returns>
     internal static QueryField ParseEquals<TEntity>(MethodCallExpression expression)
         where TEntity : class
     {
@@ -345,13 +288,6 @@ public partial class QueryField
             GetProperty<TEntity>(expression.Arguments.Last());
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    ///
-    /// <returns></returns>
     internal static QueryField ParseCompareString<TEntity>(MethodCallExpression expression)
         where TEntity : class
     {
@@ -363,7 +299,7 @@ public partial class QueryField
 
         // Return
         if (property is PropertyInfo pi
-            && PropertyCache.Get(pi.DeclaringType!, pi, true) is { } mappedProperty)
+            && PropertyCache.Get(pi.DeclaringType, pi, true) is { } mappedProperty)
         {
             return new QueryField(mappedProperty.AsField(), value);
         }
@@ -435,13 +371,6 @@ public partial class QueryField
             ConvertToLikeableValue(expression.Method.Name, value ?? ""), unaryNodeType);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <param name="unaryNodeType"></param>
-    /// <returns></returns>
     internal static IEnumerable<QueryField> ParseAll<TEntity>(MethodCallExpression expression,
         ExpressionType? unaryNodeType = null)
         where TEntity : class
@@ -459,13 +388,6 @@ public partial class QueryField
             GetProperty<TEntity>(expression.Arguments.Last());
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <param name="unaryNodeType"></param>
-    /// <returns></returns>
     internal static IEnumerable<QueryField> ParseAny<TEntity>(MethodCallExpression expression,
         ExpressionType? unaryNodeType = null)
         where TEntity : class
@@ -485,11 +407,6 @@ public partial class QueryField
 
     #region GetProperty
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     internal static ClassProperty? GetProperty<TEntity>(Expression expression)
         where TEntity : class
     {
@@ -510,29 +427,14 @@ public partial class QueryField
             GetProperty<TEntity>(expression.Arguments.Last());
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static ClassProperty? GetProperty<TEntity>(LambdaExpression expression)
         where TEntity : class =>
         GetProperty<TEntity>(expression.Body);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static ClassProperty? GetProperty<TEntity>(BinaryExpression expression)
         where TEntity : class =>
         GetProperty<TEntity>(expression.Left) ?? GetProperty<TEntity>(expression.Right);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     internal static ClassProperty? GetProperty<TEntity>(MemberExpression expression)
         where TEntity : class
     {
@@ -547,12 +449,6 @@ public partial class QueryField
             return null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="propertyInfo"></param>
-    /// <returns></returns>
     internal static ClassProperty? GetProperty<TEntity>(PropertyInfo propertyInfo)
         where TEntity : class
     {

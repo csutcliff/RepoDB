@@ -33,8 +33,8 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
         : this(new MySqlDbTypeNameToClientTypeResolver())
     { }
 #else
-   /// <summary>
-    /// Creates a new instance of <see cref="MySqlDbHelper"/> class.
+    /// <summary>
+    /// Creates a new instance of <see cref="MySqlConnectorDbHelper"/> class.
     /// </summary>
     public MySqlConnectorDbHelper()
         : this(new MySqlConnectorDbTypeNameToClientTypeResolver())
@@ -52,7 +52,7 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
     }
 #else
  /// <summary>
-    /// Creates a new instance of <see cref="MySqlDbHelper"/> class.
+    /// Creates a new instance of <see cref="MySqlConnectorDbHelper"/> class.
     /// </summary>
     /// <param name="dbTypeResolver">The type resolver to be used.</param>
     public MySqlConnectorDbHelper(IResolver<string, Type> dbTypeResolver)
@@ -63,10 +63,6 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private const string FieldCommandText = @"
         SELECT
             COLUMN_NAME AS ColumnName,
@@ -90,10 +86,6 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
             AND TABLE_NAME = @TableName
         ORDER BY ORDINAL_POSITION";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static readonly HashSet<string> BlobTypes = new([
         "blob",
         "blobasarray",
@@ -106,11 +98,6 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
         "varbinary"
     ], StringComparer.OrdinalIgnoreCase);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
     private DbField ReaderToDbField(DbDataReader reader)
     {
         var columnType = reader.GetString(4);
@@ -228,12 +215,14 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
         FROM information_schema.tables
         WHERE table_schema = DATABASE()";
 
+    /// <inheritdoc />
     public override IEnumerable<DbSchemaObject> GetSchemaObjects(IDbConnection connection, IDbTransaction? transaction = null)
     {
         return connection.ExecuteQuery<(string Type, string Name, string Schema)>(GetSchemaQuery, transaction)
                          .Select(MapSchemaQueryResult);
     }
 
+    /// <inheritdoc />
     public override async ValueTask<IEnumerable<DbSchemaObject>> GetSchemaObjectsAsync(IDbConnection connection, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
         var results = await connection.ExecuteQueryAsync<(string Type, string Name, string Schema)>(GetSchemaQuery, transaction, cancellationToken: cancellationToken);
@@ -257,10 +246,10 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
     #endregion
 
     private const string MySqlRuntimeInfoQuery = @"
-    SELECT VERSION() AS Version;
-    SHOW VARIABLES LIKE 'version_comment';
-";
+        SELECT VERSION() AS Version;
+        SHOW VARIABLES LIKE 'version_comment';";
 
+    /// <inheritdoc />
     public override DbRuntimeSetting GetDbConnectionRuntimeInformation(IDbConnection connection, IDbTransaction? transaction)
     {
         using var rdr = (MySqlDataReader)connection.ExecuteReader(MySqlRuntimeInfoQuery, transaction: transaction);
@@ -297,6 +286,7 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
     }
 
 
+    /// <inheritdoc />
     public override object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
 #if NET && MYSQLPLAIN // MySqlConnector has proper DateOnly support

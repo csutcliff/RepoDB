@@ -7,10 +7,6 @@ namespace RepoDb.Options;
 /// </summary>
 public sealed class ClassHandlerGetOptions : ClassHandlerOptions
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
     internal ClassHandlerGetOptions(DbDataReader reader)
     {
         DataReader = reader;
@@ -27,11 +23,6 @@ public sealed class ClassHandlerGetOptions : ClassHandlerOptions
 
     #region Methods
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
     internal static ClassHandlerGetOptions Create(DbDataReader reader) =>
         new ClassHandlerGetOptions(reader);
 

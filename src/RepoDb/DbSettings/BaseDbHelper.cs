@@ -170,6 +170,7 @@ public abstract class BaseDbHelper : IDbHelper
     /// <returns></returns>
     public virtual Expression? GetParameterPostCreationExpression(ParameterExpression dbParameterExpression, ParameterExpression? propertyExpression, DbField dbField)
     {
+        ArgumentNullException.ThrowIfNull(dbParameterExpression);
         var method = StaticType.IDbHelper.GetMethod(nameof(IDbHelper.DynamicHandler))!
             .MakeGenericMethod(dbParameterExpression.Type);
         return Expression.Call(Expression.Constant(this),

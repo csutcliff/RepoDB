@@ -20,6 +20,9 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 #endif
 {
 #if MYSQLPLAIN
+    /// <summary>
+    /// 
+    /// </summary>
     public MySqlStatementBuilder()
         : this(DbSettingMapper.Get<MySqlConnection>()!,
               null,
@@ -41,7 +44,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
     { }
 #else
     /// <summary>
-    /// Creates a new instance of <see cref="MySqlStatementBuilder"/> object.
+    /// Creates a new instance of <see cref="MySqlConnectorStatementBuilder"/> object.
     /// </summary>
     public MySqlConnectorStatementBuilder()
         : this(DbSettingMapper.Get<MySqlConnection>()!,
@@ -105,15 +108,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
     #region CreateInsert
 
-    /// <summary>
-    /// Creates a SQL Statement for insert operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be inserted.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for insert operation.</returns>
+    /// <inheritdoc />
     public override string CreateInsert(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<DbField> keyFields,
@@ -167,16 +162,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
     #region CreateInsertAll
 
-    /// <summary>
-    /// Creates a SQL Statement for insert-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be inserted.</param>
-    /// <param name="batchSize">The batch size of the operation.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for insert operation.</returns>
+    /// <inheritdoc />
     public override string CreateInsertAll(string tableName,
         IEnumerable<Field>? fields,
         int batchSize,
@@ -289,16 +275,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
     #region CreateMerge
 
-    /// <summary>
-    /// Creates a SQL Statement for merge operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMerge(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -420,17 +397,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
     #region CreateMergeAll
 
-    /// <summary>
-    /// Creates a SQL Statement for merge-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="batchSize">The batch size of the operation.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMergeAll(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -569,17 +536,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
     #region CreateQuery
 
-    /// <summary>
-    /// Creates a SQL Statement for query operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="offset"></param>
-    /// <param name="top">The number of rows to be returned.</param>
-    /// <returns>A sql statement for query operation.</returns>
-    /// <param name="hints">The table hints to be used.</param>
+    /// <inheritdoc />
     public override string CreateQuery(string tableName,
         IEnumerable<Field> fields,
         QueryGroup? where = null,
@@ -617,7 +574,10 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
     #endregion
 
+    /// <inheritdoc />
     public override string? JsonColumnType => base.JsonColumnType;
+    /// <inheritdoc />
     public override string? VectorColumnType => "VECTOR";
+    /// <inheritdoc />
     public override string IdentityDefinition => "AUTO_INCREMENT";
 }

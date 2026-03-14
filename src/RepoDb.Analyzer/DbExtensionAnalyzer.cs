@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace RepoDb.Analyzer;
 
+/// <summary>
+/// 
+/// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class RepoDbEntityAnalyzer : DiagnosticAnalyzer
 {
@@ -14,8 +17,10 @@ public class RepoDbEntityAnalyzer : DiagnosticAnalyzer
         DiagnosticSeverity.Error,
         isEnabledByDefault: true);
 
+    /// <inheritdoc />
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
+    /// <inheritdoc />
     public override void Initialize(AnalysisContext context)
     {
         context.EnableConcurrentExecution();

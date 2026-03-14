@@ -1,4 +1,4 @@
-﻿namespace RepoDb;
+﻿namespace RepoDb.DbSettings;
 
 /// <summary>
 ///

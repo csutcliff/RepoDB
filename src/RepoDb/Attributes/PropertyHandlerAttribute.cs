@@ -31,10 +31,6 @@ public class PropertyHandlerAttribute : Attribute
 
     #region Methods
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="handlerType"></param>
     private static void Validate(Type handlerType)
     {
         if (!handlerType.IsInterfacedTo(StaticType.IPropertyHandler))

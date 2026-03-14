@@ -29,7 +29,7 @@ public sealed class SQLiteStatementBuilder : BaseStatementBuilder
     { }
 #else
     /// <summary>
-    /// Creates a new instance of <see cref="SqLiteStatementBuilder"/> class.
+    /// Creates a new instance of <see cref="SQLiteStatementBuilder"/> class.
     /// </summary>
     /// <param name="dbSetting">The database settings object currently in used.</param>
     /// <param name="convertFieldResolver">The resolver used when converting a field in the database layer.</param>
@@ -233,16 +233,7 @@ public sealed class SQLiteStatementBuilder : BaseStatementBuilder
 
     #region CreateMerge
 
-    /// <summary>
-    /// Creates a SQL Statement for merge operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMerge(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -343,17 +334,7 @@ public sealed class SQLiteStatementBuilder : BaseStatementBuilder
 
     #region CreateMergeAll
 
-    /// <summary>
-    /// Creates a SQL Statement for merge-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="batchSize">The batch size of the operation.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMergeAll(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -520,6 +501,8 @@ public sealed class SQLiteStatementBuilder : BaseStatementBuilder
 
     #endregion
 
+    /// <inheritdoc />
     public override string? JsonColumnType => base.JsonColumnType;
+    /// <inheritdoc />
     public override string IdentityDefinition => "AUTOINCREMENT";
 }

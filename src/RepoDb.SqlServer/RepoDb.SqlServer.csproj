@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Description>A hybrid .NET ORM library for SQL Server.</Description>
     <PackageTags>orm hybrid-orm micro-orm sqlserver</PackageTags>
-    <PackageProjectUrl>https://github.com/AmpScm/RepoDB/tree/main/src/RepoDb.SqlServer/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/AmpScm/RepoDb/tree/main/src/RepoDb.SqlServer/</PackageProjectUrl>
     <PackageId>$(PackagePrefix)$(AssemblyName)</PackageId>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>

@@ -78,7 +78,7 @@ public sealed partial class JsonExtractQueryField : FunctionalQueryField
         Operation operation,
         object? value,
         DbType? dbType)
-        : base(fieldName, operation, value, dbType ?? DbType.Int32, JsonExtractFormat)
+        : base(fieldName, operation, value, dbType, JsonExtractFormat)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
         Path = path;
@@ -99,7 +99,7 @@ public sealed partial class JsonExtractQueryField : FunctionalQueryField
             return GetString(index, v, dbSetting);
         }
         else
-            return base.GetString(index, dbSetting).Replace("@@path@@", string.Concat("'", ToJsonPath(Path).Replace("'", "''"), "'"));
+            return base.GetString(index, dbSetting).Replace("@@path@@", string.Concat("'", ToJsonPath(Path).Replace("'", "''", StringComparison.Ordinal), "'"), StringComparison.Ordinal);
     }
 
     #endregion

@@ -83,3 +83,12 @@ dotnet_diagnostic.IDE0008.severity = none
 
 # IDE0022: Use block body for method
 dotnet_diagnostic.IDE0022.severity = none
+
+# IDE0024: Use block body for operator
+dotnet_diagnostic.IDE0024.severity = none
+
+# IDE0011: Add braces
+dotnet_diagnostic.IDE0011.severity = silent
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = silent

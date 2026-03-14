@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Description>Adds Vector support to RepoDb.PostgreSql.</Description>
     <PackageTags>orm hybrid-orm micro-orm postgresql npgsql</PackageTags>
-    <PackageProjectUrl>https://github.com/AmpScm/RepoDB/tree/main/src/RepoDb.PostgreSql.Vectors/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/AmpScm/RepoDb/tree/main/src/RepoDb.PostgreSql.Vectors/</PackageProjectUrl>
     <PackageId>$(PackagePrefix)$(AssemblyName)</PackageId>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>

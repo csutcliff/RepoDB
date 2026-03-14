@@ -16,15 +16,6 @@ public static partial class NpgsqlConnectionExtension
     private readonly static PostgreSqlDbTypeNameToNpgsqlDbTypeResolver dbTypeNameToNpgsqlDbTypeResolver = new();
     private readonly static ClientTypeToNpgsqlDbTypeResolver clientTypeToNpgsqlDbTypeResolver = new();
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbFields"></param>
-    /// <param name="properties"></param>
-    /// <param name="includePrimary"></param>
-    /// <param name="includeIdentity"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static IEnumerable<ClassProperty> GetMatchedProperties(DbFieldCollection dbFields,
         IEnumerable<ClassProperty> properties,
         bool includePrimary,
@@ -50,18 +41,6 @@ public static partial class NpgsqlConnectionExtension
         return matchedProperties;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sourceName"></param>
-    /// <param name="destinationName"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="includePrimary"></param>
-    /// <param name="includeIdentity"></param>
-    /// <param name="alternativeType"></param>
-    /// <param name="npgsqlDbType"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static NpgsqlBulkInsertMapItem? GetMapping(string sourceName,
         string destinationName,
         DbFieldCollection dbFields,
@@ -95,15 +74,6 @@ public static partial class NpgsqlConnectionExtension
         return new NpgsqlBulkInsertMapItem(sourceName, destinationName, npgsqlDbType);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="includePrimary"></param>
-    /// <param name="includeIdentity"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static DbField? GetMappingDbField(string name,
         DbFieldCollection dbFields,
         bool includePrimary,
@@ -131,15 +101,6 @@ public static partial class NpgsqlConnectionExtension
         return null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbFields"></param>
-    /// <param name="properties"></param>
-    /// <param name="includePrimary"></param>
-    /// <param name="includeIdentity"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static IEnumerable<NpgsqlBulkInsertMapItem> GetMappings(DbFieldCollection dbFields,
         IEnumerable<ClassProperty> properties,
         bool includePrimary,
@@ -170,15 +131,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="includePrimary"></param>
-    /// <param name="includeIdentity"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static IEnumerable<NpgsqlBulkInsertMapItem> GetMappings(IDictionary<string, object?> dictionary,
         DbFieldCollection dbFields,
         bool includePrimary,
@@ -203,15 +155,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="table"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="includePrimary"></param>
-    /// <param name="includeIdentity"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static IEnumerable<NpgsqlBulkInsertMapItem> GetMappings(DataTable table,
         DbFieldCollection dbFields,
         bool includePrimary,
@@ -236,15 +179,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="includePrimary"></param>
-    /// <param name="includeIdentity"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static IEnumerable<NpgsqlBulkInsertMapItem> GetMappings(DbDataReader reader,
         DbFieldCollection dbFields,
         bool includePrimary,
@@ -270,11 +204,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="propertyValueAttributes"></param>
-    /// <returns></returns>
     private static NpgsqlDbType? GetMappedNpgsqlDbTypeFromAttributes(IEnumerable<PropertyValueAttribute> propertyValueAttributes)
     {
         // In purpose, the PropertyValueAttribute.Value is not exposed, therefore we cannot use this.
@@ -286,12 +215,6 @@ public static partial class NpgsqlConnectionExtension
         return attribute?.NpgsqlDbType;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="table"></param>
-    /// <param name="rowState"></param>
-    /// <returns></returns>
     private static IEnumerable<DataRow> GetRows(DataTable table,
         DataRowState? rowState)
     {
@@ -304,24 +227,10 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TData"></typeparam>
-    /// <param name="data"></param>
-    /// <param name="field"></param>
-    /// <returns></returns>
     private static IEnumerable<ExpandoObject> GetExpandoObjectData<TData>(IEnumerable<TData> data,
         Field field) =>
         GetExpandoObjectData<TData>(data, field.FieldName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TData"></typeparam>
-    /// <param name="data"></param>
-    /// <param name="column"></param>
-    /// <returns></returns>
     private static IEnumerable<ExpandoObject> GetExpandoObjectData<TData>(IEnumerable<TData> data,
         string column)
     {
@@ -333,10 +242,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="mappings"></param>
     private static List<NpgsqlBulkInsertMapItem> AddOrderColumnMapping(IEnumerable<NpgsqlBulkInsertMapItem> mappings)
     {
         var list = new List<NpgsqlBulkInsertMapItem>(mappings);
@@ -345,15 +250,6 @@ public static partial class NpgsqlConnectionExtension
         return list;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entityType"></param>
-    /// <param name="entities"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="identityResults"></param>
-    /// <param name="dbSetting"></param>
     private static void SetIdentities<TEntity>(Type entityType,
         IEnumerable<TEntity> entities,
         DbFieldCollection dbFields,
@@ -372,14 +268,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="identityResults"></param>
-    /// <param name="dbSetting"></param>
     private static void SetEntityIdentities<TEntity>(IEnumerable<TEntity> entities,
         DbFieldCollection dbFields,
         IEnumerable<IdentityResult> identityResults,
@@ -387,13 +275,6 @@ public static partial class NpgsqlConnectionExtension
         where TEntity : class =>
         SetEntityIdentities<TEntity>(entities, GetEntityIdentityField<TEntity>(dbFields, dbSetting), identityResults);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityResults"></param>
     private static void SetEntityIdentities<TEntity>(IEnumerable<TEntity> entities,
         Field? identityField,
         IEnumerable<IdentityResult> identityResults)
@@ -455,13 +336,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="identityResults"></param>
-    /// <param name="dbSetting"></param>
     private static void SetDictionaryIdentities(IEnumerable<IDictionary<string, object?>> entities,
         DbFieldCollection dbFields,
         IEnumerable<IdentityResult> identityResults,
@@ -486,13 +360,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="table"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="identityResults"></param>
-    /// <param name="dbSetting"></param>
     private static void SetDataTableIdentities(DataTable table,
         DbFieldCollection dbFields,
         IEnumerable<IdentityResult> identityResults,
@@ -518,13 +385,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="dbFields"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static Field? GetEntityIdentityField<TEntity>(DbFieldCollection dbFields,
         IDbSetting dbSetting)
         where TEntity : class
@@ -543,13 +403,6 @@ public static partial class NpgsqlConnectionExtension
         return null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="dbFields"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static ClassProperty? GetEntityIdentityProperty<TEntity>(DbFieldCollection dbFields,
         IDbSetting dbSetting)
         where TEntity : class
@@ -568,13 +421,6 @@ public static partial class NpgsqlConnectionExtension
         return property;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="table"></param>
-    /// <param name="identityField"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static DataColumn? GetDataTableIdentityColumn(DataTable table,
         Field identityField,
         IDbSetting dbSetting)
@@ -596,28 +442,12 @@ public static partial class NpgsqlConnectionExtension
         return null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     private static bool IsPrimaryAnIdentity(DbFieldCollection dbFields) =>
         IsPrimaryAnIdentity(dbFields.PrimaryFields?.OneOrDefault());
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="primary"></param>
-    /// <returns></returns>
     private static bool IsPrimaryAnIdentity(DbField? primary) =>
         primary?.IsPrimary == true && primary?.IsIdentity == true;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="enumerable"></param>
-    /// <returns></returns>
     private static int EnumerableGetHashCode<T>(IEnumerable<T>? enumerable)
     {
         var hashCode = 0;

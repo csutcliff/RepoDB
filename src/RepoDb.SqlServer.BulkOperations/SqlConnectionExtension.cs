@@ -17,13 +17,6 @@ public static partial class SqlConnectionExtension
 {
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
-    /// <param name="reader"></param>
-    /// <param name="identityField"></param>
     private static int SetIdentityForEntities<TEntity>(IEnumerable<TEntity> entities,
         DbDataReader reader,
         Field identityField)
@@ -63,14 +56,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
-    /// <param name="reader"></param>
-    /// <param name="identityDbField"></param>
-    /// <param name="cancellationToken"></param>
     private static async Task<int> SetIdentityForEntitiesAsync<TEntity>(IEnumerable<TEntity> entities,
         DbDataReader reader,
         DbField identityDbField,
@@ -108,13 +93,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dataTable"></param>
-    /// <param name="reader"></param>
-    /// <param name="identityColumn"></param>
-    /// <returns></returns>
     private static int SetIdentityForEntities(DataTable dataTable,
         DbDataReader reader,
         DataColumn identityColumn)
@@ -130,14 +108,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dataTable"></param>
-    /// <param name="reader"></param>
-    /// <param name="identityColumn"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> SetIdentityForEntitiesAsync(DataTable dataTable,
         DbDataReader reader,
         DataColumn identityColumn,
@@ -154,11 +124,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sqlBulkCopy"></param>
-    /// <param name="mappings"></param>
     private static void AddMappings(SqlBulkCopy sqlBulkCopy,
         IEnumerable<BulkInsertMapItem> mappings)
     {
@@ -175,11 +140,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <returns></returns>
     private static IEnumerable<Field> GetDictionaryStringObjectFields(IDictionary<string, object?> dictionary)
     {
         foreach (var kvp in dictionary)
@@ -188,31 +148,14 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="qualifiers"></param>
-    /// <returns></returns>
     private static FieldSet? ParseExpression<TEntity>(Expression<Func<TEntity, object?>>? qualifiers)
         where TEntity : class =>
         qualifiers != null ? Field.Parse<TEntity>(qualifiers) : default;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetTableName(string tableName,
         IDbSetting dbSetting) =>
         DataEntityExtension.GetTableName(tableName, dbSetting);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="transaction"></param>
     private static void ValidateTransactionConnectionObject(this IDbConnection connection,
         IDbTransaction transaction)
     {
@@ -222,11 +165,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dataTable"></param>
-    /// <returns></returns>
     private static IEnumerable<DataColumn> GetDataColumns(DataTable dataTable)
     {
         foreach (var column in dataTable.Columns.OfType<DataColumn>())
@@ -235,12 +173,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dataTable"></param>
-    /// <param name="rowState"></param>
-    /// <returns></returns>
     private static IEnumerable<DataRow> GetDataRows(DataTable dataTable,
         DataRowState? rowState = null)
     {
@@ -255,11 +187,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dataTable"></param>
-    /// <returns></returns>
     private static void AddOrderColumn(DataTable dataTable)
     {
         if (dataTable is null)
@@ -274,10 +201,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="mappings"></param>
     private static List<BulkInsertMapItem> AddOrderColumnMapping(IEnumerable<BulkInsertMapItem> mappings)
     {
         var list = mappings.AsList();
@@ -285,11 +208,6 @@ public static partial class SqlConnectionExtension
         return list;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fields"></param>
-    /// <returns></returns>
     private static IEnumerable<BulkInsertMapItem> GetBulkInsertMapItemsFromFields(IEnumerable<Field> fields)
     {
         foreach (var field in fields)
@@ -298,10 +216,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
     internal static void ThrowIfNullOrEmpty(DbDataReader reader)
     {
         ArgumentNullException.ThrowIfNull(reader);
@@ -311,10 +225,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dataTable"></param>
     internal static void ThrowIfNullOrEmpty(DataTable dataTable)
     {
         ArgumentNullException.ThrowIfNull(dataTable);
@@ -324,11 +234,6 @@ public static partial class SqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
     internal static void ThrowIfNullOrEmpty<TEntity>(IEnumerable<TEntity> entities)
         where TEntity : class
     {
@@ -446,15 +351,6 @@ public static partial class SqlConnectionExtension
 
     #region SQL Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="tempTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <returns></returns>
     private static string GetCreateTemporaryTableSqlText(string tableName,
         string tempTableName,
         IEnumerable<Field> fields,
@@ -490,13 +386,6 @@ public static partial class SqlConnectionExtension
         return builder.ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tempTableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetCreateTemporaryTableClusteredIndexSqlText(string tempTableName,
         IEnumerable<Field> qualifiers,
         IDbSetting dbSetting)
@@ -529,25 +418,10 @@ public static partial class SqlConnectionExtension
         return builder.ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tempTableName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetDropTemporaryTableSqlText(string tempTableName,
         IDbSetting dbSetting) =>
         $"DROP TABLE {tempTableName.AsQuoted(dbSetting)};";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="tempTableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="hints"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBulkDeleteSqlText(string tableName,
         string tempTableName,
         IEnumerable<Field> qualifiers,
@@ -586,18 +460,6 @@ public static partial class SqlConnectionExtension
         return builder.ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="tempTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="identityField"></param>
-    /// <param name="hints"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <param name="forceIdentityColumn"></param>
-    /// <returns></returns>
     private static string GetBulkInsertSqlText(string tableName,
         string tempTableName,
         IEnumerable<Field> fields,
@@ -706,20 +568,6 @@ public static partial class SqlConnectionExtension
         return builder.ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="tempTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="primaryField"></param>
-    /// <param name="identityField"></param>
-    /// <param name="hints"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <param name="forceIdentityColumn"></param>
-    /// <returns></returns>
     private static string GetBulkMergeSqlText(string tableName,
         string tempTableName,
         IEnumerable<Field> fields,
@@ -862,18 +710,6 @@ public static partial class SqlConnectionExtension
         return builder.ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="tempTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="primaryField"></param>
-    /// <param name="identityField"></param>
-    /// <param name="hints"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBulkUpdateSqlText(string tableName,
         string tempTableName,
         IEnumerable<Field> fields,
@@ -929,12 +765,6 @@ public static partial class SqlConnectionExtension
         return builder.ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="field"></param>
-    /// <param name="values"></param>
-    /// <returns></returns>
     private static DataTable CreateDataTableWithSingleColumn(Field field,
         IEnumerable<object> values)
     {

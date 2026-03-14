@@ -4,6 +4,7 @@ using System.Dynamic;
 using RepoDb.Interfaces;
 
 namespace RepoDb;
+
 public static partial class DbConnectionExtension
 {
     #region ExecuteQueryMultiple(Results)
@@ -403,22 +404,6 @@ public static partial class DbConnectionExtension
             );
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="isDisposeConnection"></param>
-    /// <returns></returns>
     internal static QueryMultipleExtractor ExecuteQueryMultipleInternal(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -885,23 +870,6 @@ public static partial class DbConnectionExtension
     }
     #endregion
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="isDisposeConnection"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<QueryMultipleExtractor> ExecuteQueryMultipleInternalAsync(this IDbConnection connection,
         string commandText,
         object? param = null,

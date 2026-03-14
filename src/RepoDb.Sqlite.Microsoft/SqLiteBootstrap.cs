@@ -28,9 +28,6 @@ public static class SqliteBootstrap
     [Obsolete("This class will soon to be hidden as internal class. Use the 'GlobalConfiguration.Setup().UseSqlite()' method instead.")]
     public static void Initialize() => InitializeInternal();
 
-    /// <summary>
-    ///
-    /// </summary>
     internal static void InitializeInternal()
     {
         // Skip if already initialized

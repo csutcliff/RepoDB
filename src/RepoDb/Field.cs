@@ -142,11 +142,6 @@ public class Field : IEquatable<Field>
         return new FieldSet(TypeCache.Get(type).GetProperties().Select(PropertyInfoExtension.AsField));
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
     private static FieldSet ParseDictionaryStringObject(IDictionary<string, object?> obj)
     {
         ArgumentNullException.ThrowIfNull(obj);

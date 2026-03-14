@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Description>A hybrid .NET ORM library for Oracle.</Description>
     <PackageTags>orm hybrid-orm micro-orm Oracle npgsql</PackageTags>
-    <PackageProjectUrl>https://github.com/AmpScm/RepoDB/tree/main/src/RepoDb.Oracle/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/AmpScm/RepoDb/tree/main/src/RepoDb.Oracle/</PackageProjectUrl>
     <PackageId>$(PackagePrefix)$(AssemblyName)</PackageId>
   </PropertyGroup>
   <ItemGroup>

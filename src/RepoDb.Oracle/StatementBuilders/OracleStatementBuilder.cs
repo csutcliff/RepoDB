@@ -35,6 +35,7 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
               averageableClientTypeResolver)
     { }
 
+    /// <inheritdoc />
     public override string CreateMerge(string tableName,
                                    IEnumerable<Field> fields,
                                    IEnumerable<Field>? noUpdateFields,
@@ -127,6 +128,7 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
+    /// <inheritdoc />
     public override string CreateMergeAll(string tableName, IEnumerable<Field> fields, IEnumerable<Field>? noUpdateFields, IEnumerable<Field> qualifiers, int batchSize, IEnumerable<DbField> keyFields, string? hints = null)
     {
         return "/*FORALL*/" + CreateMerge(tableName, fields, noUpdateFields, keyFields, qualifiers, hints);
@@ -165,6 +167,7 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
+    /// <inheritdoc />
     public override string CreateInsertAll(string tableName, IEnumerable<Field>? fields, int batchSize, IEnumerable<DbField> keyFields, string? hints = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
@@ -203,6 +206,7 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return "/*FORALL*/" + CreateInsert(tableName, fields, keyFields, hints);
     }
 
+    /// <inheritdoc />
     public override string CreateUpdateAll(string tableName, IEnumerable<Field> fields, IEnumerable<Field> qualifiers, int batchSize, IEnumerable<DbField> keyFields, string? hints = null)
     {
         return "/*FORALL*/" + base.CreateUpdateAll(tableName, fields, qualifiers, 1, keyFields, hints);
@@ -242,6 +246,7 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
+    /// <inheritdoc />
     public override string CreateExists(string tableName, QueryGroup? where = null, string? hints = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
@@ -266,6 +271,7 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
+    /// <inheritdoc />
     public override string CombineQueries(ICollection<string> commandTexts)
     {
         StringBuilder sb = new();
@@ -289,8 +295,12 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return sb.ToString();
     }
 
+    /// <inheritdoc />
     public override string? JsonColumnType => "CLOB";
+    /// <inheritdoc />
     public override string? VectorColumnType => "VECTOR ({0}, FLOAT32)";
+    /// <inheritdoc />
     public override string IdentityDefinition => "GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT BY 1)";
+    /// <inheritdoc />
     public override bool? PrimaryBeforeIdentity => false;
 }

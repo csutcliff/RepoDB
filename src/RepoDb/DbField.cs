@@ -76,14 +76,7 @@ public sealed class DbField : Field, IEquatable<DbField>
         IsIdentity = isIdentity;
         IsNullable = isNullable;
         Size = size;
-        if (type == StaticType.Double && precision > 38)
-        {
-            Precision = 38;
-        }
-        else
-        {
-            Precision = precision;
-        }
+        Precision = type == StaticType.Double && precision > 38 ? (byte?)38 : precision;
         Scale = scale;
         DatabaseType = databaseType;
         HasDefaultValue = hasDefaultValue;

@@ -7,6 +7,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace RepoDb.Analyzer;
 
+/// <summary>
+/// 
+/// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class DbAttributeFormatAnalyzer : DiagnosticAnalyzer
 {
@@ -28,9 +31,13 @@ public class DbAttributeFormatAnalyzer : DiagnosticAnalyzer
         isEnabledByDefault: true,
         description: "Use the 'Schema' property in the Table attribute instead of encoding schema and table in a single string.");
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
         ImmutableArray.Create(EscapedIdentifierRule, TableSchemaFormatRule);
 
+    /// <inheritdoc />
     public override void Initialize(AnalysisContext context)
     {
         context.EnableConcurrentExecution();

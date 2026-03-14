@@ -312,13 +312,6 @@ public static partial class StringExtension
         IDbSetting? dbSetting) =>
         AsField(value, null, dbSetting);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="functionFormat"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static string AsField(this string value, string? functionFormat, IDbSetting? dbSetting) =>
         string.IsNullOrWhiteSpace(functionFormat) ? value.AsQuoted(true, true, dbSetting) :
             string.Format(CultureInfo.InvariantCulture, functionFormat, value.AsQuoted(true, true, dbSetting));
@@ -370,15 +363,6 @@ public static partial class StringExtension
         return value;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="leftAlias"></param>
-    /// <param name="rightAlias"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="considerNulls"></param>
-    /// <returns></returns>
     internal static string AsJoinQualifier(this string value,
         string leftAlias,
         string rightAlias,
@@ -387,14 +371,6 @@ public static partial class StringExtension
         considerNulls ? AsJoinQualifierWithNullChecks(value, leftAlias, rightAlias, dbSetting) :
             AsJoinQualifierWithoutNullChecks(value, leftAlias, rightAlias, dbSetting);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="leftAlias"></param>
-    /// <param name="rightAlias"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string AsJoinQualifierWithoutNullChecks(this string value,
         string leftAlias,
         string rightAlias,
@@ -402,14 +378,6 @@ public static partial class StringExtension
         string.Concat(leftAlias, ".", value.AsQuoted(true, true, dbSetting), " = ",
             rightAlias, ".", value.AsQuoted(true, true, dbSetting));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="leftAlias"></param>
-    /// <param name="rightAlias"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string AsJoinQualifierWithNullChecks(this string value,
         string leftAlias,
         string rightAlias,
@@ -421,13 +389,6 @@ public static partial class StringExtension
         return string.Concat("(", qualifiersWithoutNullChecks, " OR ", qualifiersWithNullChecks, ")");
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="alias"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static string AsAliasField(this string value,
         string alias,
         IDbSetting dbSetting) =>
@@ -435,24 +396,14 @@ public static partial class StringExtension
 
     internal static string AsParameterAsField(this string value,
         int index,
-        bool quote,
         IDbSetting dbSetting) =>
         string.Concat(AsParameter(value, index, dbSetting), " AS ", AsField(value, dbSetting));
 
     internal static string AsFieldAndParameter(this string value,
         int index,
-        bool quote,
         IDbSetting dbSetting) =>
         string.Concat(AsField(value, dbSetting), " = ", AsParameter(value, index, dbSetting));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="leftAlias"></param>
-    /// <param name="rightAlias"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static string AsFieldAndAliasField(this string value,
         string leftAlias,
         string rightAlias,
@@ -461,33 +412,12 @@ public static partial class StringExtension
             string.IsNullOrWhiteSpace(leftAlias) ? string.Empty : string.Concat(leftAlias, "."), AsField(value, dbSetting), " = ",
             string.IsNullOrWhiteSpace(rightAlias) ? string.Empty : string.Concat(rightAlias, "."), AsField(value, dbSetting));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="values"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static IEnumerable<string> AsFields(this IEnumerable<string> values, IDbSetting dbSetting) =>
         values.Select(value => value.AsField(dbSetting));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="values"></param>
-    /// <param name="alias"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static IEnumerable<string> AsAliasFields(this IEnumerable<string> values, string alias, IDbSetting dbSetting) =>
         values.Select(value => value.AsAliasField(alias, dbSetting));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="values"></param>
-    /// <param name="leftAlias"></param>
-    /// <param name="rightAlias"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static IEnumerable<string> AsFieldsAndAliasFields(this IEnumerable<string> values, string leftAlias, string rightAlias, IDbSetting dbSetting) =>
         values.Select(value => value.AsFieldAndAliasField(leftAlias, rightAlias, dbSetting));
 }

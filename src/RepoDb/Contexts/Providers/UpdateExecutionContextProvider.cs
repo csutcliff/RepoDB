@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using System.Globalization;
-using RepoDb.Contexts.Cachers;
+using RepoDb.Contexts.Caches;
 using RepoDb.Contexts.Execution;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -13,15 +13,6 @@ namespace RepoDb.Contexts.Providers;
 /// </summary>
 internal static class UpdateExecutionContextProvider
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="tableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="hints"></param>
-    /// <param name="where"></param>
-    /// <returns></returns>
     private static string GetKey(Type entityType,
         string tableName,
         IEnumerable<Field> fields,
@@ -165,16 +156,6 @@ internal static class UpdateExecutionContextProvider
         return context;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="fields"></param>
-    /// <param name="commandText"></param>
-    /// <returns></returns>
     private static UpdateExecutionContext CreateInternal(Type entityType,
         IDbConnection connection,
         string tableName,

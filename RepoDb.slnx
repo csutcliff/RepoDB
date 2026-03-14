@@ -36,6 +36,7 @@
   </Folder>
   <Folder Name="/Z-Benchmarks/">
     <Project Path="src/RepoDb.Benchmarks.PostgreSql/RepoDb.Benchmarks.PostgreSql.csproj" />
+    <Project Path="src/RepoDb.Benchmarks.SqlServer/RepoDb.Benchmarks.SqlServer.csproj" />
   </Folder>
   <Folder Name="/Z-DirectoryFiles/" />
 </Solution>

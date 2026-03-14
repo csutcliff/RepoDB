@@ -318,14 +318,8 @@ public partial class DbRepository<TDbConnection> : IDisposable
     /// </summary>
     public void Dispose()
     {
-        try
-        {
-            Dispose(true);
-        }
-        finally
-        {
-            GC.SuppressFinalize(this);
-        }
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>

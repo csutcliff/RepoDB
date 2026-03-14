@@ -62,21 +62,11 @@ public static partial class ClassExpression
         where TEntity : class =>
         GetPropertyValuesCache<TEntity, TResult>.Do(entities, property);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class GetPropertyValuesCache<TEntity, TResult>
         where TEntity : class
     {
         private static readonly ConcurrentDictionary<PropertyInfo, Func<TEntity, TResult>> cache = new();
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="property"></param>
-        /// <returns></returns>
         private static Func<TEntity, TResult> GetFunc(ClassProperty property)
         {
             // Expressions
@@ -97,10 +87,6 @@ public static partial class ClassExpression
                 .Compile();
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="property"></param>
         private static void Guard(ClassProperty property)
         {
             ArgumentNullException.ThrowIfNull(property);

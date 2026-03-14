@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Globalization;
-using RepoDb.Contexts.Cachers;
+using RepoDb.Context.Caches;
 using RepoDb.Contexts.Execution;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -219,19 +219,6 @@ internal static class MergeAllExecutionContextProvider
         return context;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="entities"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="tableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="fields"></param>
-    /// <param name="commandText"></param>
-    /// <returns></returns>
     private static MergeAllExecutionContext CreateInternal(Type entityType,
         IDbConnection connection,
         IEnumerable<object> entities,

@@ -196,8 +196,14 @@ public partial class QueryField : IEquatable<QueryField>
     /// <summary>
     /// Returns the name of the <see cref="Field"/> object current in used.
     /// </summary>
-    public string? GetName() =>
-        Field?.FieldName;
+    [Obsolete("Use .FieldName")]
+    public string? GetName() => FieldName;
+
+    /// <summary>
+    /// Returns the name of the <see cref="Field"/> object current in used.
+    /// </summary>
+    public string? FieldName
+        => Field?.FieldName;
 
     /// <summary>
     /// Returns the value of the <see cref="Parameter"/> object currently in used. However, if this instance of object has already been used as a database parameter
@@ -205,7 +211,7 @@ public partial class QueryField : IEquatable<QueryField>
     /// object, then the value of the in-used <see cref="IDbDataParameter"/> object will be returned.
     /// </summary>
     /// <returns>The value of the <see cref="Parameter"/> object.</returns>
-    public object? GetValue() => DbParameter?.Value ?? Parameter?.Value;
+    public object? Value => DbParameter?.Value ?? Parameter?.Value;
 
     /// <summary>
     /// Returns the value of the <see cref="Parameter"/> object currently in used. However, if this instance of object has already been used as a database parameter
@@ -214,9 +220,9 @@ public partial class QueryField : IEquatable<QueryField>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns>The value of the converted <see cref="Parameter"/> object.</returns>
-    [Obsolete("Use GetValue() method instead."), EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("Use .Value property instead."), EditorBrowsable(EditorBrowsableState.Never)]
     public T? GetValue<T>() =>
-        Converter.ToType<T>(GetValue());
+        Converter.ToType<T>(Value);
 
     /// <summary>
     /// Make the current instance of <see cref="QueryField"/> object to become an expression for 'Update' operations.
@@ -378,7 +384,7 @@ public partial class QueryField : IEquatable<QueryField>
             return size;
 
         // 2098 is sqlserver max params. Issues ahead if we round that up to 5000.
-        if (size > 2000 && size < 2098)
+        if (size is > 2000 and < 2098)
         {
             return 2098;
         }

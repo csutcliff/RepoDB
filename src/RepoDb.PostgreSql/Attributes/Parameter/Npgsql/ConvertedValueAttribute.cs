@@ -3,7 +3,7 @@
 namespace RepoDb.Attributes.Parameter.Npgsql;
 
 /// <summary>
-/// An attribute used to define a value to the <see cref="NpgsqlParameter.ConvertedValue"/>
+/// An attribute that used to define a value to the NpgsqlParameter.ConvertedValue
 /// property via an entity property before the actual execution.
 /// </summary>
 [Obsolete("No longer supported with Npgsql 7 and later", error: true)]

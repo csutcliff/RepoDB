@@ -147,12 +147,6 @@ public partial class QueryGroup
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <param name="queryGroupTypeMap"></param>
-    /// <param name="queryField"></param>
     private static void AsMappedObjectForBetweenQueryField(IDictionary<string, object?> dictionary,
         in QueryGroupTypeMap queryGroupTypeMap,
         QueryField queryField)
@@ -255,12 +249,6 @@ public partial class QueryGroup
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <param name="queryGroupTypeMap"></param>
-    /// <param name="queryField"></param>
     private static void AsMappedObjectForNormalQueryField(IDictionary<string, object?> dictionary,
         in QueryGroupTypeMap queryGroupTypeMap,
         QueryField queryField)
@@ -281,10 +269,6 @@ public partial class QueryGroup
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
     private static List<T> GetValueList<T>(T value)
     {
         var list = new List<T>();

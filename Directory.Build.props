@@ -5,7 +5,7 @@
     <Company>RepoDb</Company>
     <Product>RepoDb</Product>
     <Version Condition="'$(Version)' == ''">0.0.1-dev</Version>
-    <LangVersion>default</LangVersion>
+    <LangVersion>14</LangVersion>
     <Copyright>Copyright © 2020-2026</Copyright>
     <PackageProjectUrl>https://repodb.net/</PackageProjectUrl>
     <RepositoryType>Github</RepositoryType>
@@ -25,18 +25,12 @@
     <TestTargetFrameworks>net10.0;net9.0;net8.0;net48</TestTargetFrameworks>
     <TestTargetOutputType>Exe</TestTargetOutputType>
     <TestingPlatformDotnetTestRunner>true</TestingPlatformDotnetTestRunner>
-    <LangVersion>preview</LangVersion>
+    <GenerateDocumentationFile Condition="$([System.String]::Copy('$(MSBuildProjectName)').ToLower().Contains('test')) == 'false'">true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Reduce tests while running inside VS -->
     <TestTargetFrameworks Condition="'$(VisualStudioVersion)' != '' and '$(BuildingInsideVisualStudio)' == 'true'">net10.0</TestTargetFrameworks>
   </PropertyGroup>
-  <Target Name="SetGenerateBeforeBuild" BeforeTargets="Build">
-    <!-- IsPackable is set in project files, so delay evaluating this -->
-    <PropertyGroup>
-      <GenerateDocumentationFile Condition="'$(IsPackable)' != 'false'">true</GenerateDocumentationFile>
-    </PropertyGroup>
-  </Target>
   <ItemGroup Condition=" '$(MSBuildProjectName)' != '' and $(MSBuildProjectName.Contains('Test')) and '$(BuildingInsideVisualStudio)' != 'true'">
     <PackageReference Include="GitHubActionsTestLogger" />
   </ItemGroup>

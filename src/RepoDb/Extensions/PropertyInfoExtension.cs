@@ -68,9 +68,9 @@ public static class PropertyInfoExtension
             else
             {
                 if (mappedName.Contains('`', StringComparison.Ordinal))
-                    mappedName = mappedName.Replace("`", "");
+                    mappedName = mappedName.Replace("`", "", StringComparison.Ordinal);
                 if (mappedName.Contains('"', StringComparison.Ordinal))
-                    mappedName = mappedName.Replace("\"", "");
+                    mappedName = mappedName.Replace("\"", "", StringComparison.Ordinal);
             }
         }
 
@@ -234,22 +234,9 @@ public static class PropertyInfoExtension
         return GetPropertyValueAttributes(property, declaringType ?? property.DeclaringType!).OfType<TPropertyValueAttribute>().LastOrDefault();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="property"></param>
-    /// <param name="declaringType"></param>
-    /// <returns></returns>
     internal static PropertyValueAttribute? GetDbTypePropertyValueAttribute(this PropertyInfo property, Type? declaringType = null) =>
         GetPropertyValueAttributeByParameterName(property, declaringType ?? property.DeclaringType!, nameof(IDbDataParameter.DbType));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="property"></param>
-    /// <param name="declaringType"></param>
-    /// <param name="parameterName"></param>
-    /// <returns></returns>
     internal static PropertyValueAttribute? GetPropertyValueAttributeByParameterName(this PropertyInfo property,
         Type? declaringType,
         string parameterName) =>

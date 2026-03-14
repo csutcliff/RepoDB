@@ -10,12 +10,6 @@ internal partial class Compiler
 {
     #region PropertyValueAttribute
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbParameterExpression"></param>
-    /// <param name="classProperty"></param>
-    /// <returns></returns>
     private static List<Expression>? GetParameterPropertyValueSetterAttributesAssignmentExpressions(
         Expression dbParameterExpression,
         ClassProperty? classProperty)
@@ -48,23 +42,11 @@ internal partial class Compiler
         return expressions;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbParameterExpression"></param>
-    /// <param name="attribute"></param>
-    /// <returns></returns>
     private static MethodCallExpression GetPropertyValueAttributesAssignmentExpression(
         ParameterExpression dbParameterExpression,
         PropertyValueAttribute attribute) =>
         GetPropertyValueAttributesAssignmentExpression((Expression)dbParameterExpression, attribute);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameterExpression"></param>
-    /// <param name="attribute"></param>
-    /// <returns></returns>
     private static MethodCallExpression GetPropertyValueAttributesAssignmentExpression(
         Expression parameterExpression,
         PropertyValueAttribute attribute)
@@ -79,10 +61,6 @@ internal partial class Compiler
         return Expression.Call(Expression.Constant(attribute), method, parameterExpression);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetPropertyValueAttributeSetValueMethod() =>
 
         StaticType.PropertyValueAttribute.GetMethod(nameof(PropertyValueAttribute.SetValue),

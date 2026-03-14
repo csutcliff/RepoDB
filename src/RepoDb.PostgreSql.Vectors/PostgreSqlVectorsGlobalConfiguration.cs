@@ -6,9 +6,17 @@ using RepoDb.Resolvers;
 
 namespace RepoDb;
 
+/// <summary>
+/// 
+/// </summary>
 public static partial class PostgreSqlVectorsGlobalConfiguration
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="globalConfiguration"></param>
+    /// <returns></returns>
     public static GlobalConfiguration UsePostgreSqlVectors(this GlobalConfiguration globalConfiguration)
     {
 #pragma warning disable CS0618 // Type or member is obsolete

@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using RepoDb.Contexts.Cachers;
+using RepoDb.Contexts.Caches;
 using RepoDb.Contexts.Execution;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -162,16 +162,6 @@ internal static class MergeExecutionContextProvider
         return context;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="tableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="commandText"></param>
-    /// <returns></returns>
     private static MergeExecutionContext CreateInternal(Type entityType,
         IDbConnection connection,
         DbFieldCollection dbFields,

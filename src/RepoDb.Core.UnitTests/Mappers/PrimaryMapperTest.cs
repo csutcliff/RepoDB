@@ -96,6 +96,48 @@ public partial class PrimaryMapperTest
         Assert.AreEqual(expected, actual?.FieldName);
     }
 
+    [TestMethod]
+    public void TestPrimaryMapperMappingViaPropertyNames()
+    {
+        // Setup
+        PrimaryMapper.Add<PrimaryMapperTestClass>("ColumnInt", "ColumnString");
+
+        // Act
+        var actual = PrimaryMapper.GetPrimaryKeys<PrimaryMapperTestClass>();
+        var expected = new string[] { "ColumnInt", "ColumnString"};
+
+        // Assert
+        Assert.AreEqual(string.Join(", ", expected), string.Join(", ", actual.Select(x=>x.FieldName)));
+    }
+
+    [TestMethod]
+    public void TestPrimaryMapperMappingViaFields()
+    {
+        // Setup
+        PrimaryMapper.Add<PrimaryMapperTestClass>(new Field("ColumnInt"), new Field("ColumnString"));
+
+        // Act
+        var actual = PrimaryMapper.GetPrimaryKeys<PrimaryMapperTestClass>();
+        var expected = new string[] { "ColumnInt", "ColumnString" };
+
+        // Assert
+        Assert.AreEqual(string.Join(", ", expected), string.Join(", ", actual.Select(x => x.FieldName)));
+    }
+
+    [TestMethod]
+    public void TestPrimaryMapperMappingViaExpression2()
+    {
+        // Setup
+        PrimaryMapper.Add<PrimaryMapperTestClass>(e => new { e.ColumnInt, e.ColumnString });
+
+        // Act
+        var actual = PrimaryMapper.GetPrimaryKeys<PrimaryMapperTestClass>();
+        var expected = new string[] { "ColumnInt", "ColumnString" };
+
+        // Assert
+        Assert.AreEqual(string.Join(", ", expected), string.Join(", ", actual.Select(x => x.FieldName)));
+    }
+
     /*
      * With PrimaryAttribute
      */

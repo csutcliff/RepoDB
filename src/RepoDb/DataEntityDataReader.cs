@@ -15,12 +15,10 @@ public class DataEntityDataReader<TEntity> : DbDataReader
     where TEntity : class
 {
     #region Fields
-
-    private readonly string? tableName;
+    private readonly string tableName;
     private readonly int fieldCount; // 0
     private bool isClosed; // false
     private bool isDisposed; // false
-    private int position = -1;
     private int recordsAffected = -1;
     private readonly bool isDictionaryStringObject; // false
 
@@ -90,7 +88,7 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         this.tableName = tableName ?? ClassMappedNameCache.Get<TEntity>();
         isClosed = false;
         isDisposed = false;
-        position = -1;
+        Position = -1;
         recordsAffected = -1;
 
         // Type
@@ -146,8 +144,7 @@ public class DataEntityDataReader<TEntity> : DbDataReader
     /// <summary>
     /// Gets the current position of the enumerator.
     /// </summary>
-    public int Position =>
-        position;
+    public int Position { get; private set; }
 
     /// <summary>
     /// Gets the type of the entities.
@@ -245,7 +242,7 @@ public class DataEntityDataReader<TEntity> : DbDataReader
     {
         ThrowExceptionIfNotAvailable();
         EntityEnumerator = Entities.GetEnumerator();
-        position = -1;
+        Position = -1;
         recordsAffected = -1;
     }
 
@@ -434,6 +431,13 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         return Converter.ToType<long>(GetValue(ordinal));
     }
 
+    /// <inheritdoc />
+    public override T GetFieldValue<T>(int ordinal)
+    {
+        ThrowExceptionIfNotAvailable();
+        return Converter.ToType<T>(GetValue(ordinal));
+    }
+
     /// <summary>
     /// Gets the name of the property from the defined property index.
     /// </summary>
@@ -442,11 +446,6 @@ public class DataEntityDataReader<TEntity> : DbDataReader
     public override string GetName(int ordinal) =>
         isDictionaryStringObject ? GetNameForDictionaryStringObject(ordinal) : GetNameForEntities(ordinal);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="i"></param>
-    /// <returns></returns>
     private string GetNameForEntities(int i)
     {
         ThrowExceptionIfNotAvailable();
@@ -457,11 +456,6 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         return Properties[i].FieldName;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="i"></param>
-    /// <returns></returns>
     private string GetNameForDictionaryStringObject(int i)
     {
         ThrowExceptionIfNotAvailable();
@@ -480,11 +474,6 @@ public class DataEntityDataReader<TEntity> : DbDataReader
     public override int GetOrdinal(string name) =>
         isDictionaryStringObject ? GetOrdinalForDictionaryStringObject(name) : GetOrdinalForEntities(name);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
     private int GetOrdinalForEntities(string name)
     {
         ThrowExceptionIfNotAvailable();
@@ -499,11 +488,6 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
     private int GetOrdinalForDictionaryStringObject(string name)
     {
         ThrowExceptionIfNotAvailable();
@@ -563,7 +547,7 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         ThrowExceptionIfNotAvailable();
         if (i == Properties.Count)
         {
-            return position;
+            return Position;
         }
         else
         {
@@ -581,7 +565,7 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         ThrowExceptionIfNotAvailable();
         if (i == Fields.Count)
         {
-            return position;
+            return Position;
         }
         else
         {
@@ -640,14 +624,11 @@ public class DataEntityDataReader<TEntity> : DbDataReader
     public override bool Read()
     {
         ThrowExceptionIfNotAvailable();
-        position++;
+        Position++;
         recordsAffected++;
         return EntityEnumerator.MoveNext();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
     private void ThrowExceptionIfNotAvailable()
     {
         if (IsDisposed)
@@ -660,10 +641,6 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private IEnumerable<ClassProperty> GetClassProperties()
     {
         if (isDictionaryStringObject)
@@ -673,11 +650,6 @@ public class DataEntityDataReader<TEntity> : DbDataReader
         return PropertyCache.Get(EntityType);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <returns></returns>
     private static IEnumerable<Field> GetFields(IDictionary<string, object?>? dictionary)
     {
         if (dictionary is not null)

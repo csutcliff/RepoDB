@@ -53,5 +53,8 @@ public class DbTypeToSqlServerStringNameResolver : IResolver<DbType, string?>
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static readonly DbTypeToSqlServerStringNameResolver Instance = new();
 }

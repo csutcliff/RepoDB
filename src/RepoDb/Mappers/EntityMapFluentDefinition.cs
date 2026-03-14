@@ -474,7 +474,7 @@ public class EntityMapFluentDefinition<TEntity>
     /// <param name="propertyHandler">The instance of the <see cref="IPropertyHandler{TInput, TResult}"/>.</param>
     /// <returns>The current instance.</returns>
     public EntityMapFluentDefinition<TEntity> PropertyHandler<TPropertyHandler>(Expression<Func<TEntity, object?>> expression,
-        TPropertyHandler propertyHandler) where TPropertyHandler: class =>
+        TPropertyHandler propertyHandler) where TPropertyHandler : class =>
         PropertyHandler(expression, propertyHandler, false);
 
     /// <summary>

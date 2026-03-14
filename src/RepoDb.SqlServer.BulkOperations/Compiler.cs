@@ -23,11 +23,6 @@ internal static class Compiler
         where TEntity : class =>
         MethodFuncCache<TEntity, TResult>.GetFunc(methodName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class MethodFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -74,10 +69,6 @@ internal static class Compiler
         where TEntity : class =>
         VoidMethodFuncCache<TEntity>.GetFunc(methodName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class VoidMethodFuncCache<TEntity>
         where TEntity : class
     {
@@ -127,11 +118,6 @@ internal static class Compiler
         where TEntity : class =>
         ParameterizedMethodFuncCache<TEntity, TResult>.GetFunc(methodName, types);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class ParameterizedMethodFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -188,10 +174,6 @@ internal static class Compiler
         where TEntity : class =>
         ParameterizedVoidMethodFuncCache<TEntity>.GetFunc(methodName, types);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class ParameterizedVoidMethodFuncCache<TEntity>
         where TEntity : class
     {
@@ -251,11 +233,6 @@ internal static class Compiler
         where TEntity : class =>
         PropertyGetterFuncCache<TEntity, TResult>.GetFunc(PropertyCache.Get<TEntity>(propertyName) ?? throw new PropertyNotFoundException($"Property {propertyName} not found"));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class PropertyGetterFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -298,10 +275,6 @@ internal static class Compiler
         where TEntity : class =>
         PropertySetterFuncCache<TEntity>.GetFunc(PropertyCache.Get<TEntity>(propertyName, true));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class PropertySetterFuncCache<TEntity>
         where TEntity : class
     {
@@ -353,11 +326,6 @@ internal static class Compiler
         where TEntity : class =>
         FieldGetterFuncCache<TEntity, TResult>.GetFunc(fieldName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class FieldGetterFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -407,10 +375,6 @@ internal static class Compiler
         where TEnum : Enum =>
         EnumFuncCache<TEnum>.GetFunc(value);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
     private static class EnumFuncCache<TEnum>
         where TEnum : Enum
     {

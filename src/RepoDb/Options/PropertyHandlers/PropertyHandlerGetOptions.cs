@@ -7,11 +7,6 @@ namespace RepoDb.Options;
 /// </summary>
 public sealed class PropertyHandlerGetOptions : PropertyHandlerOptions
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="property"></param>
     private PropertyHandlerGetOptions(DbDataReader reader,
         ClassProperty property)
         : base(property)
@@ -30,12 +25,6 @@ public sealed class PropertyHandlerGetOptions : PropertyHandlerOptions
 
     #region Methods
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="property"></param>
-    /// <returns></returns>
     internal static PropertyHandlerGetOptions Create(DbDataReader reader,
         ClassProperty property) =>
         new PropertyHandlerGetOptions(reader, property);

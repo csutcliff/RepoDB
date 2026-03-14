@@ -28,8 +28,8 @@ public sealed class PrimaryResolver : IResolver<Type, IEnumerable<ClassProperty>
             return pkProperties;
 
         // Get from the implicit mapping
-        if (PrimaryMapper.Get(entityType) is { } v)
-            return [v];
+        if (PrimaryMapper.GetPrimaryKeys(entityType) is { } v)
+            return v;
 
         // Id Property
         if (properties.GetByPropertyName("id") is { } idProperty)

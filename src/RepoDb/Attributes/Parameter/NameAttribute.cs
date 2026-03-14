@@ -23,9 +23,5 @@ public class NameAttribute : PropertyValueAttribute
     /// </summary>
     public string Name => (string)Value!;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     internal override object GetValue() => Name.AsParameter(null);
 }

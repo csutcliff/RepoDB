@@ -8,16 +8,6 @@ namespace RepoDb.Reflection;
 
 internal partial class Compiler
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbCommandExpression"></param>
-    /// <param name="entityIndex"></param>
-    /// <param name="dictionaryInstanceExpression"></param>
-    /// <param name="dbField"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="dbHelper"></param>
-    /// <returns></returns>
     private static BlockExpression GetDictionaryStringObjectParameterAssignmentExpression(ParameterExpression dbCommandExpression,
         int entityIndex,
         Expression dictionaryInstanceExpression,

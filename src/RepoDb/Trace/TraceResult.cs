@@ -54,11 +54,6 @@ internal sealed class TraceResult
             new CancellableTraceLog(Interlocked.Increment(ref _nextSessionId),
                 key, command.CommandText, GetParameters(command)));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <returns></returns>
     private static List<IDbDataParameter> GetParameters(DbCommand command)
     {
         var list = new List<IDbDataParameter>();

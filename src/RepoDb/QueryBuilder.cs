@@ -95,12 +95,6 @@ public sealed class QueryBuilder
         return Append(text.AsQuoted(dbSetting), spaceBefore);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="spaceBefore"></param>
-    /// <returns></returns>
     private QueryBuilder Append(string? value,
         bool spaceBefore = true)
     {
@@ -116,11 +110,6 @@ public sealed class QueryBuilder
         return this;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private QueryBuilder Append(char value)
     {
         stringBuilder.Append(value);
@@ -413,7 +402,7 @@ public sealed class QueryBuilder
     /// <param name="dbSetting">The currently in used <see cref="IDbSetting"/> object.</param>
     /// <returns>The current instance.</returns>
     public QueryBuilder FieldsAndParametersFrom(IEnumerable<Field> fields, int index, IDbSetting dbSetting) =>
-        AppendJoin(fields?.Select(field => field.FieldName.AsFieldAndParameter(index, true, dbSetting)));
+        AppendJoin(fields?.Select(field => field.FieldName.AsFieldAndParameter(index, dbSetting)));
 
 
     /// <summary>
@@ -720,7 +709,7 @@ public sealed class QueryBuilder
     /// <param name="dbSetting">The currently in used <see cref="IDbSetting"/> object.</param>
     /// <returns>The current instance.</returns>
     public QueryBuilder ParametersAsFieldsFrom(IEnumerable<Field> fields, int index, IDbSetting dbSetting) =>
-        AppendJoin(fields?.Select(field => field.FieldName.AsParameterAsField(index, false, dbSetting)));
+        AppendJoin(fields?.Select(field => field.FieldName.AsParameterAsField(index, dbSetting)));
 
     /// <summary>
     /// Appends a word SELECT to the SQL Query Statement.
@@ -938,7 +927,7 @@ public sealed class QueryBuilder
         if (fields.IsNullOrEmpty()) return this;
 
         return Append("WHERE (")
-            .AppendJoin(fields.Select(f => f.FieldName.AsFieldAndParameter(index, true, dbSetting)), " AND ", false)
+            .AppendJoin(fields.Select(f => f.FieldName.AsFieldAndParameter(index, dbSetting)), " AND ", false)
             .Append(')');
     }
 

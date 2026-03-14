@@ -6,6 +6,8 @@ using System.Dynamic;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using RepoDb.Caches;
+using RepoDb.DbSettings;
 using RepoDb.Enumerations;
 using RepoDb.Exceptions;
 using RepoDb.Extensions;
@@ -192,21 +194,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     internal static int ExecuteNonQueryInternal(this IDbConnection connection,
         string commandText,
         object? param,
@@ -298,22 +285,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false).ConfigureAwait(false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<int> ExecuteNonQueryInternalAsync(this DbConnection connection,
         string commandText,
         object? param,
@@ -466,12 +437,34 @@ public static partial class DbConnectionExtension
     /// <param name="connection"></param>
     /// <param name="transaction"></param>
     /// <returns></returns>
-    public static DbRuntimeSetting GetDbRuntimeSetting(this IDbConnection connection, IDbTransaction? transaction=null)
+    public static DbRuntimeSetting GetDbRuntimeSetting(this IDbConnection connection, IDbTransaction? transaction = null)
     {
         ArgumentNullException.ThrowIfNull(connection);
 
         // Get the runtime setting
         var runtimeSetting = DbRuntimeSettingCache.Get(connection, transaction);
+        // Check the presence
+        if (runtimeSetting is null)
+        {
+            ThrowMissingMappingException("runtime setting", connection.GetType());
+        }
+        // Return the runtime setting
+        return runtimeSetting!;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async ValueTask<DbRuntimeSetting> GetDbRuntimeSettingAsync(this IDbConnection connection, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(connection);
+
+        // Get the runtime setting
+        var runtimeSetting = await DbRuntimeSettingCache.GetAsync(connection, transaction, cancellationToken).ConfigureAwait(false);
         // Check the presence
         if (runtimeSetting is null)
         {
@@ -490,7 +483,7 @@ public static partial class DbConnectionExtension
     private static void ThrowMissingMappingException(string property,
         Type connectionType)
     {
-        throw new MissingMappingException($"There is no database {property} mapping found for '{connectionType.FullName}'. Make sure to install the correct extension library and call the bootstrapper method. You can also visit the library's installation page (https://repodb.net/tutorial/installation).");
+        throw new MissingMappingException($"There is no database {property} mapping found for '{connectionType.FullName}'. Make sure to install the correct extension library and call the bootstrapper method.");
     }
 
     #endregion
@@ -499,10 +492,6 @@ public static partial class DbConnectionExtension
 
     #region DbParameters
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="param"></param>
     internal static void SetOutputParameters(object? param)
     {
         switch (param)
@@ -522,17 +511,9 @@ public static partial class DbConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="queryGroup"></param>
     internal static void SetOutputParameters(QueryGroup queryGroup) =>
         SetOutputParameters(queryGroup.GetFields(true));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="queryFields"></param>
     internal static void SetOutputParameters(IEnumerable<QueryField>? queryFields)
     {
         if (queryFields?.Any() != true)
@@ -545,44 +526,25 @@ public static partial class DbConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="queryField"></param>
     internal static void SetOutputParameter(QueryField queryField)
     {
         if (queryField is null)
         {
             return;
         }
-        queryField.Parameter.SetValue(queryField.GetValue());
+        queryField.Parameter.SetValue(queryField.Value);
     }
 
     #endregion
 
     #region GetAndGuardPrimaryKeyOrIdentityKey
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field> GetAndGuardPrimaryKeyOrIdentityKey(Type entityType,
         IDbConnection connection,
         IDbTransaction? transaction) =>
         GetAndGuardPrimaryKeyOrIdentityKey(connection, ClassMappedNameCache.Get(entityType) ?? throw new ArgumentException($"Can't map {entityType} to valid tablename"),
             transaction, entityType);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="transaction"></param>
-    /// <param name="entityType"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field> GetAndGuardPrimaryKeyOrIdentityKey(IDbConnection connection,
         string tableName,
         IDbTransaction? transaction,
@@ -593,13 +555,6 @@ public static partial class DbConnectionExtension
         return GetAndGuardPrimaryKeyOrIdentityKey(tableName, key);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     internal static IEnumerable<DbField> GetAndGuardPrimaryKeyOrIdentityKey(IDbConnection connection,
         string tableName,
         IDbTransaction? transaction)
@@ -609,14 +564,6 @@ public static partial class DbConnectionExtension
         return GetAndGuardPrimaryKeyOrIdentityKey(tableName, keys);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static ValueTask<IEnumerable<Field>> GetAndGuardPrimaryKeyOrIdentityKeyAsync(Type entityType,
         IDbConnection connection,
         IDbTransaction? transaction,
@@ -624,15 +571,6 @@ public static partial class DbConnectionExtension
         GetAndGuardPrimaryKeyOrIdentityKeyAsync(connection, ClassMappedNameCache.Get(entityType) ?? throw new ArgumentException($"Can't map {entityType} to valid tablename"),
             transaction, entityType, cancellationToken);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="transaction"></param>
-    /// <param name="entityType"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<IEnumerable<Field>> GetAndGuardPrimaryKeyOrIdentityKeyAsync(IDbConnection connection,
         string tableName,
         IDbTransaction? transaction,
@@ -648,12 +586,6 @@ public static partial class DbConnectionExtension
         IEnumerable<DbField>? dbFields) =>
         dbFields ?? throw GetKeyFieldNotFoundException(tableName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="field"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field> GetAndGuardPrimaryKeyOrIdentityKey(string tableName,
         Field? field) =>
         field?.AsEnumerable() ?? throw GetKeyFieldNotFoundException(tableName);
@@ -662,12 +594,6 @@ public static partial class DbConnectionExtension
         IEnumerable<Field>? fields) =>
         fields ?? throw GetKeyFieldNotFoundException(tableName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field>? GetAndGuardPrimaryKeyOrIdentityKey(Type entityType,
         DbFieldCollection dbFields) =>
         entityType == null ? null :
@@ -675,12 +601,6 @@ public static partial class DbConnectionExtension
             GetAndGuardPrimaryKeyOrIdentityKeyForDictionaryStringObject(entityType, dbFields) :
             GetAndGuardPrimaryKeysOrIdentityKeyForEntity(entityType, dbFields);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field> GetAndGuardPrimaryKeyOrIdentityKeyForDictionaryStringObject(Type type,
         DbFieldCollection dbFields)
     {
@@ -694,12 +614,6 @@ public static partial class DbConnectionExtension
         return dbField;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field> GetAndGuardPrimaryKeysOrIdentityKeyForEntity(Type type,
         DbFieldCollection dbFields)
     {
@@ -717,43 +631,21 @@ public static partial class DbConnectionExtension
         }
 
         // Identity
-        if (dbFields?.Identity is { } dbIdentity)
-        {
-            return properties.GetByFieldName(dbIdentity.FieldName)?.AsField()?.AsEnumerable() ?? throw GetKeyFieldNotFoundException(type);
-        }
-
-        throw GetKeyFieldNotFoundException(type);
+        return dbFields?.Identity is { } dbIdentity
+            ? (IEnumerable<Field>)(properties.GetByFieldName(dbIdentity.FieldName)?.AsField()?.AsEnumerable() ?? throw GetKeyFieldNotFoundException(type))
+            : throw GetKeyFieldNotFoundException(type);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="context"></param>
-    /// <returns></returns>
     internal static KeyFieldNotFoundException GetKeyFieldNotFoundException(string context) =>
-        new KeyFieldNotFoundException($"No primary key found at the '{context}'.");
+        new($"No primary key found at the '{context}'.");
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
     internal static KeyFieldNotFoundException GetKeyFieldNotFoundException(Type type) =>
-        new KeyFieldNotFoundException($"No primary key found at the target table and also to the given '{type.FullName}' object.");
+        new($"No primary key found at the target table and also to the given '{type.FullName}' object.");
 
     #endregion
 
     #region WhatToQueryGroup
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="what"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     internal static QueryGroup? WhatToQueryGroup<T>(this IDbConnection connection,
         string tableName,
         T what,
@@ -772,33 +664,17 @@ public static partial class DbConnectionExtension
             {
                 var fields = GetAndGuardPrimaryKeyOrIdentityKey(connection, tableName, transaction, whatType);
 
-                if (fields.OneOrDefault() is { } field)
-                    queryGroup = WhatToQueryGroup(field, what);
-                else
-                    queryGroup = WhatToQueryGroup(fields, what);
+                queryGroup = fields.OneOrDefault() is { } field ? WhatToQueryGroup(field, what) : WhatToQueryGroup(fields, what);
             }
             else
             {
                 var dbFields = GetAndGuardPrimaryKeyOrIdentityKey(connection, tableName, transaction);
-                if (dbFields.OneOrDefault() is { } dbField)
-                    queryGroup = WhatToQueryGroup(dbField, what);
-                else
-                    queryGroup = WhatToQueryGroup(dbFields, what);
+                queryGroup = dbFields.OneOrDefault() is { } dbField ? WhatToQueryGroup(dbField, what) : WhatToQueryGroup(dbFields, what);
             }
         }
         return queryGroup;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="what"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<QueryGroup?> WhatToQueryGroupAsync<T>(this IDbConnection connection,
         string tableName,
         T what,
@@ -830,37 +706,16 @@ public static partial class DbConnectionExtension
         return queryGroup;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="tableName"></param>
-    /// <param name="what"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     internal static QueryGroup? WhatToQueryGroup<T>(string tableName,
         T what,
         IEnumerable<DbField> dbFields) where T : notnull
     {
         var key = dbFields?.FirstOrDefault(p => p.IsPrimary) ?? dbFields?.FirstOrDefault(p => p.IsIdentity);
-        if (key is null)
-        {
-            throw new KeyFieldNotFoundException($"No primary key and identity key found at the table '{tableName}'.");
-        }
-        else
-        {
-            return WhatToQueryGroup(key, what);
-        }
+        return key is null
+            ? throw new KeyFieldNotFoundException($"No primary key and identity key found at the table '{tableName}'.")
+            : WhatToQueryGroup(key, what);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="what"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     internal static QueryGroup? WhatToQueryGroup(Type entityType,
         IDbConnection connection,
         object? what,
@@ -890,15 +745,6 @@ public static partial class DbConnectionExtension
         return null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="what"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<QueryGroup?> WhatToQueryGroupAsync(Type entityType,
         IDbConnection connection,
         object what,
@@ -918,13 +764,6 @@ public static partial class DbConnectionExtension
         return WhatToQueryGroup(key, what);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="dbField"></param>
-    /// <param name="what"></param>
-    /// <returns></returns>
     internal static QueryGroup? WhatToQueryGroup<T>(DbField dbField,
         T what) where T : notnull
     {
@@ -934,14 +773,9 @@ public static partial class DbConnectionExtension
         }
         var type = typeof(T);
         var properties = PropertyCache.Get(type) ?? type.GetClassProperties();
-        if (properties?.GetByFieldName(dbField.FieldName, StringComparison.OrdinalIgnoreCase) is { } property)
-        {
-            return WhatToQueryGroup(property.AsField(), what);
-        }
-        else
-        {
-            return new QueryGroup(new QueryField(dbField, what));
-        }
+        return properties?.GetByFieldName(dbField.FieldName, StringComparison.OrdinalIgnoreCase) is { } property
+            ? WhatToQueryGroup(property.AsField(), what)
+            : new QueryGroup(new QueryField(dbField, what));
     }
 
     internal static QueryGroup? WhatToQueryGroup<T>(IEnumerable<DbField> dbFields,
@@ -952,13 +786,6 @@ public static partial class DbConnectionExtension
             Conjunction.And);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="what"></param>
-    /// <returns></returns>
     internal static QueryGroup WhatToQueryGroup<T>(Field field,
         T what) where T : notnull
     {
@@ -986,12 +813,6 @@ public static partial class DbConnectionExtension
             Conjunction.And);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="what"></param>
-    /// <returns></returns>
     internal static QueryGroup? WhatToQueryGroup<T>(T what)
     {
         return what switch
@@ -1009,11 +830,6 @@ public static partial class DbConnectionExtension
 
     #region ToQueryGroup
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup(object? obj)
     {
         if (obj is null)
@@ -1021,22 +837,11 @@ public static partial class DbConnectionExtension
             return null;
         }
         var type = obj.GetType();
-        if (TypeCache.Get(type).IsClassType)
-        {
-            return QueryGroup.Parse(obj, true);
-        }
-        else
-        {
-            throw new Exceptions.InvalidExpressionException("Only dynamic object is supported in the 'where' expression.");
-        }
+        return !TypeCache.Get(type).IsClassType
+            ? throw new Exceptions.InvalidExpressionException("Only dynamic object is supported in the 'where' expression.")
+            : QueryGroup.Parse(obj, true);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbField"></param>
-    /// <param name="entity"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup(DbField dbField,
         object entity)
     {
@@ -1066,36 +871,17 @@ public static partial class DbConnectionExtension
     internal static QueryGroup? ToQueryGroup<TEntity>(this IDbConnection connection, Expression<Func<TEntity, bool>>? where, IDbTransaction? transaction, string? tableName = null)
         where TEntity : class
     {
-        if (where is null)
-        {
-            return null;
-        }
-        return QueryGroup.Parse(where, connection: connection, transaction: transaction, tableName: tableName);
+        return where is null ? null : QueryGroup.Parse(where, connection: connection, transaction: transaction, tableName: tableName);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="field"></param>
-    /// <param name="dictionary"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup(Field field,
         IDictionary<string, object?> dictionary)
     {
-        if (!dictionary.TryGetValue(field.FieldName, out var value))
-        {
-            throw new MissingFieldsException([field.FieldName]);
-        }
-        return ToQueryGroup(new QueryField(field, value));
+        return !dictionary.TryGetValue(field.FieldName, out var value)
+            ? throw new MissingFieldsException([field.FieldName])
+            : ToQueryGroup(new QueryField(field, value));
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="entity"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup<TEntity>(Field field,
         TEntity entity)
         where TEntity : class
@@ -1114,53 +900,23 @@ public static partial class DbConnectionExtension
             Conjunction.And);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="property"></param>
-    /// <param name="entity"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup<TEntity>(ClassProperty? property,
         TEntity entity)
         where TEntity : class =>
         ToQueryGroup(property?.PropertyInfo.AsQueryField(entity));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="queryField"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup(QueryField? queryField)
     {
-        if (queryField is null)
-        {
-            return null;
-        }
-        return new QueryGroup(queryField);
+        return queryField is null ? null : new QueryGroup(queryField);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="queryFields"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup(IEnumerable<QueryField>? queryFields)
     {
-        if (queryFields is null)
-        {
-            return null;
-        }
-        return new QueryGroup(queryFields);
+        return queryFields is null ? null : new QueryGroup(queryFields);
     }
 
     #endregion
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
     internal static void ThrowIfNullOrEmpty<TEntity>(IEnumerable<TEntity> entities)
         where TEntity : class
     {
@@ -1172,11 +928,6 @@ public static partial class DbConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="transaction"></param>
     internal static void ValidateTransactionConnectionObject(this IDbConnection connection,
         IDbTransaction? transaction)
     {
@@ -1186,26 +937,12 @@ public static partial class DbConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="where"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
     internal static void WhereToCommandParameters(DbCommand command,
         QueryGroup? where,
         Type entityType,
         DbFieldCollection dbFields) =>
         DbCommandExtension.CreateParameters(command, where, null, entityType, dbFields);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="properties"></param>
-    /// <param name="qualifiers"></param>
-    /// <returns></returns>
     internal static QueryGroup CreateQueryGroupForUpsert(object entity,
         IEnumerable<ClassProperty> properties,
         IEnumerable<Field> qualifiers)
@@ -1221,12 +958,6 @@ public static partial class DbConnectionExtension
         return new QueryGroup(queryFields);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <param name="qualifiers"></param>
-    /// <returns></returns>
     internal static QueryGroup CreateQueryGroupForUpsert(IDictionary<string, object?> dictionary,
         IEnumerable<Field>? qualifiers = null)
     {
@@ -1245,12 +976,7 @@ public static partial class DbConnectionExtension
             }
         }
 
-        if (queryFields.Count == 0)
-        {
-            throw new MissingFieldsException();
-        }
-
-        return new QueryGroup(queryFields);
+        return queryFields.Count == 0 ? throw new MissingFieldsException() : new QueryGroup(queryFields);
     }
 
     internal static IEnumerable<object> ExtractPropertyValues<TEntity>(IEnumerable<TEntity> entities, Field keyField) where TEntity : class
@@ -1260,45 +986,20 @@ public static partial class DbConnectionExtension
         return ClassExpression.GetEntitiesPropertyValues<TEntity, object>(entities, property);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entity"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field> GetQualifiedFields<TEntity>(TEntity? entity)
         where TEntity : class
     {
         var typeOfEntity = entity?.GetType() ?? typeof(TEntity);
 
-        if (TypeCache.Get(typeOfEntity).IsClassType)
-            return FieldCache.Get(typeOfEntity);
-        else
-            return Field.Parse<TEntity>(entity);
+        return TypeCache.Get(typeOfEntity).IsClassType ? FieldCache.Get(typeOfEntity) : Field.Parse<TEntity>(entity);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
     internal static IEnumerable<Field>? GetQualifiedFields<TEntity>()
         where TEntity : class
     {
-        if (TypeCache.Get(typeof(TEntity)).IsClassType)
-            return FieldCache.Get<TEntity>();
-        else
-            return null;
+        return TypeCache.Get(typeof(TEntity)).IsClassType ? FieldCache.Get<TEntity>() : (IEnumerable<Field>?)null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="commandText"></param>
-    /// <param name="parameterName"></param>
-    /// <param name="values"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static string ToRawSqlWithArrayParams(string commandText,
         string parameterName,
         IEnumerable<object> values,
@@ -1326,19 +1027,6 @@ public static partial class DbConnectionExtension
 
     #region CreateDbCommandForExecution
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="transaction"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     internal static DbCommand CreateDbCommandForExecution(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -1367,20 +1055,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: skipCommandArrayParametersCheck);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="transaction"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<DbCommand> CreateDbCommandForExecutionAsync(this DbConnection connection,
         string commandText,
         object? param = null,
@@ -1410,19 +1084,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: skipCommandArrayParametersCheck);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="transaction"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     private static DbCommand CreateDbCommandForExecutionInternal(this DbConnection connection,
         string commandText,
         object? param = null,
@@ -1806,12 +1467,6 @@ public static partial class DbConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="commandText"></param>
-    /// <param name="queryField"></param>
-    /// <returns></returns>
     private static bool IsPreConstructed(string commandText,
         QueryField queryField)
     {
@@ -1835,44 +1490,19 @@ public static partial class DbConnectionExtension
 
     #endregion
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entity"></param>
-    /// <returns></returns>
     internal static string GetMappedName<TEntity>(TEntity? entity)
         where TEntity : class =>
         (entity != null ? ClassMappedNameCache.Get(entity.GetType()) : ClassMappedNameCache.Get<TEntity>()) ?? throw new ArgumentException($"Can't map table name for '{(entity?.GetType() ?? typeof(TEntity)).FullName}'.", nameof(entity));
 
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
     internal static string GetMappedName<TEntity>(IEnumerable<TEntity> entities)
         where TEntity : class =>
         (entities.FirstOrDefault() is { } entity ? ClassMappedNameCache.Get(entity.GetType()) : ClassMappedNameCache.Get<TEntity>()) ?? throw new ArgumentException($"Can't map table name for '{typeof(TEntity).FullName}'.", nameof(entities));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entities"></param>
-    /// <returns></returns>
     internal static Type GetEntityType<TEntity>(IEnumerable<TEntity>? entities)
         where TEntity : class =>
         GetEntityType(entities?.FirstOrDefault());
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entity"></param>
-    /// <returns></returns>
     internal static Type GetEntityType<TEntity>(TEntity? entity)
         where TEntity : class =>
         entity?.GetType() ?? typeof(TEntity);

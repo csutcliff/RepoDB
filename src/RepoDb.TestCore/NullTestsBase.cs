@@ -640,21 +640,48 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
     }
 
     [TestMethod]
-    public async Task GetRuntimeInfo()
+    public void GetRuntimeInfo()
     {
-        using var sql = await CreateOpenConnectionAsync();
+        using var sql = CreateConnection();
 
-        var info = await DbRuntimeSettingCache.GetAsync(sql, null, TestContext.CancellationToken);
+        var info = sql.GetDbRuntimeSetting();
 
         Assert.IsNotNull(info);
     }
 
     [TestMethod]
-    public async Task BulkQuery()
+    public async Task GetRuntimeInfoAsync()
+    {
+        using var sql = CreateConnection();
+
+        var info = await sql.GetDbRuntimeSettingAsync(cancellationToken: TestContext.CancellationToken);
+
+        Assert.IsNotNull(info);
+    }
+
+    [TestMethod]
+    public async Task ExecuteQueryReader()
     {
         using var sql = await CreateOpenConnectionAsync();
 
+        if (!await sql.SchemaObjectExistsAsync<RelatedTable>(cancellationToken: TestContext.CancellationToken))
+        {
+            await sql.CreateTableAsync<RelatedTable>();
+        }
+        else
+        {
+            await sql.TruncateAsync<RelatedTable>(cancellationToken: TestContext.CancellationToken);
+        }
 
+        await sql.InsertAllAsync<RelatedTable>([
+            new RelatedTable { ID = 1, Name = "a", Ordered = 10, Canceled = 1, Delivered = 5 },
+            new RelatedTable { ID = 2, Name = "b", Ordered = 20, Canceled = 2, Delivered = 10 },
+            new RelatedTable { ID = 3, Name = "c", Ordered = 30, Canceled = 0, Delivered = 0 },
+            new RelatedTable { ID = 4, Name = "d", Ordered = 40, Canceled = 40, Delivered = 0 }
+        ], cancellationToken: TestContext.CancellationToken);
+
+        var rr = await sql.QueryReaderAsync((RelatedTable r) => r.ID > 2).ToListAsync(TestContext.CancellationToken);
+        Assert.HasCount(2, rr);
     }
 
     class RelatedTable
@@ -685,7 +712,7 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
         await sql.InsertAllAsync<RelatedTable>([
             new RelatedTable { ID = 1, Name = "a", Ordered = 10, Canceled = 1, Delivered = 5 },
             new RelatedTable { ID = 2, Name = "b", Ordered = 20, Canceled = 2, Delivered = 10 },
-            new RelatedTable { ID = 3, Name = "c", Ordered = 30, Canceled =0, Delivered =0 },
+            new RelatedTable { ID = 3, Name = "c", Ordered = 30, Canceled = 0, Delivered = 0 },
             new RelatedTable { ID = 4, Name = "d", Ordered = 40, Canceled = 40, Delivered = 0 }
         ], cancellationToken: TestContext.CancellationToken);
 

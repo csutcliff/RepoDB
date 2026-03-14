@@ -65,23 +65,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     internal static IEnumerable<dynamic> ExecuteQueryInternal(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -215,24 +198,6 @@ public static partial class DbConnectionExtension
             cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     internal static async ValueTask<IEnumerable<dynamic>> ExecuteQueryInternalAsync(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -373,24 +338,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     internal static IEnumerable<TResult> ExecuteQueryInternal<TResult>(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -453,24 +400,6 @@ public static partial class DbConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     private static IEnumerable<TResult> ExecuteQueryInternalForDictionaryStringObject<TResult>(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -523,24 +452,6 @@ public static partial class DbConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     private static IEnumerable<TResult> ExecuteQueryInternalForType<TResult>(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -675,25 +586,6 @@ public static partial class DbConnectionExtension
             cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     internal static async ValueTask<IEnumerable<TResult>> ExecuteQueryInternalAsync<TResult>(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -759,25 +651,6 @@ public static partial class DbConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     private static async ValueTask<IEnumerable<TResult>> ExecuteQueryInternalAsyncForDictionaryStringObject<TResult>(this IDbConnection connection,
         string commandText,
         object? param = null,
@@ -832,25 +705,6 @@ public static partial class DbConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="tableName"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <returns></returns>
     private static async ValueTask<IEnumerable<TResult>> ExecuteQueryInternalAsyncForType<TResult>(this IDbConnection connection,
         string commandText,
         object? param = null,

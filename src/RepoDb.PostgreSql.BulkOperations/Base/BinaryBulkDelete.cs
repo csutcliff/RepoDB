@@ -13,21 +13,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteBase<TEntity>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="keepIdentity"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int BinaryBulkDeleteBase<TEntity>(this NpgsqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -115,21 +100,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteBase<DataTable>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="table"></param>
-    /// <param name="rowState"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="keepIdentity"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int BinaryBulkDeleteBase(this NpgsqlConnection connection,
         string tableName,
         DataTable table,
@@ -210,19 +180,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteBase<DbDataReader>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="keepIdentity"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int BinaryBulkDeleteBase(this NpgsqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -302,22 +259,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteBaseAsync<TEntity>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="keepIdentity"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryBulkDeleteBaseAsync<TEntity>(this NpgsqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -408,22 +349,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteBaseAsync<DataTable>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="table"></param>
-    /// <param name="rowState"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="keepIdentity"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryBulkDeleteBaseAsync(this NpgsqlConnection connection,
         string tableName,
         DataTable table,
@@ -507,20 +432,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteBaseAsync<DbDataReader>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="keepIdentity"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryBulkDeleteBaseAsync(this NpgsqlConnection connection,
         string tableName,
         DbDataReader reader,

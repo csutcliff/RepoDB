@@ -1,4 +1,4 @@
-[![MSBuild-CI](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml/badge.svg)](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml)
+[![MSBuild-CI](https://github.com/AmpScm/RepoDb/actions/workflows/build.yml/badge.svg)](https://github.com/AmpScm/RepoDb/actions/workflows/build.yml)
 [![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb)
 [![GitterChat](https://img.shields.io/gitter/room/mikependon/RepoDb?&logo=gitter&color=48B293)](https://gitter.im/RepoDb/community)
 
@@ -9,7 +9,7 @@ RepoDB is an open-source .NET ORM library that bridges the gaps of micro-ORMs an
 ## Important Pages
 
 - [GitHub Home Page](https://github.com/AmpScm/RepoDb) - to learn more about the core library and fork improvements.
-- [Documentation](../../tree/main/docs) - comprehensive guides, features, and references in the repository.
+- [Documentation](https://github.com/AmpScm/RepoDb/blob/main/docs/README.md) - comprehensive guides, features, and references in the repository.
 
 ## Core Features
 

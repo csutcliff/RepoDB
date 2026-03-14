@@ -13,8 +13,12 @@ using OracleINullable = Oracle.ManagedDataAccess.Types.INullable;
 
 namespace RepoDb.DbHelpers;
 
+/// <summary>
+/// 
+/// </summary>
 public sealed class OracleDbHelper : BaseDbHelper
 {
+    /// <inheritdoc />
     public OracleDbHelper(IDbSetting dbSetting)
         : base(new OracleDbTypeToClientTypeResolver())
     {
@@ -22,8 +26,10 @@ public sealed class OracleDbHelper : BaseDbHelper
         DbSetting = dbSetting;
     }
 
+    /// <inheritdoc />
     public IDbSetting DbSetting { get; }
 
+    /// <inheritdoc />
     public override void DynamicHandler<TEventInstance>(TEventInstance instance, string key)
     {
         if (key == "RepoDb.Internal.Compiler.Events[AfterCreateDbParameter]" && instance is OracleParameter op)
@@ -32,6 +38,7 @@ public sealed class OracleDbHelper : BaseDbHelper
         }
     }
 
+    /// <inheritdoc />
     public override Expression? GetParameterPostCreationExpression(ParameterExpression dbParameterExpression, ParameterExpression? propertyExpression, DbField dbField)
     {
         return Expression.Call(typeof(OracleDbHelper).GetMethod(nameof(HandleDbParameterPostCreation), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!,
@@ -85,6 +92,7 @@ public sealed class OracleDbHelper : BaseDbHelper
             AND C.OWNER = :Schema
         ORDER BY C.COLUMN_ID";
 
+    /// <inheritdoc />
     public override DbFieldCollection GetFields(IDbConnection connection, string tableName, IDbTransaction? transaction = null)
     {
         var commandText = GetFieldsQuery;
@@ -114,6 +122,7 @@ public sealed class OracleDbHelper : BaseDbHelper
         return new(dbFields);
     }
 
+    /// <inheritdoc />
     public override async ValueTask<DbFieldCollection> GetFieldsAsync(IDbConnection connection, string tableName, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
         var commandText = GetFieldsQuery;
@@ -182,12 +191,14 @@ public sealed class OracleDbHelper : BaseDbHelper
         );
     }
 
+    /// <inheritdoc />
     public override IEnumerable<DbSchemaObject> GetSchemaObjects(IDbConnection connection, IDbTransaction? transaction = null)
     {
         return connection.ExecuteQuery<(string Type, string Name, string Schema, bool IsCurrentSchema)>(GetSchemaQuery, transaction)
                          .SelectMany(MapSchemaQueryResult);
     }
 
+    /// <inheritdoc />
     public override async ValueTask<IEnumerable<DbSchemaObject>> GetSchemaObjectsAsync(IDbConnection connection, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
         var results = await connection.ExecuteQueryAsync<(string Type, string Name, string Schema, bool IsCurrentSchema)>(GetSchemaQuery, transaction, cancellationToken: cancellationToken);
@@ -215,6 +226,7 @@ public sealed class OracleDbHelper : BaseDbHelper
     }
     #endregion
 
+    /// <inheritdoc />
     public override object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
         switch (value)
@@ -240,6 +252,7 @@ public sealed class OracleDbHelper : BaseDbHelper
         }
     }
 
+    /// <inheritdoc />
     public override Func<object?> PrepareForIdentityOutput(DbCommand command)
     {
         int collectionSize = 0;
@@ -309,6 +322,7 @@ public sealed class OracleDbHelper : BaseDbHelper
         }
     }
 
+    /// <inheritdoc />
     public override void PrepareForBatchOperation(DbCommand command, int count)
     {
         OracleCommand cmd = (OracleCommand)command;
@@ -348,7 +362,7 @@ public sealed class OracleDbHelper : BaseDbHelper
         }
     }
 
-
+    /// <inheritdoc />
     public override string? GetJsonColumnType(DbConnection sql, DbTransaction transaction)
     {
         if (sql.GetDbRuntimeSetting(transaction) is { } info)
@@ -363,6 +377,7 @@ public sealed class OracleDbHelper : BaseDbHelper
     private const string QueryVersion = @"SELECT banner FROM v$version";
     private const string QueryProduct = @"SELECT PRODUCT, VERSION FROM PRODUCT_COMPONENT_VERSION WHERE PRODUCT LIKE 'Oracle%'";
 
+    /// <inheritdoc />
     public override DbRuntimeSetting GetDbConnectionRuntimeInformation(IDbConnection connection, IDbTransaction? transaction)
     {
         string? banner = null;

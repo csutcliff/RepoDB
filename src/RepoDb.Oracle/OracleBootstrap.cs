@@ -6,7 +6,7 @@ using RepoDb.StatementBuilders;
 namespace RepoDb;
 
 /// <summary>
-/// A class used to initialize necessary objects that is connected to <see cref="NpgsqlConnection"/> object.
+/// A class used to initialize necessary objects that is connected to <see cref="OracleConnection"/> object.
 /// </summary>
 internal static class OracleBootstrap
 {
@@ -22,14 +22,11 @@ internal static class OracleBootstrap
     #region Methods
 
     /// <summary>
-    /// Initializes all necessary settings for PostgreSql.
+    /// Initializes all necessary settings for Oracle.
     /// </summary>
-    [Obsolete("This class will soon to be hidden as internal class. Use the 'GlobalConfiguration.Setup().UsePostgreSql()' method instead.")]
+    [Obsolete("This class will soon to be hidden as internal class. Use the 'GlobalConfiguration.Setup().UseOracle()' method instead.")]
     public static void Initialize() => InitializeInternal();
 
-    /// <summary>
-    ///
-    /// </summary>
     internal static void InitializeInternal()
     {
         // Skip if already initialized

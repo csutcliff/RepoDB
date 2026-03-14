@@ -7,10 +7,6 @@ namespace RepoDb.Options;
 /// </summary>
 public sealed class ClassHandlerSetOptions : ClassHandlerOptions
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
     internal ClassHandlerSetOptions(DbCommand command)
     {
         DbCommand = command;
@@ -27,11 +23,6 @@ public sealed class ClassHandlerSetOptions : ClassHandlerOptions
 
     #region Methods
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <returns></returns>
     internal static ClassHandlerSetOptions Create(DbCommand command) =>
         new ClassHandlerSetOptions(command);
 

@@ -18,6 +18,12 @@ public static partial class SqlServerGlobalConfiguration
         return UseSqlServer(globalConfiguration, null);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="globalConfiguration"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static GlobalConfiguration UseSqlServer(this GlobalConfiguration globalConfiguration,
                                                     SqlServerOptions? options = null)
     {

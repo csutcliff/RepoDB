@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Globalization;
-using RepoDb.Contexts.Cachers;
+using RepoDb.Contexts.Caches;
 using RepoDb.Contexts.Execution;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -14,15 +14,6 @@ namespace RepoDb.Contexts.Providers;
 /// </summary>
 internal static class InsertAllExecutionContextProvider
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="tableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="hints"></param>
-    /// <returns></returns>
     private static string GetKey(Type entityType,
         string tableName,
         IEnumerable<Field> fields,
@@ -200,17 +191,6 @@ internal static class InsertAllExecutionContextProvider
         return context;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="fields"></param>
-    /// <param name="commandText"></param>
-    /// <returns></returns>
     private static InsertAllExecutionContext CreateInternal(Type entityType,
         IDbConnection connection,
         string tableName,

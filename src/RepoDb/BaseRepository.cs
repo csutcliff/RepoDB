@@ -21,7 +21,7 @@ public abstract partial class BaseRepository<TEntity, TDbConnection> : IDisposab
     /// Creates a new instance of <see cref="BaseRepository{TEntity, TDbConnection}"/> class.
     /// </summary>
     /// <param name="connectionString">The connection string to be used by this repository.</param>
-    public BaseRepository(string connectionString)
+    protected BaseRepository(string connectionString)
         : this(connectionString,
               null,
               ConnectionPersistency.PerCall,
@@ -36,7 +36,7 @@ public abstract partial class BaseRepository<TEntity, TDbConnection> : IDisposab
     /// </summary>
     /// <param name="connectionString">The connection string to be used by this repository.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used on every operations by this repository.</param>
-    public BaseRepository(string connectionString,
+    protected BaseRepository(string connectionString,
         int? commandTimeout)
         : this(connectionString,
               commandTimeout,
@@ -52,7 +52,7 @@ public abstract partial class BaseRepository<TEntity, TDbConnection> : IDisposab
     /// </summary>
     /// <param name="connectionString">The connection string to be used by this repository.</param>
     /// <param name="cache">The cache object to be used by this repository. This object must implement the <see cref="ICache"/> interface.</param>
-    public BaseRepository(string connectionString,
+    protected BaseRepository(string connectionString,
         ICache? cache)
         : this(connectionString,
               null,
@@ -285,14 +285,8 @@ public abstract partial class BaseRepository<TEntity, TDbConnection> : IDisposab
     /// </summary>
     public void Dispose()
     {
-        try
-        {
-            Dispose(true);
-        }
-        finally
-        {
-            GC.SuppressFinalize(this);
-        }
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>

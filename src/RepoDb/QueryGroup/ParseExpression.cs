@@ -14,11 +14,6 @@ public partial class QueryGroup
      * Others
      */
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static bool IsDirect<TEntity>(BinaryExpression expression) =>
         (
             expression.Left.NodeType == ExpressionType.Constant ||
@@ -62,12 +57,6 @@ public partial class QueryGroup
         return parsed;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static QueryGroup? Parse<TEntity>(Expression expression)
         where TEntity : class
     {
@@ -118,17 +107,11 @@ public partial class QueryGroup
      * Binary
      */
 
-    static readonly Lazy<MemberInfo?> VBCompareString = new(() =>
+    private static readonly Lazy<MemberInfo?> VBCompareString = new(() =>
         (Type.GetType("Microsoft.VisualBasic.CompilerServices.Operators, Microsoft.VisualBasic.Core", false)
             ?? Type.GetType("Microsoft.VisualBasic.CompilerServices.Operators, Microsoft.VisualBasic", false)
         )?.GetMethod("CompareString", BindingFlags.Static | BindingFlags.Public));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static QueryGroup Parse<TEntity>(BinaryExpression expression)
         where TEntity : class
     {
@@ -186,7 +169,7 @@ public partial class QueryGroup
             var vv = QueryField.Parse<TEntity>(expression).GetFields(false)!.Single();
 
             var rightType = expression.Right.Type;
-            return new QueryGroup([new JsonExtractQueryField(vv.Field!.FieldName, jsonPath, QueryField.GetOperation(expression.NodeType), vv.GetValue(), dbType: TypeMapCache.Get(rightType) ?? ClientTypeToDbTypeResolver.Instance.Resolve(rightType))]);
+            return new QueryGroup([new JsonExtractQueryField(vv.Field!.FieldName, jsonPath, QueryField.GetOperation(expression.NodeType), vv.Value, dbType: TypeMapCache.Get(rightType) ?? ClientTypeToDbTypeResolver.Instance.Resolve(rightType))]);
         }
         else if (expression.Left is MethodCallExpression m3
             && m3.Object is { }
@@ -250,7 +233,7 @@ public partial class QueryGroup
         return leftQueryGroup;
     }
 
-    sealed class ReplaceVisitor : ExpressionVisitor
+    private sealed class ReplaceVisitor : ExpressionVisitor
     {
         private readonly Expression _from;
         private readonly Expression _to;
@@ -302,16 +285,10 @@ public partial class QueryGroup
      * Unary
      */
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static QueryGroup Parse<TEntity>(UnaryExpression expression)
         where TEntity : class
     {
-        if (expression.NodeType == ExpressionType.Not || expression.NodeType == ExpressionType.Convert)
+        if (expression.NodeType is ExpressionType.Not or ExpressionType.Convert)
         {
             // These two handle
             if (expression.Operand is MemberExpression memberExpression && ParseME(memberExpression, expression.NodeType) is { } r1)
@@ -342,13 +319,6 @@ public partial class QueryGroup
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="expression"></param>
-    /// <param name="unaryNodeType"></param>
-    /// <returns></returns>
     private static QueryGroup? Parse<TEntity>(MethodCallExpression expression,
         ExpressionType? unaryNodeType = null)
         where TEntity : class
@@ -359,11 +329,6 @@ public partial class QueryGroup
 
     #region GetConjunction
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static Conjunction GetConjunction(BinaryExpression expression) => expression.NodeType switch
     {
         ExpressionType.Or or ExpressionType.OrElse => Conjunction.Or,
@@ -371,11 +336,6 @@ public partial class QueryGroup
         _ => throw new NotSupportedException($"Unsupported expression for conjunction: {expression}")
     };
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="expression"></param>
-    /// <returns></returns>
     private static Conjunction GetConjunction(MethodCallExpression expression) =>
         expression.Method.Name == "Any" ? Conjunction.Or : Conjunction.And;
 

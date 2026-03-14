@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Concurrent;
 using System.Data;
 using System.Data.Common;
 using System.Linq.Expressions;
@@ -7,11 +6,11 @@ using System.Text.RegularExpressions;
 using Microsoft.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.SqlTypes;
+using RepoDb.Caches;
 using RepoDb.DbSettings;
 using RepoDb.Enumerations;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
-using RepoDb.Options;
 using RepoDb.Resolvers;
 
 namespace RepoDb.DbHelpers;
@@ -38,10 +37,6 @@ public sealed class SqlServerDbHelper : BaseDbHelper
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private const string FieldInfoCommandText = @"
         SELECT C.COLUMN_NAME AS ColumnName
             , CONVERT(BIT, COALESCE(TC.is_primary, 0)) AS IsPrimary
@@ -87,6 +82,7 @@ public sealed class SqlServerDbHelper : BaseDbHelper
             C.TABLE_SCHEMA = @Schema
             AND C.TABLE_NAME = @TableName;";
 
+#if NET
     private const string VectorInfoCommandText = @"
         SELECT
             c.name,
@@ -96,12 +92,8 @@ public sealed class SqlServerDbHelper : BaseDbHelper
         JOIN sys.tables tbl ON c.object_id = tbl.object_id
         JOIN sys.schemas s ON tbl.schema_id = s.schema_id
         WHERE s.name = @Schema AND tbl.name = @TableName AND c.name IN (@Columns);";
+#endif
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
     private DbField ReaderToDbField(DbDataReader reader)
     {
         return new DbField(reader.GetString(0),
@@ -118,12 +110,6 @@ public sealed class SqlServerDbHelper : BaseDbHelper
             "MSSQL");
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private async Task<DbField> ReaderToDbFieldAsync(DbDataReader reader,
         CancellationToken cancellationToken = default)
     {
@@ -295,12 +281,14 @@ public sealed class SqlServerDbHelper : BaseDbHelper
         JOIN sys.schemas s ON o.schema_id = s.schema_id
         WHERE o.type IN ('U', 'V') AND is_ms_shipped = 0";
 
+    /// <inheritdoc />
     public override IEnumerable<DbSchemaObject> GetSchemaObjects(IDbConnection connection, IDbTransaction? transaction = null)
     {
         return connection.ExecuteQuery<(string Type, string Name, string Schema)>(GetSchemaQuery, transaction)
                          .Select(MapSchemaQueryResult);
     }
 
+    /// <inheritdoc />
     public override async ValueTask<IEnumerable<DbSchemaObject>> GetSchemaObjectsAsync(IDbConnection connection, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
         var results = await connection.ExecuteQueryAsync<(string Type, string Name, string Schema)>(GetSchemaQuery, transaction, cancellationToken: cancellationToken);
@@ -386,6 +374,7 @@ public sealed class SqlServerDbHelper : BaseDbHelper
     ORDER BY
         ColumnType, is_nullable DESC;";
 
+    /// <inheritdoc />
     public override DbRuntimeSetting GetDbConnectionRuntimeInformation(IDbConnection connection, IDbTransaction? transaction)
     {
         using var rdr = (SqlDataReader)connection.ExecuteReader(DbRuntimeInfoQuery, transaction: transaction);
@@ -443,6 +432,7 @@ public sealed class SqlServerDbHelper : BaseDbHelper
         };
     }
 
+    /// <inheritdoc />
     public override DbParameter? CreateTableParameter(IDbConnection connection, IDbTransaction? transaction, Type? fieldType, IEnumerable values, string parameterName)
     {
         var info = DbRuntimeSettingCache.Get(connection, transaction);
@@ -474,6 +464,7 @@ public sealed class SqlServerDbHelper : BaseDbHelper
         return null;
     }
 
+    /// <inheritdoc />
     public override bool CanCreateTableParameter(IDbConnection connection, IDbTransaction? transaction, Type? fieldType, IEnumerable values)
     {
         var info = DbRuntimeSettingCache.Get(connection, transaction);
@@ -483,6 +474,7 @@ public sealed class SqlServerDbHelper : BaseDbHelper
             && pm.TryGetValue(elementType, out _);
     }
 
+    /// <inheritdoc />
     public override string? CreateTableParameterText(IDbConnection connection, IDbTransaction? transaction, Type? fieldType, string parameterName, IEnumerable values)
     {
         var info = DbRuntimeSettingCache.Get(connection, transaction);
@@ -497,6 +489,7 @@ public sealed class SqlServerDbHelper : BaseDbHelper
         return null;
     }
 
+    /// <inheritdoc />
     public override string? GetJsonColumnType(DbConnection sql, DbTransaction transaction)
     {
         if (sql.GetDbRuntimeSetting(transaction) is { } info)
@@ -508,6 +501,7 @@ public sealed class SqlServerDbHelper : BaseDbHelper
         return "VARCHAR(max)";
     }
 
+    /// <inheritdoc />
     public override object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
         if (parameter is SqlParameter sp)

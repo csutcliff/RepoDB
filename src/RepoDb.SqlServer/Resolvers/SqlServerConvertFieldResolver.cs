@@ -52,5 +52,8 @@ public class SqlServerConvertFieldResolver : DbConvertFieldResolver
     #endregion
 
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static readonly SqlServerConvertFieldResolver Instance = new();
 }

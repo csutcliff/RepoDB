@@ -4,6 +4,7 @@ using System.Dynamic;
 using RepoDb.Interfaces;
 
 namespace RepoDb;
+
 public static partial class DbConnectionExtension
 {
     #region ExecuteReader
@@ -46,22 +47,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <param name="beforeExecutionCallback"></param>
-    /// <returns></returns>
     internal static DbDataReader ExecuteReaderInternal(this IDbConnection connection,
         string commandText,
         object? param,
@@ -176,23 +161,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false).ConfigureAwait(false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <param name="beforeExecutionCallbackAsync"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<DbDataReader> ExecuteReaderInternalAsync(this IDbConnection connection,
         string commandText,
         object? param,

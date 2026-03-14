@@ -8,7 +8,7 @@ namespace RepoDb.Attributes.Parameter;
 /// property via a class property mapping.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class DirectionAttribute : PropertyValueAttribute
+public sealed class DirectionAttribute : PropertyValueAttribute
 {
     /// <summary>
     /// Creates a new instance of <see cref="DirectionAttribute"/> class.

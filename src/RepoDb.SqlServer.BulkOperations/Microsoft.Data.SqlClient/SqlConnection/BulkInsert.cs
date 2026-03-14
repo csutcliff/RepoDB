@@ -601,22 +601,6 @@ public static partial class SqlConnectionExtension
 
     #region BulkInsertInternal
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     internal static int BulkInsertInternal<TEntity>(SqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -641,18 +625,6 @@ public static partial class SqlConnectionExtension
             usePhysicalPseudoTempTable,
             transaction);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     internal static int BulkInsertInternal(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -715,24 +687,6 @@ public static partial class SqlConnectionExtension
 
     #region BulkInsertInternalAsync
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static Task<int> BulkInsertInternalAsync<TEntity>(SqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -761,19 +715,6 @@ public static partial class SqlConnectionExtension
             trace,
             cancellationToken);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static Task<int> BulkInsertInternalAsync(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -840,24 +781,6 @@ public static partial class SqlConnectionExtension
             trace,
             cancellationToken);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async Task<int> BulkInsertInternalAsync<TEntity>(SqlConnection connection,
         string tableName,
         IAsyncEnumerable<TEntity> entities,

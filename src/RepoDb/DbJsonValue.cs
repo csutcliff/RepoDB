@@ -12,14 +12,14 @@ namespace RepoDb;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [DebuggerDisplay($"{{DebuggerDisplay}}")]
-public struct DbJsonValue<T> : IFormattable, IDbJsonValue
+public struct DbJsonValue<T> : IFormattable, IDbJsonValue, IEquatable<T>, IEquatable<DbJsonValue<T>>
 #if NET
     , IParsable<DbJsonValue<T>>, IUtf8SpanParsable<DbJsonValue<T>>
 #endif
     where T : class
 {
-    JsonNode? _json;
-    T? _value;
+    private JsonNode? _json;
+    private T? _value;
 
     /// <summary>
     ///
@@ -29,7 +29,7 @@ public struct DbJsonValue<T> : IFormattable, IDbJsonValue
     /// <summary>
     ///
     /// </summary>
-    public T Value => _value ?? (_value = Converter.FromJsonToObject<T>(_json))!;
+    public T Value => _value ?? (_value = Converter.FromJsonToObject<T>(_json));
 
     /// <summary>
     ///
@@ -59,22 +59,17 @@ public struct DbJsonValue<T> : IFormattable, IDbJsonValue
     public override bool Equals(object? obj)
     {
         if (obj is JsonNode node)
-            return node.ToJsonString() == Json.ToJsonString();
+            return Equals(node);
         else if (obj is T t)
-            return Value.Equals(t);
+            return Equals(t);
         else if (obj is DbJsonValue<T> vt)
-        {
-            if (vt._json is { } jv)
-                return Equals(jv);
-            else
-                return Equals(vt.Json);
-        }
+            return Equals(vt);
 
         return false;
     }
 
     /// <inheritdoc/>
-    public override int GetHashCode() => 1;
+    public override readonly int GetHashCode() => 1;
 
     /// <inheritdoc/>
     public string ToString(string? format, IFormatProvider? formatProvider)
@@ -146,20 +141,43 @@ public struct DbJsonValue<T> : IFormattable, IDbJsonValue
         }
     }
 
+    /// <inheritdoc/>
+    public bool Equals(JsonNode other)
+    {
+        return other?.ToJsonString() == Json.ToJsonString();
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(T? other)
+    {
+        return Value.Equals(other);
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(DbJsonValue<T> other)
+    {
+        if (other._json is { } jv)
+            return Equals(jv);
+        else
+            return Equals(other.Json);
+    }
+
     /// <summary>
     ///
     /// </summary>
     /// <param name="v1"></param>
     /// <param name="v2"></param>
     /// <returns></returns>
-    public static bool operator==(DbJsonValue<T> v1, DbJsonValue<T> v2) => v1.Equals(v2);
+    public static bool operator ==(DbJsonValue<T> v1, DbJsonValue<T> v2) => v1.Equals(v2);
+
     /// <summary>
     ///
     /// </summary>
     /// <param name="v1"></param>
     /// <param name="v2"></param>
     /// <returns></returns>
-    public static bool operator!=(DbJsonValue<T> v1, DbJsonValue<T> v2) => !v1.Equals(v2);
+    public static bool operator !=(DbJsonValue<T> v1, DbJsonValue<T> v2) => !v1.Equals(v2);
+
     /// <summary>
     ///
     /// </summary>
@@ -167,6 +185,7 @@ public struct DbJsonValue<T> : IFormattable, IDbJsonValue
     /// <param name="v2"></param>
     /// <returns></returns>
     public static bool operator ==(DbJsonValue<T> v1, JsonNode v2) => v1.Equals(v2);
+
     /// <summary>
     ///
     /// </summary>
@@ -174,6 +193,7 @@ public struct DbJsonValue<T> : IFormattable, IDbJsonValue
     /// <param name="v2"></param>
     /// <returns></returns>
     public static bool operator !=(DbJsonValue<T> v1, JsonNode v2) => !v1.Equals(v2);
+
     /// <summary>
     ///
     /// </summary>
@@ -181,6 +201,7 @@ public struct DbJsonValue<T> : IFormattable, IDbJsonValue
     /// <param name="v2"></param>
     /// <returns></returns>
     public static bool operator ==(JsonNode v1, DbJsonValue<T> v2) => v2.Equals(v1);
+
     /// <summary>
     ///
     /// </summary>
@@ -196,5 +217,5 @@ public struct DbJsonValue<T> : IFormattable, IDbJsonValue
     public static implicit operator DbJsonValue<T>(T value) => new DbJsonValue<T> { _value = value };
 
     // Convert here, to avoid side-effects
-    private string DebuggerDisplay => (_json ?? Converter.ToJsonObject<T>(_value))?.ToJsonString(Converter.JsonSerializerOptions) ?? "null";
+    private readonly string DebuggerDisplay => (_json ?? Converter.ToJsonObject<T>(_value))?.ToJsonString(Converter.JsonSerializerOptions) ?? "null";
 }

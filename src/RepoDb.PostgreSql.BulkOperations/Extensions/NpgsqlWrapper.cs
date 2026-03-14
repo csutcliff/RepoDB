@@ -14,25 +14,6 @@ public static partial class NpgsqlConnectionExtension
 {
     #region PseudoBasedBinaryImport
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="getPseudoTableName"></param>
-    /// <param name="getMappings"></param>
-    /// <param name="binaryImport"></param>
-    /// <param name="getMergeToPseudoCommandText"></param>
-    /// <param name="setIdentities"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="isBinaryBulkInsert"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int PseudoBasedBinaryImport(this NpgsqlConnection connection,
         string tableName,
         int bulkCopyTimeout,
@@ -127,26 +108,6 @@ public static partial class NpgsqlConnectionExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="getPseudoTableName"></param>
-    /// <param name="getMappings"></param>
-    /// <param name="binaryImportAsync"></param>
-    /// <param name="getMergeToPseudoCommandText"></param>
-    /// <param name="setIdentities"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="isBinaryBulkInsert"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> PseudoBasedBinaryImportAsync(this NpgsqlConnection connection,
         string tableName,
         int bulkCopyTimeout,
@@ -255,14 +216,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region TransactionalExecute
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="execute"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static TResult? TransactionalExecute<TResult>(this NpgsqlConnection connection,
         Func<TResult> execute,
         NpgsqlTransaction? transaction)
@@ -318,15 +271,6 @@ public static partial class NpgsqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="executeAsync"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<TResult?> TransactionalExecuteAsync<TResult>(this NpgsqlConnection connection,
         Func<Task<TResult>> executeAsync,
         NpgsqlTransaction? transaction,

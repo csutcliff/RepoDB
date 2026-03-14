@@ -99,7 +99,7 @@ public static class DataEntityExtension
         }
         else
         {
-            var index = tableName.IndexOf('.');
+            var index = tableName.IndexOf('.', StringComparison.Ordinal);
             if (index >= 0)
             {
                 return tableName.Substring(0, index);
@@ -150,22 +150,10 @@ public static class DataEntityExtension
         return tableName;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
     internal static PropertyInfo GetPropertyOrThrow<TEntity>(string propertyName)
         where TEntity : class =>
         GetPropertyOrThrow(typeof(TEntity), propertyName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
     private static PropertyInfo GetPropertyOrThrow(Type type,
         string propertyName)
     {
@@ -174,22 +162,10 @@ public static class DataEntityExtension
         return property;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
     internal static ClassProperty GetClassPropertyOrThrow<TEntity>(string? propertyName)
         where TEntity : class =>
         GetClassPropertyOrThrow(typeof(TEntity), propertyName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
     private static ClassProperty GetClassPropertyOrThrow(Type type,
         string? propertyName)
     {

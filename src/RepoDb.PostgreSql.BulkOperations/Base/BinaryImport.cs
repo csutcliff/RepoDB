@@ -87,21 +87,6 @@ public static partial class NpgsqlConnectionExtension
             transaction);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int BinaryImport<TEntity>(this NpgsqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -249,21 +234,6 @@ public static partial class NpgsqlConnectionExtension
                 transaction);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="table"></param>
-    /// <param name="rowState"></param>
-    /// <param name="mappings"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int BinaryImport(this NpgsqlConnection connection,
         string tableName,
         DataTable table,
@@ -349,19 +319,6 @@ public static partial class NpgsqlConnectionExtension
             connection.GetDbSetting(),
             transaction);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int BinaryImport(this NpgsqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -495,22 +452,6 @@ public static partial class NpgsqlConnectionExtension
             cancellationToken);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryImportAsync<TEntity>(this NpgsqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -667,22 +608,6 @@ public static partial class NpgsqlConnectionExtension
             cancellationToken);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="table"></param>
-    /// <param name="rowState"></param>
-    /// <param name="mappings"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryImportAsync(this NpgsqlConnection connection,
         string tableName,
         DataTable table,
@@ -774,20 +699,6 @@ public static partial class NpgsqlConnectionExtension
             transaction,
             cancellationToken);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryImportAsync(this NpgsqlConnection connection,
         string tableName,
         DbDataReader reader,

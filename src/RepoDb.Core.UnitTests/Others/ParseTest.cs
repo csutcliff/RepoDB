@@ -33,12 +33,12 @@ public class ParseTest
 
         // Assert
         Assert.HasCount(4, queryFields);
-        properties.ForEach(p =>
+        foreach(var p in properties)
         {
             var queryField = queryFields.FirstOrDefault(qf => qf.Field.FieldName == p.Name);
             Assert.IsNotNull(queryField);
             Assert.AreEqual(p.PropertyType, queryField.Field.Type);
-        });
+        }
     }
 
     [TestMethod]
@@ -73,11 +73,11 @@ public class ParseTest
         // Assert
         Assert.HasCount(4, properties);
         Assert.HasCount(4, classProperties);
-        properties.ForEach(p =>
+        foreach(var p in properties)
         {
             var property = classProperties.FirstOrDefault(cp => cp.PropertyInfo == p);
             Assert.IsNotNull(property);
-        });
+        }
     }
 
     #endregion
@@ -94,12 +94,12 @@ public class ParseTest
         // Assert
         Assert.HasCount(4, properties);
         Assert.AreEqual(4, fields.Count);
-        properties.ForEach(p =>
+        foreach(var p in properties)
         {
             var field = fields.FirstOrDefault(f => f.FieldName == p.Name);
             Assert.IsNotNull(field);
             Assert.AreEqual(p.PropertyType, field.Type);
-        });
+        }
     }
 
     [TestMethod]
@@ -112,12 +112,12 @@ public class ParseTest
         // Assert
         Assert.HasCount(4, properties);
         Assert.AreEqual(4, fields.Count);
-        properties.ForEach(p =>
+        foreach(var p in properties)
         {
             var field = fields.FirstOrDefault(f => f.FieldName == p.Name);
             Assert.IsNotNull(field);
             Assert.AreEqual(p.PropertyType, field.Type);
-        });
+        }
     }
 
     [TestMethod]

@@ -16,16 +16,6 @@ public static partial class NpgsqlConnectionExtension
 {
     #region Sync
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static NpgsqlBinaryImporter GetNpgsqlBinaryImporter(NpgsqlConnection connection,
         string tableName,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -49,16 +39,6 @@ public static partial class NpgsqlConnectionExtension
         return importer;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="importer"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="entityType"></param>
-    /// <param name="identityBehavior"></param>
     private static int BinaryImport<TEntity>(NpgsqlBinaryImporter importer,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -79,13 +59,6 @@ public static partial class NpgsqlConnectionExtension
             identityBehavior);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="dictionaries"></param>
-    /// <param name="mappings"></param>
-    /// <param name="identityBehavior"></param>
     private static int BinaryImport(NpgsqlBinaryImporter importer,
         IEnumerable<IDictionary<string, object?>> dictionaries,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -106,13 +79,6 @@ public static partial class NpgsqlConnectionExtension
             identityBehavior);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="rows"></param>
-    /// <param name="mappings"></param>
-    /// <param name="identityBehavior"></param>
     private static int BinaryImport(NpgsqlBinaryImporter importer,
         IEnumerable<DataRow> rows,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -134,13 +100,6 @@ public static partial class NpgsqlConnectionExtension
             identityBehavior);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="identityBehavior"></param>
     private static int BinaryImport(NpgsqlBinaryImporter importer,
         DbDataReader reader,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -159,16 +118,6 @@ public static partial class NpgsqlConnectionExtension
             identityBehavior);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="importer"></param>
-    /// <param name="moveNext"></param>
-    /// <param name="getCurrent"></param>
-    /// <param name="write"></param>
-    /// <param name="identityBehavior"></param>
-    /// <returns></returns>
     private static int BinaryImportWrite<TEntity>(NpgsqlBinaryImporter importer,
         Func<bool> moveNext,
         Func<TEntity> getCurrent,
@@ -192,12 +141,6 @@ public static partial class NpgsqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="data"></param>
-    /// <param name="npgsqlDbType"></param>
     private static void BinaryImportWrite(NpgsqlBinaryImporter importer,
         object? data,
         NpgsqlDbType? npgsqlDbType)
@@ -252,17 +195,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region Async
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="mappings"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<NpgsqlBinaryImporter> GetNpgsqlBinaryImporterAsync(NpgsqlConnection connection,
         string tableName,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -292,17 +224,6 @@ public static partial class NpgsqlConnectionExtension
         return importer;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="importer"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="entityType"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="cancellationToken"></param>
     private static async Task<int> BinaryImportAsync<TEntity>(NpgsqlBinaryImporter importer,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -325,15 +246,6 @@ public static partial class NpgsqlConnectionExtension
             cancellationToken);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="dictionaries"></param>
-    /// <param name="mappings"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryImportExplicitAsync(NpgsqlBinaryImporter importer,
         IEnumerable<IDictionary<string, object?>> dictionaries,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -357,14 +269,6 @@ public static partial class NpgsqlConnectionExtension
             cancellationToken);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="rows"></param>
-    /// <param name="mappings"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="cancellationToken"></param>
     private static async Task<int> BinaryImportAsync(NpgsqlBinaryImporter importer,
         IEnumerable<DataRow> rows,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -388,14 +292,6 @@ public static partial class NpgsqlConnectionExtension
             cancellationToken);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="cancellationToken"></param>
     private static async Task<int> BinaryImportAsync(NpgsqlBinaryImporter importer,
         DbDataReader reader,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
@@ -417,17 +313,6 @@ public static partial class NpgsqlConnectionExtension
             cancellationToken: cancellationToken);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="importer"></param>
-    /// <param name="moveNextAsync"></param>
-    /// <param name="getCurrentAsync"></param>
-    /// <param name="writeAsync"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryImportWriteAsync<TEntity>(NpgsqlBinaryImporter importer,
         Func<Task<bool>> moveNextAsync,
         Func<Task<TEntity>> getCurrentAsync,
@@ -453,14 +338,6 @@ public static partial class NpgsqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="importer"></param>
-    /// <param name="data"></param>
-    /// <param name="npgsqlDbType"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task BinaryImportWriteAsync(NpgsqlBinaryImporter importer,
         object? data,
         NpgsqlDbType? npgsqlDbType,
@@ -506,14 +383,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region Others
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="mappings"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBinaryImportCopyCommand(string tableName,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
         BulkImportIdentityBehavior identityBehavior,
@@ -531,23 +400,10 @@ public static partial class NpgsqlConnectionExtension
         return $"COPY {tableName.AsQuoted(true, dbSetting)} ({textColumns}) FROM STDIN (FORMAT BINARY)";
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="mappings"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetTextColumns(IEnumerable<NpgsqlBulkInsertMapItem> mappings,
         IDbSetting? dbSetting) =>
         mappings.Select(mapping => mapping.DestinationColumn.AsQuoted(true, dbSetting)).Join(", ");
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="row"></param>
-    /// <param name="columnName"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
     private static object? GetDataRowColumnData(DataRow row,
         string columnName,
         NpgsqlDbType? type)

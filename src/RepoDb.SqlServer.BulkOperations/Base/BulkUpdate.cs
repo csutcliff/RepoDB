@@ -10,22 +10,6 @@ public static partial class SqlConnectionExtension
 {
     #region BulkUpdateInternalBase
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <returns></returns>
     internal static int BulkUpdateInternalBase(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -346,23 +330,6 @@ public static partial class SqlConnectionExtension
 
     #region BulkUpdateInternalBaseAsync
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async Task<int> BulkUpdateInternalBaseAsync(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -512,24 +479,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="dataTable"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="rowState"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async Task<int> BulkUpdateInternalBaseAsync(SqlConnection connection,
         string tableName,
         DataTable dataTable,

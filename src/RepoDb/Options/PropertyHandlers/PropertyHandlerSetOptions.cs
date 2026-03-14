@@ -7,11 +7,6 @@ namespace RepoDb.Options;
 /// </summary>
 public sealed class PropertyHandlerSetOptions : PropertyHandlerOptions
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameter"></param>
-    /// <param name="property"></param>
     private PropertyHandlerSetOptions(IDbDataParameter? parameter,
         ClassProperty property)
         : base(property)
@@ -30,12 +25,6 @@ public sealed class PropertyHandlerSetOptions : PropertyHandlerOptions
 
     #region Methods
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameter"></param>
-    /// <param name="property"></param>
-    /// <returns></returns>
     internal static PropertyHandlerSetOptions Create(IDbDataParameter? parameter,
         ClassProperty property) =>
         new PropertyHandlerSetOptions(parameter, property);

@@ -137,12 +137,6 @@ internal static class Tracer
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="log"></param>
-    /// <exception cref="CancelledExecutionException"></exception>
     private static void ValidateCancellation(string? key,
         CancellableTraceLog log)
     {

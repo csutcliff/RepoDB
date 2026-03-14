@@ -1,7 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Data;
+using RepoDb.DbSettings;
 
-namespace RepoDb;
+namespace RepoDb.Caches;
 
 /// <summary>
 ///

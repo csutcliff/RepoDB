@@ -4,6 +4,7 @@ using System.Dynamic;
 using RepoDb.Interfaces;
 
 namespace RepoDb;
+
 public static partial class DbConnectionExtension
 {
     #region ExecuteScalar
@@ -170,25 +171,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="transaction"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <param name="trace"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="cache"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <returns></returns>
     internal static TResult? ExecuteScalarInternal<TResult>(this IDbConnection connection,
         string commandText,
         object? param,
@@ -312,26 +294,6 @@ public static partial class DbConnectionExtension
             skipCommandArrayParametersCheck: false).ConfigureAwait(false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="commandType"></param>
-    /// <param name="commandTimeout"></param>
-    /// <param name="transaction"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="skipCommandArrayParametersCheck"></param>
-    /// <param name="trace"></param>
-    /// <param name="traceKey"></param>
-    /// <param name="cache"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async ValueTask<TResult?> ExecuteScalarInternalAsync<TResult>(
         this IDbConnection connection,
         string commandText,
@@ -362,7 +324,7 @@ public static partial class DbConnectionExtension
 #if NET
         await
 #endif
-            using var command = await CreateDbCommandForExecutionAsync(connection: (DbConnection)connection,
+        using var command = await CreateDbCommandForExecutionAsync(connection: (DbConnection)connection,
             commandText: commandText,
             param: param,
             commandType: commandType,

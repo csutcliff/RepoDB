@@ -38,12 +38,6 @@ internal partial class Compiler
         throw new NotSupportedException($"No compiled expression found for '{typeOfResult.FullName}' type.");
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="reader"></param>
-    /// <returns></returns>
     private static Func<DbDataReader, TResult> CompileDataReaderToTargetType<TResult>(DbDataReader reader)
     {
         var typeOfResult = typeof(TResult);
@@ -67,13 +61,6 @@ internal partial class Compiler
             .Compile();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="reader"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     private static Func<DbDataReader, TResult> CompileDataReaderToDataEntity<TResult>(DbDataReader reader,
         DbFieldCollection? dbFields)
     {
@@ -136,13 +123,6 @@ internal partial class Compiler
             .Compile();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="reader"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     private static Func<DbDataReader, TResult> CompileDataReaderToTuple<TResult>(DbDataReader reader,
         DbFieldCollection? dbFields)
     {

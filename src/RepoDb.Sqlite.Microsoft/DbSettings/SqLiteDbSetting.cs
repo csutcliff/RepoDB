@@ -30,6 +30,7 @@ public sealed record SqLiteDbSetting : BaseDbSetting
         MaxQueriesInBatchCount = 10; // No need to optimize using higher value as there is no network latency in SQLite
     }
 
+    /// <inheritdoc />
     protected override string TranslateFunctionalFormat(string format)
     {
         if (format.StartsWith("LEFT({0}, ", StringComparison.Ordinal))

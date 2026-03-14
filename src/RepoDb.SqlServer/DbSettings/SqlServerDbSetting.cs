@@ -33,6 +33,7 @@ public sealed record SqlServerDbSetting : BaseDbSetting
         UseInValuesTreshold = 5;
     }
 
+    /// <inheritdoc />
     protected override string TranslateFunctionalFormat(string format)
     {
         if (format == LengthQueryField.LengthFormat)

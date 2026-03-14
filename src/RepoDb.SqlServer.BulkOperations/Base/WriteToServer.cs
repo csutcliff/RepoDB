@@ -10,21 +10,6 @@ public static partial class SqlConnectionExtension
 {
     #region WriteToServerInternal
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="hasOrderingColumn"></param>
-    /// <param name="transaction"></param>
-    ///
-    /// <returns></returns>
     private static int WriteToServerInternal<TEntity>(SqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -95,18 +80,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int WriteToServerInternal(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -162,20 +135,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="dataTable"></param>
-    /// <param name="rowState"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="hasOrderingColumn"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int WriteToServerInternal(SqlConnection connection,
         string tableName,
         DataTable dataTable,
@@ -249,21 +208,6 @@ public static partial class SqlConnectionExtension
 
     #region WriteToServerAsync
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="hasOrderingColumn"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> WriteToServerInternalAsync<TEntity>(SqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -336,19 +280,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> WriteToServerInternalAsync(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -405,21 +336,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="dataTable"></param>
-    /// <param name="rowState"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="hasOrderingColumn"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> WriteToServerInternalAsync(SqlConnection connection,
         string tableName,
         DataTable dataTable,

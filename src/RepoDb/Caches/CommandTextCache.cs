@@ -48,11 +48,6 @@ public static class CommandTextCache
 
     #region GetAverageText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetAverageText(AverageRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -66,11 +61,6 @@ public static class CommandTextCache
 
     #region GetCountText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetCountText(CountRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -83,11 +73,6 @@ public static class CommandTextCache
 
     #region GetDeleteText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetDeleteText(DeleteRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -100,11 +85,6 @@ public static class CommandTextCache
 
     #region GetExistsText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetExistsText(ExistsRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -151,11 +131,6 @@ public static class CommandTextCache
 
     #region GetMaxText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetMaxText(MaxRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -217,11 +192,6 @@ public static class CommandTextCache
 
     #region GetMinText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetMinText(MinRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -273,11 +243,6 @@ public static class CommandTextCache
 
     #region GetSumText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetSumText(SumRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -291,11 +256,6 @@ public static class CommandTextCache
 
     #region GetTruncateText
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     internal static string GetTruncateText(TruncateRequest request)
     {
         var statementBuilder = EnsureStatementBuilder(request.Connection, request.StatementBuilder);
@@ -388,7 +348,7 @@ public static class CommandTextCache
     private static void ValidateOrderFields(IEnumerable<OrderField>? orderFields,
         DbFieldCollection dbFields)
     {
-        var unmatchesOrderFields = dbFields.IsEmpty() == false ?
+        var unmatchesOrderFields = !dbFields.IsEmpty() ?
             orderFields?.Where(of => dbFields.GetByFieldName(of.Name) == null) : null;
         if (unmatchesOrderFields?.Any() == true)
         {
@@ -396,13 +356,6 @@ public static class CommandTextCache
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fields"></param>
-    /// <param name="dbFields"></param>
-    ///
-    /// <returns></returns>
     private static IEnumerable<Field> GetTargetFields(IEnumerable<Field>? fields,
         DbFieldCollection dbFields)
     {
@@ -412,12 +365,6 @@ public static class CommandTextCache
         return fields.Where(f => dbFields.GetByFieldName(f.FieldName) is { });
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     private static IEnumerable<DbField> GetKeyFields(BaseRequest request,
         DbFieldCollection dbFields)
     {
@@ -518,12 +465,6 @@ public static class CommandTextCache
         return dbFieldListUpdated;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="builder"></param>
-    /// <returns></returns>
     private static IStatementBuilder EnsureStatementBuilder(IDbConnection connection,
         IStatementBuilder? builder) =>
         builder ?? connection.GetStatementBuilder();

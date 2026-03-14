@@ -94,11 +94,6 @@ public static class DbCommandExtension
         parameter.Value = value ?? DBNull.Value;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="commandArrayParametersText"></param>
     internal static void CreateParametersFromArray(
         this DbCommand command,
         CommandArrayParametersText commandArrayParametersText)
@@ -201,19 +196,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <param name="size"></param>
-    /// <param name="classProperty"></param>
-    /// <param name="dbField"></param>
-    /// <param name="parameterDirection"></param>
-    /// <param name="dbType"></param>
-    /// <param name="fallbackType"></param>
-    /// <returns></returns>
     private static IDbDataParameter CreateParameter(IDbCommand command,
         string name,
         object? value,
@@ -260,20 +242,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="valueType"></param>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <param name="size"></param>
-    /// <param name="classProperty"></param>
-    /// <param name="dbField"></param>
-    /// <param name="parameterDirection"></param>
-    /// <param name="dbType"></param>
-    /// <param name="fallbackType"></param>
-    /// <returns></returns>
     private static IDbDataParameter CreateParameterForNonEnum(IDbCommand command,
         Type? valueType,
         string name,
@@ -285,7 +253,7 @@ public static class DbCommandExtension
         DbType? dbType,
         Type? fallbackType)
     {
-        bool haveDbtype = (dbType is { });
+        bool haveDbtype = dbType is { };
         // DbType
         valueType ??= TypeCache.Get(dbField?.Type).UnderlyingType ?? fallbackType;
         dbType ??= classProperty?.DbType ?? (dbField?.Type ?? fallbackType ?? valueType)?.GetDbType();
@@ -319,19 +287,6 @@ public static class DbCommandExtension
         return parameter;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="valueType"></param>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <param name="size"></param>
-    /// <param name="classProperty"></param>
-    /// <param name="dbField"></param>
-    /// <param name="parameterDirection"></param>
-    /// <param name="dbType"></param>
-    /// <returns></returns>
     private static IDbDataParameter CreateParameterForEnum(IDbCommand command,
         Type? valueType,
         string name,
@@ -376,12 +331,6 @@ public static class DbCommandExtension
         return parameter;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private static IDbDataParameter? CreateParameterIf(string name,
         object? value)
     {
@@ -394,14 +343,6 @@ public static class DbCommandExtension
         return null;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="param"></param>
-    /// <param name="propertiesToSkip"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
     private static void CreateParametersInternal(IDbCommand command,
         object param,
         HashSet<string>? propertiesToSkip,
@@ -451,13 +392,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="dictionary"></param>
-    /// <param name="propertiesToSkip"></param>
-    /// <param name="dbFields"></param>
     private static void CreateParameters(IDbCommand command,
         IDictionary<string, object?> dictionary,
         HashSet<string>? propertiesToSkip,
@@ -482,7 +416,7 @@ public static class DbCommandExtension
                     value = commandParameter.Value;
                     dbField ??= GetDbField(commandParameter.Field.FieldName, dbFields);
                     classProperty = PropertyCache.Get(commandParameter.MappedToType, commandParameter.Field.FieldName, true);
-                    dbType ??= commandParameter.DbType;
+                    dbType = commandParameter.DbType;
                 }
                 var parameter = CreateParameterIf(kvp.Key, value) ??
                     CreateParameter(command,
@@ -503,14 +437,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="queryGroup"></param>
-    /// <param name="propertiesToSkip"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
     internal static void CreateParameters(IDbCommand command,
         QueryGroup? queryGroup,
         HashSet<string>? propertiesToSkip,
@@ -524,14 +450,6 @@ public static class DbCommandExtension
         CreateParameters(command, queryGroup.GetFields(true), propertiesToSkip, entityType, dbFields);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="queryFields"></param>
-    /// <param name="propertiesToSkip"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
     internal static void CreateParameters(this IDbCommand command,
         IEnumerable<QueryField>? queryFields,
         HashSet<string>? propertiesToSkip,
@@ -571,14 +489,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="queryField"></param>
-    /// <param name="propertiesToSkip"></param>
-    /// <param name="entityType"></param>
-    /// <param name="dbFields"></param>
     private static void CreateParameters(this IDbCommand command,
         QueryField queryField,
         HashSet<string>? propertiesToSkip,
@@ -627,12 +537,6 @@ public static class DbCommandExtension
         queryField.DbParameter = parameter;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="queryField"></param>
-    /// <param name="dbField"></param>
     private static void CreateParametersForInOperation(this IDbCommand command,
         QueryField queryField,
         DbField? dbField = null)
@@ -686,12 +590,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="queryField"></param>
-    /// <param name="dbField"></param>
     private static void CreateParametersForBetweenOperation(this IDbCommand command,
         QueryField queryField,
         DbField? dbField = null)
@@ -729,14 +627,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="classProperty"></param>
-    /// <param name="parameter"></param>
-    /// <param name="valueType"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private static void InvokePropertyHandler(ClassProperty? classProperty,
         IDbDataParameter parameter,
         ref Type? valueType,
@@ -755,30 +645,14 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbField"></param>
-    /// <returns></returns>
     private static bool IsPostgreSqlUserDefined(DbField? dbField) =>
         string.Equals(dbField?.DatabaseType, "USER-DEFINED", StringComparison.OrdinalIgnoreCase) &&
         string.Equals(dbField?.Provider, "PGSQL", StringComparison.OrdinalIgnoreCase);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="classProperty"></param>
-    /// <param name="fallbackType"></param>
-    /// <returns></returns>
     private static IEnumerable<PropertyValueAttribute>? GetPropertyValueAttributes(ClassProperty? classProperty,
         Type? fallbackType) =>
         classProperty?.GetPropertyValueAttributes() ?? fallbackType?.GetPropertyValueAttributes();
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameter"></param>
-    /// <param name="attributes"></param>
     private static void InvokePropertyValueAttributes(IDbDataParameter parameter,
         IEnumerable<PropertyValueAttribute>? attributes)
     {
@@ -807,13 +681,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbField"></param>
-    /// <param name="valueType"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private static bool AutomaticConvert(DbField? dbField,
         [NotNullWhen(true)]
         ref Type? valueType,
@@ -917,10 +784,7 @@ public static class DbCommandExtension
 #endif
             else if (value == DBNull.Value)
             {
-                if (TypeCache.Get(targetType).HasNullValue)
-                    return null;
-                else
-                    return Activator.CreateInstance(targetType);
+                return TypeCache.Get(targetType).HasNullValue ? null : Activator.CreateInstance(targetType);
             }
             else if (targetType == StaticType.Object)
             {
@@ -938,12 +802,6 @@ public static class DbCommandExtension
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="dbFields"></param>
-    /// <returns></returns>
     private static DbField? GetDbField(string fieldName,
         DbFieldCollection? dbFields)
     {
@@ -964,11 +822,6 @@ public static class DbCommandExtension
         return dbFields.GetByFieldName(fieldName);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private static object? AutomaticConvertStringToGuid(object? value)
     {
         if (value is string { } str)
@@ -1004,7 +857,7 @@ public static class DbCommandExtension
     {
         // Before Execution
         var traceResult = await Tracer
-            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken);
+            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
 
         // Silent cancellation
         if (traceResult?.CancellableTraceLog?.IsCancelled == true)
@@ -1016,7 +869,7 @@ public static class DbCommandExtension
 
         // After Execution
         await Tracer
-            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken);
+            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
 
         return result;
     }
@@ -1042,7 +895,7 @@ public static class DbCommandExtension
     {
         // Before Execution
         var traceResult = await Tracer
-            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken);
+            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
         // Silent cancellation
         if (traceResult?.CancellableTraceLog?.IsCancelled == true)
         {
@@ -1051,7 +904,7 @@ public static class DbCommandExtension
         var result = await command.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
         // After Execution
         await Tracer
-            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken);
+            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
 
         return result;
     }
@@ -1077,7 +930,7 @@ public static class DbCommandExtension
     {
         // Before Execution
         var traceResult = await Tracer
-            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken);
+            .InvokeBeforeExecutionAsync(traceKey, trace, command, cancellationToken).ConfigureAwait(false);
         // Silent cancellation
         if (traceResult?.CancellableTraceLog?.IsCancelled == true)
         {
@@ -1087,7 +940,7 @@ public static class DbCommandExtension
 
         // After Execution
         await Tracer
-            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken);
+            .InvokeAfterExecutionAsync(traceResult, trace, result, cancellationToken).ConfigureAwait(false);
         return result;
     }
 
@@ -1095,7 +948,7 @@ public static class DbCommandExtension
     private static DateTime? AutomaticConvertDateOnlyToDateTime(object? value) =>
         value is DateOnly dateOnly ? dateOnly.ToDateTime(default(TimeOnly)) : null;
 #endif
-#endregion
+    #endregion
 
     private sealed class EmptyReader : DbDataReader
     {

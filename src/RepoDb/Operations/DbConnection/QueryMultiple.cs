@@ -9503,7 +9503,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -10220,7 +10220,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -11108,7 +11108,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -12160,7 +12160,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -13376,7 +13376,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -14756,7 +14756,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -15279,7 +15279,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -15868,7 +15868,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -16596,7 +16596,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -17455,7 +17455,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -18447,7 +18447,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -19571,7 +19571,7 @@ public static partial class DbConnectionExtension
                 .InvokeBeforeExecution(traceKey, trace, command));
 
         // Actual Execution
-        using (var reader = (DbDataReader)ExecuteReaderInternal(connection: connection,
+        using (var reader = ExecuteReaderInternal(connection: connection,
             commandText: commandText,
             param: param,
             commandType: commandType,
@@ -30696,15 +30696,6 @@ public static partial class DbConnectionExtension
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="cacheKey"></param>
-    /// <param name="cache"></param>
-    /// <param name="where"></param>
-    /// <param name="queryGroups"></param>
-    /// <returns></returns>
     private static IEnumerable<T>? QueryMultipleInternal<T>(
         string? cacheKey,
         ICache? cache,
@@ -30727,14 +30718,6 @@ public static partial class DbConnectionExtension
         return item;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="cacheKey"></param>
-    /// <param name="cache"></param>
-    /// <param name="where"></param>
-    /// <param name="queryGroups"></param>
-    /// <returns></returns>
     private static IEnumerable<dynamic>? QueryMultipleInternal(string? cacheKey,
         ICache? cache,
         QueryGroup? where,
@@ -30755,20 +30738,6 @@ public static partial class DbConnectionExtension
         return item;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="reader"></param>
-    /// <param name="items"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="forwardToNextResult"></param>
-    ///
-    /// <returns></returns>
     private static IEnumerable<T> QueryMultipleInternal<T>(IDbConnection connection,
         DbDataReader reader,
         IEnumerable<T>? items,
@@ -30797,16 +30766,6 @@ public static partial class DbConnectionExtension
         return items;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="cacheKey"></param>
-    /// <param name="cache"></param>
-    /// <param name="where"></param>
-    /// <param name="queryGroups"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async ValueTask<IEnumerable<T>?> QueryMultipleInternalAsync<T>(
         string? cacheKey,
         ICache? cache,
@@ -30830,15 +30789,6 @@ public static partial class DbConnectionExtension
         return item;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="cacheKey"></param>
-    /// <param name="cache"></param>
-    /// <param name="where"></param>
-    /// <param name="queryGroups"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async ValueTask<IEnumerable<dynamic>?> QueryMultipleInternalAsync(string? cacheKey,
         ICache? cache,
         QueryGroup? where,
@@ -30860,21 +30810,6 @@ public static partial class DbConnectionExtension
         return item;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="reader"></param>
-    /// <param name="items"></param>
-    /// <param name="cacheKey"></param>
-    /// <param name="cacheItemExpiration"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cache"></param>
-    /// <param name="forwardToNextResult"></param>
-    /// <param name="cancellationToken"></param>
-    ///
-    /// <returns></returns>
     private static async ValueTask<IEnumerable<T>> QueryMultipleInternalAsync<T>(IDbConnection connection,
         DbDataReader reader,
         IEnumerable<T>? items,

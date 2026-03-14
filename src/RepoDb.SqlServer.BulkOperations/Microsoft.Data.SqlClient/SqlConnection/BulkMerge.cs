@@ -606,24 +606,6 @@ public static partial class SqlConnectionExtension
 
     #region BulkMergeInternal
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <returns></returns>
     internal static int BulkMergeInternal<TEntity>(SqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,
@@ -744,25 +726,6 @@ public static partial class SqlConnectionExtension
 
     #region BulkMergeInternalAsync
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="entities"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="isReturnIdentity"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static Task<int> BulkMergeInternalAsync<TEntity>(SqlConnection connection,
         string tableName,
         IEnumerable<TEntity> entities,

@@ -119,12 +119,6 @@ public sealed class QueryMultipleExtractor : IDisposable, IAsyncDisposable
 
     #region Cache
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private bool TryGetCacheItem<T>([NotNullWhen(true)] out T? value)
     {
         if (_cacheKey is not null)
@@ -146,10 +140,6 @@ public sealed class QueryMultipleExtractor : IDisposable, IAsyncDisposable
         return false;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="item"></param>
     private void AddToCache(object item)
     {
         if (Position == 0)

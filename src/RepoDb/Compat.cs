@@ -330,8 +330,11 @@ namespace RepoDb
             if (dbTransaction is DbTransaction dbTransaction1)
                 await dbTransaction1.RollbackAsync(cancellationToken).ConfigureAwait(false);
             else
-#endif
                 dbTransaction.Rollback();
+#else
+            dbTransaction.Rollback();
+#endif
+
         }
 
 #if !NET
@@ -388,18 +391,34 @@ namespace RepoDb
         {
             ArgumentNullException.ThrowIfNull(source);
 
-            return Impl(source.WithCancellation(cancellationToken));
+            return Impl(source, cancellationToken);
 
-            static async ValueTask<List<TSource>> Impl(
-                ConfiguredCancelableAsyncEnumerable<TSource> source)
+            static async ValueTask<List<TSource>> Impl(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
                 List<TSource> list = [];
-                await foreach (TSource element in source)
+                await foreach (TSource element in source.ConfigureAwait(false))
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     list.Add(element);
                 }
 
                 return list;
+            }
+        }
+
+        public static IAsyncEnumerable<TElement> ToAsyncEnumerable<TElement>(this IEnumerable<TElement> source, CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(source);
+
+            return Impl(source, cancellationToken);
+
+            static async IAsyncEnumerable<TElement> Impl(IEnumerable<TElement> source, [EnumeratorCancellation] CancellationToken cancellationToken)
+            {
+                foreach (var i in source)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return i;
+                }
             }
         }
 

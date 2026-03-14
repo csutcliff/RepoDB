@@ -60,5 +60,8 @@ public class SqlServerDbTypeNameToClientTypeResolver : IResolver<string, Type>
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static readonly SqlServerDbTypeNameToClientTypeResolver Instance = new();
 }

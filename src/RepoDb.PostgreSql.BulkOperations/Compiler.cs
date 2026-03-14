@@ -17,30 +17,12 @@ internal static class Compiler
 {
     #region GetNpgsqlBinaryImporterWriteFunc (Mappings)
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="mappings"></param>
-    /// <param name="entityType"></param>
-    /// <returns></returns>
     internal static Action<NpgsqlBinaryImporter, TEntity> GetNpgsqlBinaryImporterWriteFunc<TEntity>(string tableName,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
         Type entityType)
         where TEntity : class =>
         GetNpgsqlBinaryImporterWriteFuncCache<TEntity>.Get(tableName, mappings, entityType);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="tableName"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="properties"></param>
-    /// <param name="entityType"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static Action<NpgsqlBinaryImporter, TEntity> GetNpgsqlBinaryImporterWriteFunc<TEntity>(string tableName,
         DbFieldCollection dbFields,
         IEnumerable<ClassProperty> properties,
@@ -50,10 +32,6 @@ internal static class Compiler
         where TEntity : class =>
         GetNpgsqlBinaryImporterWriteFuncCache<TEntity>.Get(tableName, dbFields, properties, entityType, identityBehavior, dbSetting);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class GetNpgsqlBinaryImporterWriteFuncCache<TEntity>
         where TEntity : class
     {
@@ -104,13 +82,6 @@ internal static class Compiler
             return GetFunc(tableName, mappings, entityType);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="mappings"></param>
-        /// <param name="entityType"></param>
-        /// <returns></returns>
         private static Action<NpgsqlBinaryImporter, TEntity> GetFunc(string tableName,
             IEnumerable<NpgsqlBulkInsertMapItem> mappings,
             Type entityType)
@@ -188,30 +159,12 @@ internal static class Compiler
 
     #region GetNpgsqlBinaryImporterWriteAsyncFunc (Mappings)
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="mappings"></param>
-    /// <param name="entityType"></param>
-    /// <returns></returns>
     internal static Func<NpgsqlBinaryImporter, TEntity, CancellationToken, Task> GetNpgsqlBinaryImporterWriteAsyncFunc<TEntity>(string tableName,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings,
         Type entityType)
         where TEntity : class =>
         GetNpgsqlBinaryImporterWriteAsyncFuncCache<TEntity>.Get(tableName, mappings, entityType);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="tableName"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="properties"></param>
-    /// <param name="entityType"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static Func<NpgsqlBinaryImporter, TEntity, CancellationToken, Task> GetNpgsqlBinaryImporterWriteAsyncFunc<TEntity>(string tableName,
         DbFieldCollection dbFields,
         IEnumerable<ClassProperty> properties,
@@ -221,10 +174,6 @@ internal static class Compiler
         where TEntity : class =>
         GetNpgsqlBinaryImporterWriteAsyncFuncCache<TEntity>.Get(tableName, dbFields, properties, entityType, identityBehavior, dbSetting);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class GetNpgsqlBinaryImporterWriteAsyncFuncCache<TEntity>
         where TEntity : class
     {
@@ -276,13 +225,6 @@ internal static class Compiler
             return GetFunc(tableName, mappings, entityType);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="tableName"></param>
-        /// <param name="mappings"></param>
-        /// <param name="entityType"></param>
-        /// <returns></returns>
         private static Func<NpgsqlBinaryImporter, TEntity, CancellationToken, Task> GetFunc(string tableName,
             IEnumerable<NpgsqlBulkInsertMapItem> mappings,
             Type entityType)
@@ -358,10 +300,6 @@ internal static class Compiler
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetNpgsqlBinaryImporterWriteMethod() =>
         typeof(NpgsqlBinaryImporter)
             .GetMethods()
@@ -369,10 +307,6 @@ internal static class Compiler
                 string.Equals("Write", method.Name, StringComparison.OrdinalIgnoreCase))
             .First(method => method.GetParameters().Length == 1);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetNpgsqlBinaryImporterWriteAsyncMethod() =>
         typeof(NpgsqlBinaryImporter)
             .GetMethods()
@@ -385,10 +319,6 @@ internal static class Compiler
                     parameters[1].ParameterType == typeof(CancellationToken);
             });
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetNpgsqlBinaryImporterWriteWithNpgsqlDbTypeMethod()
     {
         var methods = typeof(NpgsqlBinaryImporter)
@@ -403,10 +333,6 @@ internal static class Compiler
         });
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetNpgsqlBinaryImporterWriteAsyncWithNpgsqlDbTypeMethod()
     {
         var methods = typeof(NpgsqlBinaryImporter)
@@ -422,13 +348,6 @@ internal static class Compiler
         });
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityExpression"></param>
-    /// <param name="entityType"></param>
-    /// <param name="mapping"></param>
-    /// <returns></returns>
     private static Expression GetEntityPropertyExpression(Expression entityExpression,
         Type entityType,
         NpgsqlBulkInsertMapItem mapping)
@@ -447,12 +366,6 @@ internal static class Compiler
         return propertyExpression;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="propertyExpression"></param>
-    /// <param name="npgsqlDbType"></param>
-    /// <returns></returns>
     private static Expression GetEntityPropertyExpressionForEnum(Expression propertyExpression,
         NpgsqlDbType? npgsqlDbType)
     {
@@ -480,22 +393,10 @@ internal static class Compiler
         return expression;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="propertyExpression"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
     private static MethodCallExpression ConvertEnumExpressionToString(Expression propertyExpression) =>
         Expression.Call(GetConvertToTypeMethod(typeof(string)),
             Expression.Convert(propertyExpression, typeof(object)));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="propertyExpression"></param>
-    /// <param name="intBasedType"></param>
-    /// <returns></returns>
     private static MethodCallExpression ConvertEnumExpressionToIntBasedType(Expression propertyExpression,
         Type intBasedType)
     {
@@ -509,55 +410,23 @@ internal static class Compiler
         return Expression.Call(GetConvertToTypeMethod(intBasedType), valueExpression);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetEnumParseMethod() =>
         typeof(Enum).GetMethod("Parse", [typeof(Type), typeof(string), typeof(bool)])!;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetEnumGetNameMethod() =>
         typeof(Enum).GetMethod("GetName", new[] { typeof(Type), typeof(object) })!;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static MethodInfo GetConvertToTypeMethod(Type type) =>
         typeof(Convert).GetMethod($"To{type.Name}", new[] { typeof(object) })!;
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="tableName"></param>
-    /// <returns></returns>
     private static int GetHashCode(Type entityType,
         string? tableName) =>
         (tableName ?? ClassMappedNameCache.Get(entityType)).GetHashCode();
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="tableName"></param>
-    /// <param name="mappings"></param>
-    /// <returns></returns>
     private static int GetHashCode<TEntity>(string tableName,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings) =>
         GetHashCode(typeof(TEntity), tableName, mappings);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="tableName"></param>
-    /// <param name="mappings"></param>
-    /// <returns></returns>
     private static int GetHashCode(Type entityType,
         string tableName,
         IEnumerable<NpgsqlBulkInsertMapItem> mappings)
@@ -597,11 +466,6 @@ internal static class Compiler
         where TEntity : class =>
         MethodFuncCache<TEntity, TResult>.GetFunc(methodName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class MethodFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -648,10 +512,6 @@ internal static class Compiler
         where TEntity : class =>
         VoidMethodFuncCache<TEntity>.GetFunc(methodName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class VoidMethodFuncCache<TEntity>
         where TEntity : class
     {
@@ -701,11 +561,6 @@ internal static class Compiler
         where TEntity : class =>
         ParameterizedMethodFuncCache<TEntity, TResult>.GetFunc(methodName, types);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class ParameterizedMethodFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -769,10 +624,6 @@ internal static class Compiler
         where TEntity : class =>
         ParameterizedVoidMethodFuncCache<TEntity>.GetFunc(methodName, types);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class ParameterizedVoidMethodFuncCache<TEntity>
         where TEntity : class
     {
@@ -834,11 +685,6 @@ internal static class Compiler
         where TEntity : class =>
         PropertyGetterFuncCache<TEntity, TResult>.GetFunc(PropertyCache.Get<TEntity>(propertyName) ?? throw new Exceptions.PropertyNotFoundException($"Property {propertyName} not found"));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class PropertyGetterFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -878,10 +724,6 @@ internal static class Compiler
         where TEntity : class =>
         PropertySetterFuncCache<TEntity>.GetFunc(PropertyCache.Get<TEntity>(propertyName, true) ?? throw new Exceptions.PropertyNotFoundException($"Property {propertyName} not found"));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     private static class PropertySetterFuncCache<TEntity>
         where TEntity : class
     {
@@ -925,11 +767,6 @@ internal static class Compiler
         where TEntity : class =>
         FieldGetterFuncCache<TEntity, TResult>.GetFunc(fieldName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
     private static class FieldGetterFuncCache<TEntity, TResult>
         where TEntity : class
     {
@@ -978,10 +815,6 @@ internal static class Compiler
         where TEnum : Enum =>
         EnumFuncCache<TEnum>.GetFunc(value);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEnum"></typeparam>
     private static class EnumFuncCache<TEnum>
         where TEnum : Enum
     {

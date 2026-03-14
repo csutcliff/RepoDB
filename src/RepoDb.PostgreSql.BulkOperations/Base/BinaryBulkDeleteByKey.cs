@@ -11,18 +11,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteByKeyBase<TPrimaryKey>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="primaryKeys"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private static int BinaryBulkDeleteByKeyBase<TPrimaryKey>(this NpgsqlConnection connection,
         string tableName,
         IEnumerable<TPrimaryKey> primaryKeys,
@@ -92,19 +80,6 @@ public static partial class NpgsqlConnectionExtension
 
     #region BinaryBulkDeleteByKeyBaseAsync<TPrimaryKey>
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="primaryKeys"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="pseudoTableType"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private static async Task<int> BinaryBulkDeleteByKeyBaseAsync<TPrimaryKey>(this NpgsqlConnection connection,
         string tableName,
         IEnumerable<TPrimaryKey> primaryKeys,

@@ -31,10 +31,6 @@ public class ClassHandlerAttribute : Attribute
 
     #region Methods
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="handlerType"></param>
     private static void Validate(Type handlerType)
     {
         if (!handlerType.IsInterfacedTo(StaticType.IClassHandler))
@@ -51,7 +47,7 @@ public class ClassHandlerAttribute : Attribute
 /// An attribute that is used to define a handler for the property transformation.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class ClassHandlerAttribute<T> : ClassHandlerAttribute
+public sealed class ClassHandlerAttribute<T> : ClassHandlerAttribute
 {
     /// <summary>
     /// Creates a new instance of <see cref="ClassHandlerAttribute{T}"/> class.

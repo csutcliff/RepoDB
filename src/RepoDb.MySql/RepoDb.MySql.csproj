@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Description>A hybrid .NET ORM library for MySQL (using MySql.Data).</Description>
     <PackageTags>orm hybrid-orm micro-orm mysql</PackageTags>
-    <PackageProjectUrl>https://github.com/AmpScm/RepoDB/tree/main/src/RepoDb.MySql/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/AmpScm/RepoDb/tree/main/src/RepoDb.MySql/</PackageProjectUrl>
     <PackageId>$(PackagePrefix)$(AssemblyName)</PackageId>
     <DefineConstants>$(DefineConstants);MYSQLPLAIN</DefineConstants>
   </PropertyGroup>

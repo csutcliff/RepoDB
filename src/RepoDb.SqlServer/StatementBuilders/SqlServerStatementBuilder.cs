@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Azure;
 using RepoDb.Exceptions;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -78,15 +77,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
 
     #region CreateInsert
 
-    /// <summary>
-    /// Creates a SQL Statement for insert operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be inserted.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for insert operation.</returns>
+    /// <inheritdoc />
     public override string CreateInsert(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<DbField> keyFields,
@@ -150,16 +141,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
 
     #region CreateInsertAll
 
-    /// <summary>
-    /// Creates a SQL Statement for insert-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be inserted.</param>
-    /// <param name="batchSize">The batch size of the operation.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for insert operation.</returns>
+    /// <inheritdoc />
     public override string CreateInsertAll(string tableName,
         IEnumerable<Field> fields,
         int batchSize,
@@ -293,16 +275,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
 
     #region CreateMerge
 
-    /// <summary>
-    /// Creates a SQL Statement for merge operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMerge(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -465,17 +438,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
 
     #region CreateMergeAll
 
-    /// <summary>
-    /// Creates a SQL Statement for merge-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="batchSize">The batch size of the operation.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public override string CreateMergeAll(string tableName,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
@@ -679,6 +642,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
 
     #endregion
 
+    /// <inheritdoc />
     public override string CreateQuery(
         string tableName,
         IEnumerable<Field> fields,
@@ -793,7 +757,10 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
+    /// <inheritdoc />
     public override string? JsonColumnType => "VARCHAR(max)";
+    /// <inheritdoc />
     public override string? VectorColumnType => "VECTOR";
+    /// <inheritdoc />
     public override string IdentityDefinition => "IDENTITY(1,1)";
 }

@@ -101,6 +101,6 @@ public static class DbSchemaExtensions
         tableName ??= ClassMappedNameCache.Get<TEntity>();
 
         var setting = connection.GetDbSetting();
-        return await SchemaObjectExistsAsync(connection, DataEntityExtension.GetTableName(tableName, setting), DataEntityExtension.GetSchema(tableName, setting), type, transaction, cancellationToken);
+        return await SchemaObjectExistsAsync(connection, DataEntityExtension.GetTableName(tableName, setting), DataEntityExtension.GetSchema(tableName, setting), type, transaction, cancellationToken).ConfigureAwait(false);
     }
 }

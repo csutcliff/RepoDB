@@ -28,12 +28,6 @@ internal partial class Compiler
         return CompileDataEntityPropertySetter(entityType, property);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="property"></param>
-    /// <returns></returns>
     private static Action<object, object?> CompileDataEntityPropertySetter(Type entityType,
         PropertyInfo property)
     {
@@ -96,12 +90,6 @@ internal partial class Compiler
         return CompileDataEntityPropertyGetter(entityType, property);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="property"></param>
-    /// <returns></returns>
     private static Func<object, object?> CompileDataEntityPropertyGetter(Type entityType,
         PropertyInfo property)
     {

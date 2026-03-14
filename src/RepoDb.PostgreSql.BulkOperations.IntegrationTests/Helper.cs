@@ -217,12 +217,6 @@ public static class Helper
 
     #endregion
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="p1"></param>
-    /// <param name="p2"></param>
-    /// <returns></returns>
     private static bool IsMatchingProperty(string p1,
         string p2) =>
         string.Equals(p1, p2, StringComparison.OrdinalIgnoreCase) ||

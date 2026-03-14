@@ -7,7 +7,7 @@ namespace RepoDb.Attributes;
 /// An attribute that is used to define a mapping between the .NET CLR <see cref="Type"/> and the <see cref="DbType"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class TypeMapAttribute : DbTypeAttribute
+public sealed class TypeMapAttribute : DbTypeAttribute
 {
     /// <summary>
     /// Creates a new instance of <see cref="TypeMapAttribute"/> class.

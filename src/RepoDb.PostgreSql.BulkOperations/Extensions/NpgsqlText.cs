@@ -14,16 +14,6 @@ public static partial class NpgsqlConnectionExtension
 {
     #region BinaryBulkInsert
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetInsertCommandText(string sourceTableName,
         string destinationTableName,
         IEnumerable<Field> fields,
@@ -292,18 +282,6 @@ public static partial class NpgsqlConnectionExtension
             .ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="primaryField"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetMergeCommandTextViaInsertAndUpdate(string sourceTableName,
         string destinationTableName,
         IEnumerable<Field> fields,
@@ -330,18 +308,6 @@ public static partial class NpgsqlConnectionExtension
             identityBehavior,
             dbSetting);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="primaryField"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetMergeCommandTextViaInsertAndUpdateForNormal(string sourceTableName,
         string destinationTableName,
         IEnumerable<Field> fields,
@@ -476,11 +442,6 @@ public static partial class NpgsqlConnectionExtension
             .ToString();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="dbSetting"></param>
     private static void WriteCreateTemporaryReturnIdentityTableForMerge(QueryBuilder builder,
         IDbSetting dbSetting)
     {
@@ -509,15 +470,6 @@ WHERE 1 = 0;";
             .WriteText(commandText);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="identityField"></param>
-    /// <param name="dbSetting"></param>
     private static void WriteCreateTemporaryReturnIdentityTableForMerge(QueryBuilder builder,
         string sourceTableName,
         string destinationTableName,
@@ -563,11 +515,6 @@ ORDER BY ""Index"";";
             .End();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="dbSetting"></param>
     private static void WriteCreateTemporaryReturnIdentityTableIndexForMerge(QueryBuilder builder,
         IDbSetting dbSetting)
     {
@@ -588,17 +535,6 @@ ORDER BY ""Index"";";
             .End();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
     private static void WriteInsertIntoTargetTableFromPseudoTableForMerge(QueryBuilder builder,
         string sourceTableName,
         string destinationTableName,
@@ -671,16 +607,6 @@ ORDER BY ""Index"";";
             .End();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="identityField"></param>
-    /// <param name="dbSetting"></param>
     private static void WriteInsertIntoTargetTableFromPseudoTableWithReturnIdentityForMerge(QueryBuilder builder,
         string sourceTableName,
         string destinationTableName,
@@ -759,11 +685,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
             .WriteText(commandText);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="dbSetting"></param>
     private static void WriteReturnIdentityResultsFromTemporaryReturnIdentityTableForMerge(QueryBuilder builder,
         IDbSetting dbSetting) =>
         builder
@@ -775,16 +696,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
             .TableNameFrom(GetTemporaryReturnIdentityTableName(), dbSetting)
             .WriteText("ORDER BY \"Index\", \"Identity\"");
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="updatableFields"></param>
-    /// <param name="dbSetting"></param>
-    /// <param name="isWrapped"></param>
     private static void WriteUpdateTargetTableFromPseudoTableForMerge(QueryBuilder builder,
         string sourceTableName,
         string destinationTableName,
@@ -841,16 +752,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
             .End();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="identityField"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static void WriteReturnIdentityResultsFromActualTable(QueryBuilder builder,
         string sourceTableName,
         string destinationTableName,
@@ -896,18 +797,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
 
     #region BinaryBulkUpdate
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="primaryField"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetUpdateCommandText(string sourceTableName,
         string destinationTableName,
         IEnumerable<Field> fields,
@@ -988,18 +877,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
 
     #region BinaryBulkDelete
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="primaryField"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityBehavior"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetDeleteCommandText(string sourceTableName,
         string destinationTableName,
         IEnumerable<Field> fields,
@@ -1075,14 +952,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
 
     #region BinaryBulkDeleteByKey
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sourceTableName"></param>
-    /// <param name="destinationTableName"></param>
-    /// <param name="primaryField"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetDeleteByKeyCommandText(string sourceTableName,
         string destinationTableName,
         Field? primaryField,
@@ -1149,75 +1018,32 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBinaryBulkInsertPseudoTableName(string tableName,
         IDbSetting dbSetting) =>
         $"_RepoDb_BinaryBulkInsert_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBinaryBulkMergePseudoTableName(string tableName,
         IDbSetting dbSetting) =>
         $"_RepoDb_BinaryBulkMerge_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBinaryBulkUpdatePseudoTableName(string tableName,
         IDbSetting dbSetting) =>
         $"_RepoDb_BinaryBulkUpdate_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBinaryBulkDeletePseudoTableName(string tableName,
         IDbSetting dbSetting) =>
         $"_RepoDb_BinaryBulkDelete_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static string GetBinaryBulkDeleteByKeyPseudoTableName(string tableName,
         IDbSetting dbSetting) =>
         $"_RepoDb_BinaryBulkDeleteByKey_{tableName.AsUnquoted(true, dbSetting)}";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static string GetTemporaryReturnIdentityTableName() =>
         "_RepoDb_ReturnIdentity";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static OrderField GetOderColumnOrderField() =>
         new OrderField("__RepoDb_OrderColumn", Order.Ascending);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="qualifiers"></param>
-    /// <param name="tableName"></param>
     private static void ThrowIfNoQualifiers([NotNull] IEnumerable<Field>? qualifiers,
         string tableName)
     {
@@ -1228,12 +1054,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    ///
     private static void ThrowOnMissingQualifiers(IEnumerable<Field> fields,
         IEnumerable<Field> qualifiers)
     {
@@ -1245,13 +1065,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fields"></param>
-    /// <param name="qualifiers"></param>
-    ///
-    /// <returns></returns>
     private static IEnumerable<Field> GetMissingQualifiers(IEnumerable<Field> fields,
         IEnumerable<Field> qualifiers) =>
         qualifiers
@@ -1259,13 +1072,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
                 fields?.FirstOrDefault(field => field == qualifier ||
                     string.Equals(field.FieldName, qualifier.FieldName, StringComparison.OrdinalIgnoreCase)) == null);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="qualifiers"></param>
-    /// <param name="primaryField"></param>
-    ///
-    /// <returns></returns>
     private static IEnumerable<Field>? EnsurePrimaryAsQualifier(IEnumerable<Field>? qualifiers,
         Field? primaryField)
     {
@@ -1277,14 +1083,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         return qualifiers;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fields"></param>
-    /// <param name="identityField"></param>
-    /// <param name="identityBehavior"></param>
-    ///
-    /// <returns></returns>
     private static IEnumerable<Field> GetInsertableFields(IEnumerable<Field> fields,
         Field? identityField,
         BulkImportIdentityBehavior identityBehavior) =>
@@ -1296,14 +1094,6 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
                     (isIdentity && identityBehavior == BulkImportIdentityBehavior.KeepIdentity);
             });
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fields"></param>
-    /// <param name="qualfiers"></param>
-    /// <param name="primaryField"></param>
-    ///
-    /// <returns></returns>
     private static IEnumerable<Field> GetUpdatableFields(IEnumerable<Field> fields,
         IEnumerable<Field> qualfiers,
         Field? primaryField) =>

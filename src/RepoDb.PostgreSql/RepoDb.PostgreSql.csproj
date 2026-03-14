@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Description>A hybrid .NET ORM library for PostgreSQL.</Description>
     <PackageTags>orm hybrid-orm micro-orm postgresql npgsql</PackageTags>
-    <PackageProjectUrl>https://github.com/AmpScm/RepoDB/tree/main/src/RepoDb.PostgreSql/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/AmpScm/RepoDb/tree/main/src/RepoDb.PostgreSql/</PackageProjectUrl>
     <PackageId>$(PackagePrefix)$(AssemblyName)</PackageId>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>

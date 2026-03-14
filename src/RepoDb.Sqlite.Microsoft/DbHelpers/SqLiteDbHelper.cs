@@ -35,20 +35,9 @@ public sealed partial class SqLiteDbHelper : BaseDbHelper
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <returns></returns>
     private string GetCommandText(string tableName) =>
         $"pragma table_xinfo({DataEntityExtension.GetTableName(tableName, DbSetting)});";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="identityFieldName"></param>
-    /// <returns></returns>
     private DbField ReaderToDbField(DbDataReader reader,
         string? identityFieldName)
     {
@@ -96,14 +85,6 @@ public sealed partial class SqLiteDbHelper : BaseDbHelper
         return v;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TDbConnection"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="transaction"></param>
-    /// <returns></returns>
     private string? GetIdentityFieldName<TDbConnection>(TDbConnection connection,
         string tableName,
         IDbTransaction? transaction = null)
@@ -121,15 +102,6 @@ public sealed partial class SqLiteDbHelper : BaseDbHelper
             .Replace(doubleQuote, string.Empty);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TDbConnection"></typeparam>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private async Task<string?> GetIdentityFieldNameAsync<TDbConnection>(TDbConnection connection,
         string tableName,
         IDbTransaction? transaction = null,
@@ -149,11 +121,6 @@ public sealed partial class SqLiteDbHelper : BaseDbHelper
             .Replace(doubleQuote, string.Empty);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sql"></param>
-    /// <returns></returns>
     private static string? GetIdentityFieldNameInternal(string sql)
     {
         // Get fieldname
@@ -185,11 +152,6 @@ public sealed partial class SqLiteDbHelper : BaseDbHelper
             return FieldName; // May be null as valuetuple is never null
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="field"></param>
-    /// <returns></returns>
     private static bool IsIdentity(string field)
     {
         return field.Contains("AUTOINCREMENT", StringComparison.OrdinalIgnoreCase) ||
@@ -375,12 +337,14 @@ public sealed partial class SqLiteDbHelper : BaseDbHelper
 
     private const string GetSchemaQuery = "SELECT type, name FROM sqlite_master WHERE (type = 'table' OR type = 'view')";
 
+    /// <inheritdoc />
     public override IEnumerable<DbSchemaObject> GetSchemaObjects(IDbConnection connection, IDbTransaction? transaction = null)
     {
         // Using tuple helper as that doesn't call the helper to fetch columns
         return connection.ExecuteQuery<(string Type, string Name)>(GetSchemaQuery, transaction: transaction).Select(MapSchemaQueryResult);
     }
 
+    /// <inheritdoc />
     public override async ValueTask<IEnumerable<DbSchemaObject>> GetSchemaObjectsAsync(IDbConnection connection, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
         // Using tuple helper as that doesn't call the helper to fetch columns
@@ -402,10 +366,9 @@ public sealed partial class SqLiteDbHelper : BaseDbHelper
 
     #endregion
 
-    private const string SqliteRuntimeInfoQuery = @"
-SELECT sqlite_version();
-";
+    private const string SqliteRuntimeInfoQuery = @"SELECT sqlite_version();";
 
+    /// <inheritdoc />
     public override DbRuntimeSetting GetDbConnectionRuntimeInformation(IDbConnection connection, IDbTransaction? transaction)
     {
         using var rdr = (SqliteDataReader)connection.ExecuteReader(SqliteRuntimeInfoQuery, transaction: transaction);

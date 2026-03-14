@@ -11,17 +11,9 @@ namespace RepoDb;
 /// </summary>
 public static class PrimaryMapper
 {
-    #region Privates
-
-    private static readonly ConcurrentDictionary<Type, ClassProperty> maps = new();
-
-    #endregion
+    private static readonly ConcurrentDictionary<Type, object> maps = new();
 
     #region Methods
-
-    /*
-     * Add
-     */
 
     /// <summary>
     /// Adds a primary property mapping into a target class (via expression).
@@ -45,6 +37,14 @@ public static class PrimaryMapper
         ArgumentNullException.ThrowIfNull(expression);
 
         // Get the property
+        if (expression.Body is NewExpression nx
+            && nx.Members is { } members)
+        {
+            // Add to the mapping
+            Add<TEntity>(force, [.. members.Select(x => DataEntityExtension.GetClassPropertyOrThrow<TEntity>(x.Name))]);
+            return;
+        }
+
         var property = ExpressionExtension.GetProperty(expression);
 
         // Add to the mapping
@@ -60,6 +60,16 @@ public static class PrimaryMapper
         where TEntity : class =>
         Add<TEntity>(propertyName, false);
 
+
+    /// <summary>
+    /// Adds a primary property mapping into a target class (via property name).
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
+    /// <param name="propertyNames">The names of the class property to be mapped.</param>
+    public static void Add<TEntity>(params string[] propertyNames)
+        where TEntity : class =>
+        Add<TEntity>(false, propertyNames);
+
     /// <summary>
     /// Adds a primary property mapping into a target class (via property name).
     /// </summary>
@@ -74,6 +84,21 @@ public static class PrimaryMapper
 
         // Add to the mapping
         Add<TEntity>(DataEntityExtension.GetClassPropertyOrThrow<TEntity>(propertyName), force);
+    }
+
+    /// <summary>
+    /// Adds a primary property mapping into a target class (via property name).
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
+    /// <param name="force">A value that indicates whether to force the mapping. If one is already exists, then it will be overwritten.</param>
+    /// <param name="propertyNames">The names of the class property to be mapped.</param>
+    public static void Add<TEntity>(bool force, params string[] propertyNames)
+        where TEntity : class
+    {
+        var props = (propertyNames ?? []).Select(propertyName => DataEntityExtension.GetClassPropertyOrThrow<TEntity>(propertyName)).ToArray();
+
+        // Add to the mapping
+        Add<TEntity>(force, props);
     }
 
     /// <summary>
@@ -102,6 +127,30 @@ public static class PrimaryMapper
     }
 
     /// <summary>
+    /// Adds a primary property mapping into a target class (via <see cref="Field"/> object).
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
+    /// <param name="fields">The instances of <see cref="Field"/> objects to be mapped.</param>
+    public static void Add<TEntity>(params Field[] fields)
+        where TEntity : class =>
+        Add<TEntity>(false, fields);
+
+    /// <summary>
+    /// Adds a primary property mapping into a target class (via <see cref="Field"/> object).
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
+    /// <param name="force">A value that indicates whether to force the mapping. If one is already exists, then it will be overwritten.</param>
+    /// <param name="fields">The instance of <see cref="Field"/> object to be mapped.</param>
+    public static void Add<TEntity>(bool force,
+        params Field[] fields)
+        where TEntity : class
+    {
+        ArgumentNullException.ThrowIfNull(fields);
+
+        Add<TEntity>(force, [.. fields.Select(x => x.FieldName)]);
+    }
+
+    /// <summary>
     /// Adds a primary property mapping into a <see cref="ClassProperty"/> object.
     /// </summary>
     /// <typeparam name="TEntity">The type of the data entity.</typeparam>
@@ -110,17 +159,28 @@ public static class PrimaryMapper
     internal static void Add<TEntity>(ClassProperty classProperty,
         bool force)
         where TEntity : class =>
-        Add(typeof(TEntity), classProperty, force);
+        Add(typeof(TEntity), force, classProperty);
+
+    /// <summary>
+    /// Adds a primary property mapping into a <see cref="ClassProperty"/> object.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
+    /// <param name="classProperties">The instance of <see cref="ClassProperty"/> to be mapped.</param>
+    /// <param name="force">A value that indicates whether to force the mapping. If one is already exists, then it will be overwritten.</param>
+    internal static void Add<TEntity>(bool force,
+        params ClassProperty[] classProperties)
+        where TEntity : class =>
+        Add(typeof(TEntity), force, classProperties);
 
     /// <summary>
     /// Adds a primary property mapping into a <see cref="ClassProperty"/> object.
     /// </summary>
     /// <param name="type">The type of the data entity.</param>
-    /// <param name="classProperty">The instance of <see cref="ClassProperty"/> to be mapped.</param>
     /// <param name="force">A value that indicates whether to force the mapping. If one is already exists, then it will be overwritten.</param>
+    /// <param name="classProperty">The instance of <see cref="ClassProperty"/> to be mapped.</param>
     internal static void Add(Type type,
-        ClassProperty classProperty,
-        bool force)
+        bool force,
+        ClassProperty classProperty)
     {
         ArgumentNullException.ThrowIfNull(type);
         ArgumentNullException.ThrowIfNull(classProperty);
@@ -143,6 +203,37 @@ public static class PrimaryMapper
         }
     }
 
+    /// <summary>
+    /// Adds a primary property mapping into a <see cref="ClassProperty"/> object.
+    /// </summary>
+    /// <param name="type">The type of the data entity.</param>
+    /// <param name="force">A value that indicates whether to force the mapping. If one is already exists, then it will be overwritten.</param>
+    /// <param name="classProperties">The instance of <see cref="ClassProperty"/> to be mapped.</param>
+    internal static void Add(Type type,
+        bool force,
+        ClassProperty[] classProperties)
+    {
+        ArgumentNullException.ThrowIfNull(type);
+        ArgumentNullException.ThrowIfNull(classProperties);
+
+        // Try get the cache
+        if (maps.TryGetValue(type, out var value))
+        {
+            if (force)
+            {
+                maps.TryUpdate(type, classProperties, value);
+            }
+            else
+            {
+                throw new MappingExistsException("The mapping is already existing.");
+            }
+        }
+        else
+        {
+            maps.TryAdd(type, classProperties);
+        }
+    }
+
     /*
      * Get
      */
@@ -155,6 +246,16 @@ public static class PrimaryMapper
     public static ClassProperty? Get<TEntity>()
         where TEntity : class =>
         Get(typeof(TEntity));
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    public static ClassProperty[]? GetPrimaryKeys<TEntity>()
+        where TEntity : class =>
+        GetPrimaryKeys(typeof(TEntity));
 
     /// <summary>
     /// Get the exising mapped primary property of the target class.
@@ -169,7 +270,25 @@ public static class PrimaryMapper
         maps.TryGetValue(type, out var value);
 
         // Return the value
-        return value;
+        return value as ClassProperty ?? (value as ClassProperty[])?[0];
+    }
+
+    /// <summary>
+    /// Get the exising mapped primary property of the target class.
+    /// </summary>
+    /// <param name="type">The target type.</param>
+    /// <returns>An instance of the mapped <see cref="ClassProperty"/> object.</returns>
+    public static ClassProperty[]? GetPrimaryKeys(Type type)
+    {
+        ArgumentNullException.ThrowIfNull(type);
+
+        // Try get the value
+        if (maps.TryGetValue(type, out var value))
+        {
+            return value is ClassProperty c ? [c] : value as ClassProperty[];
+        }
+
+        return null;
     }
 
     /*

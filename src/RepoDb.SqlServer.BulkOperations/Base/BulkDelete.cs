@@ -11,19 +11,6 @@ public static partial class SqlConnectionExtension
 {
     #region BulkDeleteInternalBase
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="primaryKeys"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <returns></returns>
     internal static int BulkDeleteInternalBase(SqlConnection connection,
         string tableName,
         IEnumerable<object> primaryKeys,
@@ -122,22 +109,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <returns></returns>
     internal static int BulkDeleteInternalBase(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -287,23 +258,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="dataTable"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="rowState"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <returns></returns>
     internal static int BulkDeleteInternalBase(SqlConnection connection,
         string tableName,
         DataTable dataTable,
@@ -464,20 +418,6 @@ public static partial class SqlConnectionExtension
 
     #region BulkDeleteInternalBaseAsync
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="primaryKeys"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="trace"></param>
-    /// <returns></returns>
     internal static async Task<int> BulkDeleteInternalBaseAsync(SqlConnection connection,
         string tableName,
         IEnumerable<object> primaryKeys,
@@ -580,23 +520,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="reader"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async Task<int> BulkDeleteInternalBaseAsync(SqlConnection connection,
         string tableName,
         DbDataReader reader,
@@ -749,24 +672,6 @@ public static partial class SqlConnectionExtension
         return result;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="tableName"></param>
-    /// <param name="dataTable"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="rowState"></param>
-    /// <param name="mappings"></param>
-    /// <param name="options"></param>
-    /// <param name="hints"></param>
-    /// <param name="bulkCopyTimeout"></param>
-    /// <param name="batchSize"></param>
-    /// <param name="usePhysicalPseudoTempTable"></param>
-    /// <param name="transaction"></param>
-    /// <param name="trace"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     internal static async Task<int> BulkDeleteInternalBaseAsync(SqlConnection connection,
         string tableName,
         DataTable dataTable,

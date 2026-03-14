@@ -1,4 +1,4 @@
-[![MSBuild-CI](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml/badge.svg)](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml)
+[![MSBuild-CI](https://github.com/AmpScm/RepoDb/actions/workflows/build.yml/badge.svg)](https://github.com/AmpScm/RepoDb/actions/workflows/build.yml)
 [![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb.PostgreSql.BulkOperations?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb.PostgreSql.BulkOperations)
 [![GitterChat](https://img.shields.io/gitter/room/mikependon/RepoDb?&logo=gitter&color=48B293)](https://gitter.im/RepoDb/community)
 
@@ -66,7 +66,7 @@ See the [Bulk Operations Guide](/docs/features/bulkoperations/postgresql.md) for
 
 ## Special Arguments
 
-The arguments `qualifiers`, `keepIdentity`, `identityBehavior`, `pseudoTableType` and `mergeCommandType` are provided in most operations (see [Bulk Operations Guide](../../tree/main/docs/features/bulkoperations/postgresql.md)).
+The arguments `qualifiers`, `keepIdentity`, `identityBehavior`, `pseudoTableType` and `mergeCommandType` are provided in most operations (see [Bulk Operations Guide](https://github.com/AmpScm/RepoDb/blob/main/docs/features/bulkoperations/postgresql.md)).
 
 The argument `qualifiers` is used to define the qualifier fields to be used in the operations. It usually refers to the `WHERE` expression of SQL Statements. If not given, the primary key field will be used.
 

@@ -16,7 +16,7 @@ namespace RepoDb.Extensions;
 /// </summary>
 public static class ExpressionExtension
 {
-    private readonly static HashSet<ExpressionType> extractableExpressionTypes =
+    private static readonly HashSet<ExpressionType> extractableExpressionTypes =
     [
         ExpressionType.Equal,
         ExpressionType.NotEqual,
@@ -26,7 +26,7 @@ public static class ExpressionExtension
         ExpressionType.LessThanOrEqual
     ];
 
-    private readonly static HashSet<ExpressionType> mathematicalExpressionTypes =
+    private static readonly HashSet<ExpressionType> mathematicalExpressionTypes =
     [
         ExpressionType.Add,
         ExpressionType.Subtract,
@@ -48,7 +48,7 @@ public static class ExpressionExtension
     /// <param name="expression">The instance of <see cref="Expression"/> object to be identified.</param>
     /// <returns>Returns true if the expression can be grouped as <see cref="QueryGroup"/> object.</returns>
     internal static bool IsGroupable(this Expression expression) =>
-        expression.NodeType == ExpressionType.AndAlso || expression.NodeType == ExpressionType.OrElse;
+        expression.NodeType is ExpressionType.AndAlso or ExpressionType.OrElse;
 
     /// <summary>
     /// Identify whether the instance of <see cref="Expression"/> is using the <see cref="Math"/> object operations.
@@ -173,9 +173,9 @@ public static class ExpressionExtension
         }
         else
         {
-            if (expression.Method.Name == nameof(string.Contains) ||
-                expression.Method.Name == nameof(string.StartsWith) ||
-                expression.Method.Name == nameof(string.EndsWith))
+            if (expression.Method.Name is (nameof(string.Contains)) or
+                (nameof(string.StartsWith)) or
+                (nameof(string.EndsWith)))
             {
                 var last = expression.Object is { } ? expression.Arguments[0] : expression.Arguments[1];
                 if (last is MemberExpression memberExpression)
@@ -623,6 +623,7 @@ public static class ExpressionExtension
         }
         throw new InvalidExpressionException($"Expression '{expression}' is not valid.");
     }
+
 
     #endregion
 

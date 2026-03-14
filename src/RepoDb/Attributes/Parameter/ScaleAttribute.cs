@@ -7,7 +7,7 @@ namespace RepoDb.Attributes.Parameter;
 /// property via a class property mapping.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class ScaleAttribute : PropertyValueAttribute
+public sealed class ScaleAttribute : PropertyValueAttribute
 {
     /// <summary>
     /// Creates a new instance of <see cref="ScaleAttribute"/> class.

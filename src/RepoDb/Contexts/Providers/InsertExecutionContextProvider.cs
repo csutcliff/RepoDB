@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using RepoDb.Contexts.Cachers;
+using RepoDb.Contexts.Caches;
 using RepoDb.Contexts.Execution;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -12,14 +12,6 @@ namespace RepoDb.Contexts.Providers;
 /// </summary>
 internal static class InsertExecutionContextProvider
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="tableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="hints"></param>
-    /// <returns></returns>
     private static string GetKey(Type type,
         string tableName,
         IEnumerable<Field> fields,
@@ -154,16 +146,6 @@ internal static class InsertExecutionContextProvider
         return context;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="connection"></param>
-    /// <param name="dbFields"></param>
-    /// <param name="tableName"></param>
-    /// <param name="fields"></param>
-    /// <param name="commandText"></param>
-    /// <returns></returns>
     private static InsertExecutionContext CreateInternal(Type entityType,
         IDbConnection connection,
         DbFieldCollection dbFields,

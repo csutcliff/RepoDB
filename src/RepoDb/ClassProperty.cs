@@ -53,12 +53,10 @@ public sealed class ClassProperty : IEquatable<ClassProperty>
     /// </summary>
     public string PropertyName => PropertyInfo.Name;
 
-    private string? _fieldName;
-
     /// <summary>
     ///
     /// </summary>
-    public string FieldName => _fieldName ??= PropertyMappedNameCache.Get(DeclaringType, PropertyInfo);
+    public string FieldName => field ??= PropertyMappedNameCache.Get(DeclaringType, PropertyInfo);
 
     /// <summary>
     ///
@@ -89,7 +87,7 @@ public sealed class ClassProperty : IEquatable<ClassProperty>
      * AsField
      */
 
-    private Field? field;
+    private Field? _field;
 
     /// <summary>
     /// Convert the <see cref="ClassProperty"/> into a <see cref="Field"/> objects.
@@ -97,7 +95,7 @@ public sealed class ClassProperty : IEquatable<ClassProperty>
     /// <returns>An instance of <see cref="string"/> object.</returns>
     public Field AsField()
     {
-        return field ??= new Field(FieldName, PropertyInfo.PropertyType);
+        return _field ??= new Field(FieldName, PropertyInfo.PropertyType);
     }
 
     /*
@@ -237,7 +235,7 @@ public sealed class ClassProperty : IEquatable<ClassProperty>
     public TPropertyHandler? GetPropertyHandler<TPropertyHandler>()
         where TPropertyHandler : class
     {
-        return PropertyHandlerCache.Get<TPropertyHandler>(DeclaringType, PropertyInfo) as TPropertyHandler;
+        return PropertyHandlerCache.Get<TPropertyHandler>(DeclaringType, PropertyInfo);
     }
 
     /*

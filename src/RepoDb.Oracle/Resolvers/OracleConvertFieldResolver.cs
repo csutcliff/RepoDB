@@ -5,12 +5,12 @@ using RepoDb.Interfaces;
 namespace RepoDb.Resolvers;
 
 /// <summary>
-/// A class that is being used to resolve the <see cref="Field"/> name conversion for PostgreSql.
+/// A class that is being used to resolve the <see cref="Field"/> name conversion for Oracle.
 /// </summary>
 public class OracleConvertFieldResolver : DbConvertFieldResolver
 {
     /// <summary>
-    /// Creates a new instance of <see cref="PostgreSqlConvertFieldResolver"/> class.
+    /// Creates a new instance of <see cref="OracleConvertFieldResolver"/> class.
     /// </summary>
     public OracleConvertFieldResolver()
         : this(ClientTypeToDbTypeResolver.Instance,
@@ -18,7 +18,7 @@ public class OracleConvertFieldResolver : DbConvertFieldResolver
     { }
 
     /// <summary>
-    /// Creates a new instance of <see cref="PostgreSqlConvertFieldResolver"/> class.
+    /// Creates a new instance of <see cref="OracleConvertFieldResolver"/> class.
     /// </summary>
     public OracleConvertFieldResolver(IResolver<Type, DbType?> dbTypeResolver,
         IResolver<DbType, string?> stringNameResolver)
@@ -33,7 +33,7 @@ public class OracleConvertFieldResolver : DbConvertFieldResolver
     /// </summary>
     /// <param name="field">The instance of the <see cref="Field"/> to be converted.</param>
     /// <param name="dbSetting">The current in used <see cref="IDbSetting"/> object.</param>
-    /// <returns>The converted name of the <see cref="Field"/> object for PostgreSql.</returns>
+    /// <returns>The converted name of the <see cref="Field"/> object for Oracle.</returns>
     public override string? Resolve(Field field,
         IDbSetting dbSetting)
     {

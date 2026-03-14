@@ -28,6 +28,7 @@ public sealed record PostgreSqlDbSetting : BaseDbSetting
         MaxParameterCount = 8096; // PostgreSQL allows up to 32767 parameters, but we set it lower to avoid issues with large queries and code generated for that
     }
 
+    /// <inheritdoc />
     protected override string? CreateJsonExtract(string path, Parameter parameter)
     {
         var segments = JsonExtractQueryField.SplitJsonPath(path).ToList();
@@ -69,6 +70,7 @@ public sealed record PostgreSqlDbSetting : BaseDbSetting
         };
     }
 
+    /// <inheritdoc />
     protected override string TranslateFunctionalFormat(string format)
     {
         if (format == JsonExtractQueryField.JsonExtractFormat)

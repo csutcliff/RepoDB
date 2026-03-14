@@ -1,4 +1,3 @@
-#nullable enable
 using System.Collections.Concurrent;
 using System.Data;
 using System.Data.Common;
@@ -39,10 +38,6 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
     private static string GetCommandText()
     {
         return @"
@@ -79,11 +74,6 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
 ";
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
     private DbField ReaderToDbField(DbDataReader reader)
     {
         var dbType = reader.IsDBNull(4) ? "text" : reader.GetString(4);
@@ -102,12 +92,6 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
             "PGSQL");
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private async Task<DbField> ReaderToDbFieldAsync(DbDataReader reader,
         CancellationToken cancellationToken = default)
     {
@@ -209,12 +193,14 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
         FROM information_schema.tables
         WHERE table_schema NOT IN ('pg_catalog', 'information_schema')";
 
+    /// <inheritdoc />
     public override IEnumerable<DbSchemaObject> GetSchemaObjects(IDbConnection connection, IDbTransaction? transaction = null)
     {
         return connection.ExecuteQuery<(string Type, string Name, string Schema)>(GetSchemaQuery, transaction)
                          .Select(MapSchemaQueryResult);
     }
 
+    /// <inheritdoc />
     public override async ValueTask<IEnumerable<DbSchemaObject>> GetSchemaObjectsAsync(IDbConnection connection, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
         var results = await connection.ExecuteQueryAsync<(string Type, string Name, string Schema)>(GetSchemaQuery, transaction, cancellationToken: cancellationToken);
@@ -253,6 +239,7 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
         }
     }
 
+    /// <inheritdoc />
     public override Expression? GetParameterPostCreationExpression(ParameterExpression dbParameterExpression, ParameterExpression? propertyExpression, DbField dbField)
     {
         // Shortcut the DynamicHandler to allow inlining
@@ -262,10 +249,6 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
 
     #region Handlers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameter"></param>
     private static void HandleDbParameterPostCreation(NpgsqlParameter parameter)
     {
         if (parameter.Value is Enum)
@@ -284,6 +267,7 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
         }
     }
 
+    /// <inheritdoc />
     public override object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
         if (parameter is NpgsqlParameter np)
@@ -316,6 +300,7 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
         SELECT version();
 ";
 
+    /// <inheritdoc />
     public override DbRuntimeSetting GetDbConnectionRuntimeInformation(IDbConnection connection, IDbTransaction? transaction)
     {
         using var rdr = (NpgsqlDataReader)connection.ExecuteReader(PostgresRuntimeInfoQuery, transaction: transaction);

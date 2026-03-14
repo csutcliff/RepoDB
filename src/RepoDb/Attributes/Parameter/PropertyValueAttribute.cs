@@ -92,10 +92,6 @@ public class PropertyValueAttribute : Attribute, IEquatable<PropertyValueAttribu
     public override string ToString() =>
         $"{ParameterType?.FullName}.{PropertyName} = {Value}";
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameter"></param>
     internal void SetValue(IDbDataParameter parameter)
     {
         ArgumentNullException.ThrowIfNull(parameter);
@@ -108,20 +104,12 @@ public class PropertyValueAttribute : Attribute, IEquatable<PropertyValueAttribu
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
     internal virtual object? GetValue() => Value;
 
     #endregion
 
     #region Helpers
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameterType"></param>
-    /// <param name="propertyName"></param>
     private void Validate(Type parameterType,
         string propertyName)
     {
@@ -131,10 +119,6 @@ public class PropertyValueAttribute : Attribute, IEquatable<PropertyValueAttribu
         EnsurePropertyInfo(parameterType, propertyName);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameterType"></param>
     private static void ValidateParameterType(Type parameterType)
     {
         if (!StaticType.IDbDataParameter.IsAssignableFrom(parameterType))
@@ -144,11 +128,6 @@ public class PropertyValueAttribute : Attribute, IEquatable<PropertyValueAttribu
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameterType"></param>
-    /// <param name="propertyName"></param>
     private void EnsurePropertyInfo(Type parameterType,
         string propertyName)
     {

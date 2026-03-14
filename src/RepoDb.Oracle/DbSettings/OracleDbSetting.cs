@@ -3,8 +3,10 @@ using RepoDb.Extensions.QueryFields;
 
 namespace RepoDb.DbSettings;
 
+/// <inheritdoc />
 public sealed record OracleDbSetting : BaseDbSetting
 {
+    /// <inheritdoc />
     public OracleDbSetting() : base()
     {
         AreTableHintsSupported = false;
@@ -22,7 +24,7 @@ public sealed record OracleDbSetting : BaseDbSetting
         GenerateFinalSemiColon = false;
     }
 
-
+    /// <inheritdoc />
     protected override string? CreateJsonExtract(string path, Parameter parameter)
     {
         return string.Concat(
@@ -39,6 +41,7 @@ public sealed record OracleDbSetting : BaseDbSetting
         );
     }
 
+    /// <inheritdoc />
     protected override string TranslateFunctionalFormat(string format)
     {
         if (format.StartsWith("LEFT({0}, "))

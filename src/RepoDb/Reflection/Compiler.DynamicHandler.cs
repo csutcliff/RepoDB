@@ -5,12 +5,6 @@ namespace RepoDb.Reflection;
 
 internal partial class Compiler
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbParameterExpression"></param>
-    /// <param name="dbHelper"></param>
-    /// <returns></returns>
     private static MethodCallExpression GetCompilerDbParameterPostCreationExpression(ParameterExpression dbParameterExpression,
         IDbHelper? dbHelper)
     {
