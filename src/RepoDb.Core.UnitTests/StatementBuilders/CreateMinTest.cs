@@ -32,7 +32,7 @@ public class BaseStatementBuilderCreateMinTest
         var actual = statementBuilder.CreateMin(field: field,
             tableName: tableName,
             hints: null);
-        var expected = "SELECT MIN ([Value]) AS [MinValue] FROM [Table];";
+        var expected = "SELECT MIN([Value]) AS [MinValue] FROM [Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -52,7 +52,7 @@ public class BaseStatementBuilderCreateMinTest
             field: field,
             where: where);
         var expected =
-            "SELECT MIN ([Value]) AS [MinValue] " +
+            "SELECT MIN([Value]) AS [MinValue] " +
             "FROM [Table] " +
             "WHERE ([Id] = @Id);";
 
@@ -73,7 +73,7 @@ public class BaseStatementBuilderCreateMinTest
         var actual = statementBuilder.CreateMin(tableName: tableName,
             field: field,
             hints: hints);
-        var expected = "SELECT MIN ([Value]) AS [MinValue] FROM [Table] WITH (NOLOCK);";
+        var expected = "SELECT MIN([Value]) AS [MinValue] FROM [Table] WITH (NOLOCK);";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -95,7 +95,7 @@ public class BaseStatementBuilderCreateMinTest
             where: where,
             hints: hints);
         var expected =
-            "SELECT MIN ([Value]) AS [MinValue] " +
+            "SELECT MIN([Value]) AS [MinValue] " +
             "FROM [Table] WITH (NOLOCK) " +
             "WHERE ([Id] = @Id);";
 
@@ -115,7 +115,7 @@ public class BaseStatementBuilderCreateMinTest
         var actual = statementBuilder.CreateMin(tableName: tableName,
             field: field,
             hints: null);
-        var expected = "SELECT MIN ([Value]) AS [MinValue] FROM [dbo].[Table];";
+        var expected = "SELECT MIN([Value]) AS [MinValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -133,7 +133,7 @@ public class BaseStatementBuilderCreateMinTest
         var actual = statementBuilder.CreateMin(tableName: tableName,
             field: field,
             hints: null);
-        var expected = "SELECT MIN ([Value]) AS [MinValue] FROM [dbo].[Table];";
+        var expected = "SELECT MIN([Value]) AS [MinValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);

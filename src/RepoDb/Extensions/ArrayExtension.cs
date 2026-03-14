@@ -21,7 +21,14 @@ public static class ArrayExtension
     /// <returns>An enumerable of objects.</returns>
     public static IEnumerable<T> AsEnumerable<T>(this Array array)
     {
-        if (array is not null)
+        if (array is IEnumerable<T> e)
+            return e;
+        else if (array is null)
+            return [];
+        else
+            return WrapArray(array);
+
+        static IEnumerable<T> WrapArray(Array array)
         {
             foreach (var value in array)
             {

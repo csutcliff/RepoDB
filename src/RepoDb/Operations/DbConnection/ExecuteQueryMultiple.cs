@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.Common;
+using System.Dynamic;
 using RepoDb.Interfaces;
 
 namespace RepoDb;
@@ -52,6 +53,23 @@ public static partial class DbConnectionExtension
             trace,
             false);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <returns></returns>
     public static (IEnumerable<T1>, IEnumerable<T2> v2) ExecuteQueryMultiple<T1, T2>(
         this IDbConnection connection,
         string commandText,
@@ -85,6 +103,24 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <returns></returns>
     public static (IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3> v3) ExecuteQueryMultiple<T1, T2, T3>(
         this IDbConnection connection,
         string commandText,
@@ -121,6 +157,25 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <returns></returns>
     public static (IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4> v4) ExecuteQueryMultiple<T1, T2, T3, T4>(
         this IDbConnection connection,
         string commandText,
@@ -159,6 +214,26 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <returns></returns>
     public static (IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5> v5) ExecuteQueryMultiple<T1, T2, T3, T4, T5>(
         this IDbConnection connection,
         string commandText,
@@ -199,6 +274,27 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <returns></returns>
     public static (IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6> v6) ExecuteQueryMultiple<T1, T2, T3, T4, T5, T6>(
         this IDbConnection connection,
         string commandText,
@@ -241,6 +337,28 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <returns></returns>
     public static (IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>, IEnumerable<T7> v7) ExecuteQueryMultiple<T1, T2, T3, T4, T5, T6, T7>(
         this IDbConnection connection,
         string commandText,
@@ -396,6 +514,25 @@ public static partial class DbConnectionExtension
             cancellationToken).ConfigureAwait(false);
 
     #region Q
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async ValueTask<Tuple<IEnumerable<T1>, IEnumerable<T2>>> ExecuteQueryMultipleAsync<T1, T2>(
         this IDbConnection connection,
         string commandText,
@@ -432,6 +569,25 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async ValueTask<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>>> ExecuteQueryMultipleAsync<T1, T2, T3>(
         this IDbConnection connection,
         string commandText,
@@ -470,6 +626,26 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async ValueTask<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>>> ExecuteQueryMultipleAsync<T1, T2, T3, T4>(
         this IDbConnection connection,
         string commandText,
@@ -510,6 +686,27 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async ValueTask<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>>> ExecuteQueryMultipleAsync<T1, T2, T3, T4, T5>(
         this IDbConnection connection,
         string commandText,
@@ -552,6 +749,28 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async ValueTask<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>>> ExecuteQueryMultipleAsync<T1, T2, T3, T4, T5, T6>(
         this IDbConnection connection,
         string commandText,
@@ -596,6 +815,29 @@ public static partial class DbConnectionExtension
             );
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <typeparam name="T3"></typeparam>
+    /// <typeparam name="T4"></typeparam>
+    /// <typeparam name="T5"></typeparam>
+    /// <typeparam name="T6"></typeparam>
+    /// <typeparam name="T7"></typeparam>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="param"></param>
+    /// <param name="commandType"></param>
+    /// <param name="cacheKey"></param>
+    /// <param name="cacheItemExpiration"></param>
+    /// <param name="traceKey"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cache"></param>
+    /// <param name="trace"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async ValueTask<Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>, IEnumerable<T7>>> ExecuteQueryMultipleAsync<T1, T2, T3, T4, T5, T6, T7>(
         this IDbConnection connection,
         string commandText,

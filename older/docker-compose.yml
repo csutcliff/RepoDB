@@ -1,0 +1,33 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - 127.0.0.1:43306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2
+
+  oracle:
+    image: gvenzl/oracle-xe:18
+    ports:
+      - 127.0.0.1:41521:1521
+      - 127.0.0.1:45500:5500
+    environment:
+      ORACLE_PASSWORD: ddd53e85-b15e-4da8
+      ORACLE_ALLOW_REMOTE: true
+    shm_size: '1gb'
+
+  postgresql:
+    image: postgres:14-alpine
+    ports:
+      - 127.0.0.1:45432:5432
+    environment:
+      POSTGRES_PASSWORD: ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 127.0.0.1:41433:1433
+    environment:
+      ACCEPT_EULA: true
+      MSSQL_SA_PASSWORD: ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2

@@ -19,6 +19,7 @@ internal sealed class QueryRequest : BaseRequest
     /// <param name="where">The query expression.</param>
     /// <param name="orderBy">The list of order fields.</param>
     /// <param name="top">The filter for the rows.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The hints for the table.</param>
     /// <param name="statementBuilder">The statement builder.</param>
     public QueryRequest(Type type,
@@ -28,6 +29,7 @@ internal sealed class QueryRequest : BaseRequest
         QueryGroup? where = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         IStatementBuilder? statementBuilder = null)
         : this(ClassMappedNameCache.Get(type),
@@ -37,6 +39,7 @@ internal sealed class QueryRequest : BaseRequest
               where,
               orderBy,
               top,
+              offset,
               hints,
               statementBuilder)
     {
@@ -53,6 +56,7 @@ internal sealed class QueryRequest : BaseRequest
     /// <param name="where">The query expression.</param>
     /// <param name="orderBy">The list of order fields.</param>
     /// <param name="top">The filter for the rows.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The hints for the table.</param>
     /// <param name="statementBuilder">The statement builder.</param>
     public QueryRequest(string name,
@@ -62,6 +66,7 @@ internal sealed class QueryRequest : BaseRequest
         QueryGroup? where = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         IStatementBuilder? statementBuilder = null)
         : base(name,
@@ -72,7 +77,8 @@ internal sealed class QueryRequest : BaseRequest
         Fields = fields?.AsFieldSet();
         Where = where;
         OrderBy = orderBy?.AsList();
-        Top = top;
+        Take = top;
+        Offset = offset;
         Hints = hints;
     }
 
@@ -94,7 +100,12 @@ internal sealed class QueryRequest : BaseRequest
     /// <summary>
     /// Gets the filter for the rows.
     /// </summary>
-    public int Top { get; }
+    public int Take { get; }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public int Offset { get; }
 
     /// <summary>
     /// Gets the hints for the table.
@@ -114,11 +125,16 @@ internal sealed class QueryRequest : BaseRequest
             // Get first the entity hash code
             hashCode = System.HashCode.Combine(
                 typeof(QueryRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Where,
-                Top,
-                Hints,
-                Fields);
+                Take,
+                System.HashCode.Combine(
+                    Offset,
+                    Hints,
+                    Fields
+                ));
 
             // Add the order fields
             if (OrderBy is not null)

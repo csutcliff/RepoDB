@@ -42,5 +42,8 @@ public class DbTypeToClientTypeResolver : IResolver<DbType, Type>
         };
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly DbTypeToClientTypeResolver Instance = new();
 }

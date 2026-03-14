@@ -49,6 +49,10 @@ public sealed record GlobalConfigurationOptions
     public bool DateOnlyAndTimeOnly { get; init; }
 #endif
 
+
+    /// <summary>
+    ///
+    /// </summary>
     [Obsolete("This property is not used anymore. Use the SqlServer specific settings object instead.", error: true), EditorBrowsable(EditorBrowsableState.Never)]
     public bool SqlServerIdentityInsert { get; init; }
 

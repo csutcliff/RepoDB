@@ -36,11 +36,9 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: null);
         var expected =
-            "SELECT [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [Table] " +
-            "ORDER BY [Field1] ASC " +
-            "OFFSET 0 " +
-            "ROWS FETCH NEXT 10 ROWS ONLY;";
+            "ORDER BY [Field1] ASC;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -91,11 +89,9 @@ public class StatementBuilderTest
             where: null,
             hints: SqlServerTableHints.NoLock);
         var expected =
-            "SELECT [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [dbo].[Table] WITH (NOLOCK) " +
-            "ORDER BY [Field1] ASC " +
-            "OFFSET 0 " +
-            "ROWS FETCH NEXT 10 ROWS ONLY;";
+            "ORDER BY [Field1] ASC;";
         // Assert
         Assert.AreEqual(expected, actual);
     }
@@ -117,11 +113,9 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: null);
         var expected =
-            "SELECT [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [dbo].[Table] " +
-            "ORDER BY [Field1] ASC " +
-            "OFFSET 0 " +
-            "ROWS FETCH NEXT 10 ROWS ONLY;";
+            "ORDER BY [Field1] ASC;";
         // Assert
         Assert.AreEqual(expected, actual);
     }
@@ -143,11 +137,9 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: null);
         var expected =
-            "SELECT [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [dbo].[Table] " +
-            "ORDER BY [Field1] ASC " +
-            "OFFSET 0 " +
-            "ROWS FETCH NEXT 10 ROWS ONLY;";
+            "ORDER BY [Field1] ASC;";
         // Assert
         Assert.AreEqual(expected, actual);
     }
@@ -270,28 +262,11 @@ public class StatementBuilderTest
         var orderBy = OrderField.Parse(new { Field1 = Order.Ascending });
 
         // Act/Assert
-        Assert.ThrowsExactly<MissingFieldsException>(() => statementBuilder.CreateBatchQuery(tableName: tableName,
-            fields: [],
+        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateBatchQuery(tableName: tableName,
+            fields: null,
             page: 0,
             rowsPerBatch: 10,
             orderBy: orderBy,
-            where: null));
-    }
-
-    [TestMethod]
-    public void ThrowExceptionOnSqlServerStatementBuilderCreateBatchQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var statementBuilder = StatementBuilderMapper.Get<SqlConnection>();
-        var tableName = "Table";
-        var fields = Field.From(["Field1", "Field2"]);
-
-        // Act/Assert
-        Assert.ThrowsExactly<EmptyException>(() => statementBuilder.CreateBatchQuery(tableName: tableName,
-            fields: fields,
-            page: 0,
-            rowsPerBatch: 10,
-            orderBy: null,
             where: null));
     }
 
@@ -313,23 +288,6 @@ public class StatementBuilderTest
             where: null));
     }
 
-    [TestMethod]
-    public void ThrowExceptionOnSqlServerStatementBuilderCreateBatchQueryIfTheRowsPerBatchIsLessThanOne()
-    {
-        // Setup
-        var statementBuilder = StatementBuilderMapper.Get<SqlConnection>();
-        var tableName = "Table";
-        var fields = Field.From(["Field1", "Field2"]);
-        var orderBy = OrderField.Parse(new { Field1 = Order.Ascending });
-
-        // Act/Assert
-        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => statementBuilder.CreateBatchQuery(tableName: tableName,
-            fields: fields,
-            page: 0,
-            rowsPerBatch: 0,
-            orderBy: orderBy,
-            where: null));
-    }
     #endregion
 
     #region CreateCountAll
@@ -342,9 +300,9 @@ public class StatementBuilderTest
         var tableName = "Table";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
-            hints: null);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [Table];";
+        var actual = statementBuilder.CreateCount(tableName: tableName,
+            null, hints: null);
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -359,9 +317,9 @@ public class StatementBuilderTest
         var hints = "WITH (NOLOCK)";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
-            hints: hints);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
+        var actual = statementBuilder.CreateCount(tableName: tableName,
+            null, hints: hints);
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -375,9 +333,9 @@ public class StatementBuilderTest
         var tableName = "[dbo].[Table]";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
-            hints: null);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [dbo].[Table];";
+        var actual = statementBuilder.CreateCount(tableName: tableName,
+            null, hints: null);
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -391,9 +349,9 @@ public class StatementBuilderTest
         var tableName = "dbo.Table";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
-            hints: null);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [dbo].[Table];";
+        var actual = statementBuilder.CreateCount(tableName: tableName,
+            null, hints: null);
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -413,7 +371,7 @@ public class StatementBuilderTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [Table];";
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -431,7 +389,7 @@ public class StatementBuilderTest
         var actual = statementBuilder.CreateCount(tableName: tableName,
             where: where);
         var expected =
-            "SELECT COUNT_BIG (*) AS [CountValue] " +
+            "SELECT COUNT_BIG(*) AS [CountValue] " +
             "FROM [Table] " +
             "WHERE ([Id] = @Id);";
 
@@ -450,7 +408,7 @@ public class StatementBuilderTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: hints);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -470,7 +428,7 @@ public class StatementBuilderTest
             where: where,
             hints: hints);
         var expected =
-            "SELECT COUNT_BIG (*) AS [CountValue] " +
+            "SELECT COUNT_BIG(*) AS [CountValue] " +
             "FROM [Table] WITH (NOLOCK) " +
             "WHERE ([Id] = @Id);";
 
@@ -488,7 +446,7 @@ public class StatementBuilderTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [dbo].[Table];";
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -504,7 +462,7 @@ public class StatementBuilderTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT_BIG (*) AS [CountValue] FROM [dbo].[Table];";
+        var expected = "SELECT COUNT_BIG(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2139,14 +2097,9 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: null);
         var expected =
-            "WITH CTE AS " +
-            "(" +
-            "SELECT TOP (10) ROW_NUMBER() OVER (ORDER BY [Field1] ASC) AS [RowNumber], [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [Table] " +
-            "ORDER BY [Field1] ASC) " +
-            "SELECT [Field1], [Field2] " +
-            "FROM CTE " +
-            "WHERE ([RowNumber] BETWEEN 1 AND 10);";
+            "ORDER BY [Field1] ASC;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2169,14 +2122,11 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: null);
         var expected =
-            "WITH CTE AS " +
-            "(" +
-            "SELECT TOP (20) ROW_NUMBER() OVER (ORDER BY [Field1] ASC) AS [RowNumber], [Field1], [Field2] " +
-            "FROM [Table] " +
-            "ORDER BY [Field1] ASC) " +
             "SELECT [Field1], [Field2] " +
-            "FROM CTE " +
-            "WHERE ([RowNumber] BETWEEN 11 AND 20);";
+            "FROM [Table] " +
+            "ORDER BY [Field1] ASC " +
+            "OFFSET 10 ROWS " +
+            "FETCH NEXT 10 ROWS ONLY;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2200,14 +2150,9 @@ public class StatementBuilderTest
             where: null,
             hints: SqlServerTableHints.NoLock);
         var expected =
-            "WITH CTE AS " +
-            "(" +
-            "SELECT TOP (10) ROW_NUMBER() OVER (ORDER BY [Field1] ASC) AS [RowNumber], [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [dbo].[Table] WITH (NOLOCK) " +
-            "ORDER BY [Field1] ASC) " +
-            "SELECT [Field1], [Field2] " +
-            "FROM CTE " +
-            "WHERE ([RowNumber] BETWEEN 1 AND 10);";
+            "ORDER BY [Field1] ASC;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2230,14 +2175,9 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: null);
         var expected =
-            "WITH CTE AS " +
-            "(" +
-            "SELECT TOP (10) ROW_NUMBER() OVER (ORDER BY [Field1] ASC) AS [RowNumber], [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [dbo].[Table] " +
-            "ORDER BY [Field1] ASC) " +
-            "SELECT [Field1], [Field2] " +
-            "FROM CTE " +
-            "WHERE ([RowNumber] BETWEEN 1 AND 10);";
+            "ORDER BY [Field1] ASC;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2260,14 +2200,9 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: null);
         var expected =
-            "WITH CTE AS " +
-            "(" +
-            "SELECT TOP (10) ROW_NUMBER() OVER (ORDER BY [Field1] ASC) AS [RowNumber], [Field1], [Field2] " +
+            "SELECT TOP (10) [Field1], [Field2] " +
             "FROM [dbo].[Table] " +
-            "ORDER BY [Field1] ASC) " +
-            "SELECT [Field1], [Field2] " +
-            "FROM CTE " +
-            "WHERE ([RowNumber] BETWEEN 1 AND 10);";
+            "ORDER BY [Field1] ASC;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2291,15 +2226,12 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: where);
         var expected =
-            "WITH CTE AS " +
-            "(" +
-            "SELECT TOP (20) ROW_NUMBER() OVER (ORDER BY [Field1] ASC) AS [RowNumber], [Field1], [Field2] " +
+            "SELECT [Field1], [Field2] " +
             "FROM [Table] " +
             "WHERE ([Field1] <> @Field1) " +
-            "ORDER BY [Field1] ASC) " +
-            "SELECT [Field1], [Field2] " +
-            "FROM CTE " +
-            "WHERE ([RowNumber] BETWEEN 11 AND 20);";
+            "ORDER BY [Field1] ASC " +
+            "OFFSET 10 ROWS " +
+            "FETCH NEXT 10 ROWS ONLY;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2323,15 +2255,12 @@ public class StatementBuilderTest
             orderBy: orderBy,
             where: where);
         var expected =
-            "WITH CTE AS " +
-            "(" +
-            "SELECT TOP (20) ROW_NUMBER() OVER (ORDER BY [Field1] ASC) AS [RowNumber], [Field1], [Field2] " +
+            "SELECT [Field1], [Field2] " +
             "FROM [Table] " +
             "WHERE ([Id] <> @Id) " +
-            "ORDER BY [Field1] ASC) " +
-            "SELECT [Field1], [Field2] " +
-            "FROM CTE " +
-            "WHERE ([RowNumber] BETWEEN 11 AND 20);";
+            "ORDER BY [Field1] ASC " +
+            "OFFSET 10 ROWS " +
+            "FETCH NEXT 10 ROWS ONLY;";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -2399,28 +2328,11 @@ public class StatementBuilderTest
         var orderBy = OrderField.Parse(new { Field1 = Order.Ascending });
 
         // Act/Assert
-        Assert.ThrowsExactly<MissingFieldsException>(() => statementBuilder.CreateSkipQuery(tableName: tableName,
-            fields: [],
+        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateSkipQuery(tableName: tableName,
+            fields: null,
             skip: 0,
             take: 10,
             orderBy: orderBy,
-            where: null));
-    }
-
-    [TestMethod]
-    public void ThrowExceptionOnSqlServerStatementBuilderCreateSkipQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var statementBuilder = StatementBuilderMapper.Get<SqlConnection>();
-        var tableName = "Table";
-        var fields = Field.From(["Field1", "Field2"]);
-
-        // Act/Assert
-        Assert.ThrowsExactly<EmptyException>(() => statementBuilder.CreateSkipQuery(tableName: tableName,
-            fields: fields,
-            skip: 0,
-            take: 10,
-            orderBy: null,
             where: null));
     }
 
@@ -2442,23 +2354,6 @@ public class StatementBuilderTest
             where: null));
     }
 
-    [TestMethod]
-    public void ThrowExceptionOnSqlServerStatementBuilderCreateSkipQueryIfTheRowsPerBatchIsLessThanOne()
-    {
-        // Setup
-        var statementBuilder = StatementBuilderMapper.Get<SqlConnection>();
-        var tableName = "Table";
-        var fields = Field.From(["Field1", "Field2"]);
-        var orderBy = OrderField.Parse(new { Field1 = Order.Ascending });
-
-        // Act/Assert
-        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => statementBuilder.CreateSkipQuery(tableName: tableName,
-            fields: fields,
-            skip: 0,
-            take: 0,
-            orderBy: orderBy,
-            where: null));
-    }
     #endregion
 
     #region CreateUpdate

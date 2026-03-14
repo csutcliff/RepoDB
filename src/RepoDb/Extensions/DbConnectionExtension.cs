@@ -53,6 +53,15 @@ public static partial class DbConnectionExtension
         return command;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="commandText"></param>
+    /// <param name="commandType"></param>
+    /// <param name="commandTimeout"></param>
+    /// <param name="transaction"></param>
+    /// <returns></returns>
     public static DbCommand CreateCommand(this DbConnection connection,
         string commandText,
         CommandType commandType = default,
@@ -451,7 +460,13 @@ public static partial class DbConnectionExtension
         return statementBuilder!;
     }
 
-    internal static DbRuntimeSetting GetDbRuntimeSetting(this IDbConnection connection, IDbTransaction? transaction)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <returns></returns>
+    public static DbRuntimeSetting GetDbRuntimeSetting(this IDbConnection connection, IDbTransaction? transaction=null)
     {
         ArgumentNullException.ThrowIfNull(connection);
 
@@ -629,12 +644,6 @@ public static partial class DbConnectionExtension
         return GetAndGuardPrimaryKeyOrIdentityKey(tableName, properties);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dbField"></param>
-    /// <returns></returns>
     internal static IEnumerable<DbField> GetAndGuardPrimaryKeyOrIdentityKey(string tableName,
         IEnumerable<DbField>? dbFields) =>
         dbFields ?? throw GetKeyFieldNotFoundException(tableName);
@@ -649,12 +658,6 @@ public static partial class DbConnectionExtension
         Field? field) =>
         field?.AsEnumerable() ?? throw GetKeyFieldNotFoundException(tableName);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="field"></param>
-    /// <returns></returns>
     internal static IEnumerable<Field> GetAndGuardPrimaryKeyOrIdentityKey(string tableName,
         IEnumerable<Field>? fields) =>
         fields ?? throw GetKeyFieldNotFoundException(tableName);
@@ -1060,12 +1063,6 @@ public static partial class DbConnectionExtension
         throw new KeyFieldNotFoundException($"No primary key and identity key found.");
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="where"></param>
-    /// <returns></returns>
     internal static QueryGroup? ToQueryGroup<TEntity>(this IDbConnection connection, Expression<Func<TEntity, bool>>? where, IDbTransaction? transaction, string? tableName = null)
         where TEntity : class
     {
@@ -1256,14 +1253,6 @@ public static partial class DbConnectionExtension
         return new QueryGroup(queryFields);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="entities"></param>
-    /// <param name="property"></param>
-    /// <returns></returns>
     internal static IEnumerable<object> ExtractPropertyValues<TEntity>(IEnumerable<TEntity> entities, Field keyField) where TEntity : class
     {
         var property = PropertyCache.Get(GetEntityType(entities), keyField, true)!;
@@ -1292,7 +1281,6 @@ public static partial class DbConnectionExtension
     ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    /// <param name="fields"></param>
     /// <returns></returns>
     internal static IEnumerable<Field>? GetQualifiedFields<TEntity>()
         where TEntity : class
@@ -1475,7 +1463,7 @@ public static partial class DbConnectionExtension
             command.CommandText = commandArrayParametersText.CommandText;
 
             // Array parameters
-            command.CreateParametersFromArray(connection, transaction, commandArrayParametersText);
+            command.CreateParametersFromArray(commandArrayParametersText);
         }
 
         // Normal parameters
@@ -1496,13 +1484,6 @@ public static partial class DbConnectionExtension
 
     #region GetCommandArrayParameters
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="commandText"></param>
-    /// <param name="param"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static CommandArrayParametersText? GetCommandArrayParametersText(
         DbCommand command,
         DbConnection connection,
@@ -1636,13 +1617,6 @@ public static partial class DbConnectionExtension
         return commandArrayParametersText;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="commandText"></param>
-    /// <param name="queryField"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static CommandArrayParametersText? GetCommandArrayParametersText(DbCommand command, DbConnection dbConnection, IDbTransaction? transaction, QueryField queryField)
     {
         if (queryField is null)
@@ -1689,13 +1663,6 @@ public static partial class DbConnectionExtension
         return commandArrayParametersText;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="commandText"></param>
-    /// <param name="queryFields"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static CommandArrayParametersText? GetCommandArrayParametersText(
         DbCommand command,
         DbConnection dbConnection,
@@ -1763,25 +1730,12 @@ public static partial class DbConnectionExtension
         return commandArrayParametersText;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="commandText"></param>
-    /// <param name="queryGroup"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static CommandArrayParametersText? GetCommandArrayParametersText(DbCommand command,
         DbConnection connection,
         IDbTransaction? transaction,
         QueryGroup queryGroup) =>
         GetCommandArrayParametersText(command, connection, transaction, queryGroup.GetFields(true));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="parameterName"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     private static CommandArrayParameter? GetCommandArrayParameter(
         DbCommand command,
         string parameterName,
@@ -1807,14 +1761,6 @@ public static partial class DbConnectionExtension
         };
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="commandText"></param>
-    /// <param name="parameterName"></param>
-    /// <param name="values"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static string GetRawSqlText(string commandText,
         DbConnection connection,
         IDbTransaction? transaction,
@@ -1870,21 +1816,17 @@ public static partial class DbConnectionExtension
         QueryField queryField)
     {
         // Check the IN operation parameters
-        if (queryField.Operation == Operation.In || queryField.Operation == Operation.NotIn)
+        if (queryField.Operation is Operation.In or Operation.NotIn
+            && commandText.Contains(string.Concat(queryField.Parameter.Name, "_In_"), StringComparison.OrdinalIgnoreCase))
         {
-            if (commandText.IndexOf(string.Concat(queryField.Parameter.Name, "_In_"), StringComparison.OrdinalIgnoreCase) > 0)
-            {
-                return true;
-            }
+            return true;
         }
 
         // Check the BETWEEN operation parameters
-        else if (queryField.Operation == Operation.Between || queryField.Operation == Operation.NotBetween)
+        else if (queryField.Operation is Operation.Between or Operation.NotBetween
+            && commandText.Contains(string.Concat(queryField.Parameter.Name, "_Left"), StringComparison.OrdinalIgnoreCase))
         {
-            if (commandText.IndexOf(string.Concat(queryField.Parameter.Name, "_Left"), StringComparison.OrdinalIgnoreCase) > 0)
-            {
-                return true;
-            }
+            return true;
         }
 
         // Return

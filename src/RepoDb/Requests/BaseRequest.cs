@@ -20,7 +20,7 @@ internal abstract class BaseRequest : IEquatable<BaseRequest>
         IDbTransaction? transaction,
         IStatementBuilder? statementBuilder = null)
     {
-        Name = name;
+        TableName = name;
         Connection = connection;
         Transaction = transaction;
         StatementBuilder = statementBuilder;
@@ -34,7 +34,7 @@ internal abstract class BaseRequest : IEquatable<BaseRequest>
     /// <summary>
     /// Gets the name.
     /// </summary>
-    public string Name { get; }
+    public string TableName { get; }
 
     /// <summary>
     /// Gets the connection object.
@@ -86,6 +86,8 @@ internal abstract class BaseRequest : IEquatable<BaseRequest>
         {
             return false;
         }
+        else if (other.GetType() != GetType())
+            return false;
 
         return StrictEquals(other);
     }

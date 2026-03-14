@@ -1,31 +1,31 @@
 [![MSBuild-CI](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml/badge.svg)](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml)
-[![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb.SqlServer)
+[![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb.SqlServer?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb.SqlServer)
 [![GitterChat](https://img.shields.io/gitter/room/mikependon/RepoDb?&logo=gitter&color=48B293)](https://gitter.im/RepoDb/community)
 
-# [RepoDb.SqlServer](https://repodb.net/tutorial/get-started-sqlserver) - a hybrid .NET ORM library for SQL Server.
+# RepoDb.SqlServer - a hybrid .NET ORM library for SQL Server.
 
 RepoDB is an open-source .NET ORM library that bridges the gaps of micro-ORMs and full-ORMs. It helps you simplify the switch-over of when to use the BASIC and ADVANCE operations during the development.
 
 ## Important Pages
 
 - [GitHub Home Page](https://github.com/AmpScm/RepoDb) - to learn more about the core library.
-- [Website](https://repodb.net) - docs, features, classes, references, releases and blogs.
+- [SQL Server Guide](/docs/getstarted/sqlserver.md) - getting started with SQL Server
+- [All Documentation](/docs) - comprehensive guides and references
 
 ## Community Engagements
 
 - [GitHub](https://github.com/AmpScm/RepoDb/issues) - for any issues, requests and problems.
 - [StackOverflow](https://stackoverflow.com/search?q=RepoDB) - for any technical questions.
-- [Twitter](https://twitter.com/search?q=%23repodb) - for the latest news.
 - [Gitter Chat](https://gitter.im/RepoDb/community) - for direct and live Q&A.
 
 ## Dependencies
 
 - [Microsoft.Data.SqlClient](https://www.nuget.org/packages/Microsoft.Data.SqlClient/) - the data provider used for SqlServer.
-- [RepoDb](https://www.nuget.org/packages/RepoDb.SqLite/) - the core library of RepoDB.
+- [RepoDb](https://www.nuget.org/packages/AmpScm.RepoDb/) - the core library of RepoDB.
 
 ## License
 
-[Apache-2.0](http://apache.org/licenses/LICENSE-2.0.html) 
+[Apache-2.0](http://apache.org/licenses/LICENSE-2.0.html)
 - Copyright © 2019 - 2024 [Michael Camara Pendon](https://github.com/mikependon)
 - Copyright © 2025 - now [Bert Huijben](https://github.com/rhuijben)
 
@@ -39,21 +39,22 @@ At the Package Manager Console, write the command below.
 > Install-Package AmpScm.RepoDb.SqlServer
 ```
 
-Or, visit our [installation](https://repodb.net/tutorial/installation) page for more information.
+See the [SQL Server Guide](/docs/getstarted/sqlserver.md) for more information.
 
 ## Get Started
 
-First, RepoDB must be configured and SqlServer support loaded.
+First, RepoDB must be configured and SQL Server support loaded.
 
 ```csharp
+using RepoDb;
+using Microsoft.Data.SqlClient;
+
 GlobalConfiguration.Setup().UseSqlServer();
 ```
 
-**Note:** The call must be done once.
+**Note:** This call must be done once during application startup.
 
 After the bootstrap initialization, any library operation can then be called.
-
-Or, visit the official [get-started](https://repodb.net/tutorial/get-started-sqlserver) page for SQL Server.
 
 ### Query
 
@@ -73,6 +74,7 @@ var customer = new Customer
 	LastName = "Doe",
 	IsActive = true
 };
+
 using (var connection = new SqlConnection(ConnectionString))
 {
 	var id = connection.Insert<Customer>(customer);

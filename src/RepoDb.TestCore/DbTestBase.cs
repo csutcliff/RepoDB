@@ -36,6 +36,8 @@ public abstract class DbTestBase<TDbInstance> where TDbInstance : DbInstance, ne
 
     public virtual DbConnection CreateConnection() => DbInstance.CreateConnection();
 
+    public virtual DbConnection CreateLimitedConnection() => DbInstance.CreateLimitedConnection();
+
     public async Task<DbConnection> CreateOpenConnectionAsync()
     {
         var db = CreateConnection();
@@ -58,6 +60,40 @@ public abstract class DbTestBase<TDbInstance> where TDbInstance : DbInstance, ne
     public DbConnection CreateOpenConnection()
     {
         var db = CreateConnection();
+        try
+        {
+            db.Open();
+            return db;
+        }
+        catch
+        {
+            db.Dispose();
+            throw;
+        }
+    }
+
+    public async Task<DbConnection> CreateOpenLimitedConnectionAsync()
+    {
+        var db = CreateLimitedConnection();
+        try
+        {
+            await db.OpenAsync(TestContext.CancellationTokenSource.Token);
+            return db;
+        }
+        catch
+        {
+#if NET
+            await db.DisposeAsync();
+#else
+            db.Dispose();
+#endif
+            throw;
+        }
+    }
+
+    public DbConnection CreateOpenLimitedConnection()
+    {
+        var db = CreateLimitedConnection();
         try
         {
             db.Open();

@@ -91,7 +91,9 @@ internal sealed class MinRequest : BaseRequest
             // Get first the entity hash code
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(MinRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Field,
                 Where,
                 Hints);

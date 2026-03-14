@@ -91,7 +91,9 @@ internal sealed class UpdateRequest : BaseRequest
         {
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(UpdateRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Where,
                 Fields,
                 Hints);

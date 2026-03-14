@@ -17,5 +17,8 @@ public class ClassMappedNameResolver : IResolver<Type, string>
         DataEntityExtension.GetMappedName(entityType);
 
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly ClassMappedNameResolver Instance = new();
 }

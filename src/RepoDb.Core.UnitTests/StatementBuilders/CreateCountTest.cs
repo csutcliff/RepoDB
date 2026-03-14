@@ -30,7 +30,7 @@ public class BaseStatementBuilderCreateCountTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [Table];";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -48,7 +48,7 @@ public class BaseStatementBuilderCreateCountTest
         var actual = statementBuilder.CreateCount(tableName: tableName,
             where: where);
         var expected =
-            "SELECT COUNT (*) AS [CountValue] " +
+            "SELECT COUNT(*) AS [CountValue] " +
             "FROM [Table] " +
             "WHERE ([Id] = @Id);";
 
@@ -67,7 +67,7 @@ public class BaseStatementBuilderCreateCountTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: hints);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -87,7 +87,7 @@ public class BaseStatementBuilderCreateCountTest
             where: where,
             hints: hints);
         var expected =
-            "SELECT COUNT (*) AS [CountValue] " +
+            "SELECT COUNT(*) AS [CountValue] " +
             "FROM [Table] WITH (NOLOCK) " +
             "WHERE ([Id] = @Id);";
 
@@ -105,7 +105,7 @@ public class BaseStatementBuilderCreateCountTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [dbo].[Table];";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -121,7 +121,7 @@ public class BaseStatementBuilderCreateCountTest
         // Act
         var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [dbo].[Table];";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);

@@ -1,7 +1,7 @@
 ﻿namespace RepoDb.PostgreSql.BulkOperations;
 
 /// <summary>
-/// 
+///
 /// </summary>
 internal class IdentityResult
 {

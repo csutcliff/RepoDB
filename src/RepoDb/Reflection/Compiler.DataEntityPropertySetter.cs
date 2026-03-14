@@ -33,7 +33,6 @@ internal partial class Compiler
     /// </summary>
     /// <param name="entityType"></param>
     /// <param name="property"></param>
-    /// <param name="targetType"></param>
     /// <returns></returns>
     private static Action<object, object?> CompileDataEntityPropertySetter(Type entityType,
         PropertyInfo property)
@@ -102,7 +101,6 @@ internal partial class Compiler
     /// </summary>
     /// <param name="entityType"></param>
     /// <param name="property"></param>
-    /// <param name="targetType"></param>
     /// <returns></returns>
     private static Func<object, object?> CompileDataEntityPropertyGetter(Type entityType,
         PropertyInfo property)

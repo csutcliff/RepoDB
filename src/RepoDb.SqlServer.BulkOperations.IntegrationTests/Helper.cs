@@ -154,7 +154,7 @@ public static class Helper
      */
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -184,7 +184,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="hasId"></param>
     /// <returns></returns>
@@ -206,7 +206,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     public static void UpdateBulkOperationIdentityTables(List<BulkOperationIdentityTable> tables)
@@ -226,7 +226,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     public static void UpdateBulkOperationIdentityTable(BulkOperationIdentityTable table)
@@ -247,7 +247,7 @@ public static class Helper
      */
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -277,7 +277,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="hasId"></param>
     /// <returns></returns>
@@ -299,7 +299,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     public static List<dynamic> UpdateBulkOperationAnonymousObjectIdentityTables(List<dynamic> tables)
@@ -325,7 +325,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static dynamic UpdateBulkOperationAnonymousObjectIdentityTable(dynamic table)
@@ -350,7 +350,7 @@ public static class Helper
      */
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -382,7 +382,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     /// <returns></returns>
@@ -406,7 +406,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="hasId"></param>
     /// <returns></returns>
@@ -430,7 +430,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateBulkOperationExpandoObjectIdentityTable(ExpandoObject table)
@@ -456,7 +456,7 @@ public static class Helper
      */
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -486,7 +486,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="hasId"></param>
     /// <returns></returns>
@@ -508,7 +508,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     public static void UpdateBulkOperationMappedIdentityTables(List<BulkOperationMappedIdentityTable> tables)
@@ -528,7 +528,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     public static void UpdateBulkOperationMappedIdentityTable(BulkOperationMappedIdentityTable table)
@@ -549,7 +549,7 @@ public static class Helper
      */
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -579,7 +579,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="hasId"></param>
     /// <returns></returns>
@@ -601,7 +601,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     public static List<dynamic> UpdateBulkOperationAnonymousObjectMappedIdentityTables(List<dynamic> tables)
@@ -627,7 +627,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static dynamic UpdateBulkOperationAnonymousObjectMappedIdentityTable(dynamic table)
@@ -652,7 +652,7 @@ public static class Helper
      */
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -684,7 +684,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     /// <returns></returns>
@@ -708,7 +708,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="hasId"></param>
     /// <returns></returns>
@@ -732,7 +732,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateBulkOperationExpandoObjectMappedIdentityTable(ExpandoObject table)
@@ -754,7 +754,7 @@ public static class Helper
     #region WithExtraFieldsBulkOperationIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -786,7 +786,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     public static WithExtraFieldsBulkOperationIdentityTable CreateWithExtraFieldsBulkOperationIdentityTable()
@@ -806,7 +806,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tables"></param>
     public static void UpdateWithExtraFieldsBulkOperationIdentityTables(List<WithExtraFieldsBulkOperationIdentityTable> tables)

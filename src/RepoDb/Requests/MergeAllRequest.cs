@@ -16,6 +16,7 @@ internal class MergeAllRequest : BaseRequest
     /// <param name="connection">The connection object.</param>
     /// <param name="transaction">The transaction object.</param>
     /// <param name="fields">The list of the target fields.</param>
+    /// <param name="noUpdateFields">The list of fields not to update when updating an existing record</param>
     /// <param name="qualifiers">The list of qualifier <see cref="Field"/> objects.</param>
     /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
     /// <param name="hints">The hints for the table.</param>
@@ -48,6 +49,7 @@ internal class MergeAllRequest : BaseRequest
     /// <param name="connection">The connection object.</param>
     /// <param name="transaction">The transaction object.</param>
     /// <param name="fields">The list of the target fields.</param>
+    /// <param name="noUpdateFields">The list of fields not to update when updating an existing record</param>
     /// <param name="qualifiers">The list of qualifier <see cref="Field"/> objects.</param>
     /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
     /// <param name="hints">The hints for the table.</param>
@@ -81,6 +83,7 @@ internal class MergeAllRequest : BaseRequest
     /// <param name="connection">The connection object.</param>
     /// <param name="transaction">The transaction object.</param>
     /// <param name="fields">The list of the target fields.</param>
+    /// <param name="noUpdateFields">The list of fields not to update when updating an existing record</param>
     /// <param name="qualifiers">The list of qualifier <see cref="Field"/> objects.</param>
     /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
     /// <param name="hints">The hints for the table.</param>
@@ -146,12 +149,16 @@ internal class MergeAllRequest : BaseRequest
             // Get first the entity hash code
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(MergeAllRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 BatchSize,
                 Hints,
-                Fields,
-                Qualifiers,
-                NoUpdateFields);
+                System.HashCode.Combine(
+                    Fields,
+                    Qualifiers,
+                    NoUpdateFields)
+                );
         }
 
         return hashCode;

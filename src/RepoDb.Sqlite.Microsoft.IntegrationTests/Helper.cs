@@ -176,7 +176,7 @@ public static class Helper
     #region MdsCompleteTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -211,7 +211,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateMdsCompleteTableProperties(MdsCompleteTable table)
@@ -235,7 +235,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -270,7 +270,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <returns></returns>
@@ -299,7 +299,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -333,7 +333,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <returns></returns>
@@ -365,7 +365,7 @@ public static class Helper
     #region MdsNonIdentityCompleteTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -400,7 +400,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <returns></returns>
@@ -429,7 +429,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -464,7 +464,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <returns></returns>
@@ -493,7 +493,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -527,7 +527,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <returns></returns>

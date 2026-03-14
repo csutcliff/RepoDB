@@ -8,14 +8,14 @@ using RepoDb.PostgreSql.BulkOperations;
 namespace RepoDb;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static partial class NpgsqlConnectionExtension
 {
     #region BinaryBulkInsert
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sourceTableName"></param>
     /// <param name="destinationTableName"></param>
@@ -293,7 +293,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sourceTableName"></param>
     /// <param name="destinationTableName"></param>
@@ -331,7 +331,7 @@ public static partial class NpgsqlConnectionExtension
             dbSetting);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sourceTableName"></param>
     /// <param name="destinationTableName"></param>
@@ -477,7 +477,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="dbSetting"></param>
@@ -510,7 +510,7 @@ WHERE 1 = 0;";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="sourceTableName"></param>
@@ -564,7 +564,7 @@ ORDER BY ""Index"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="dbSetting"></param>
@@ -589,7 +589,7 @@ ORDER BY ""Index"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="sourceTableName"></param>
@@ -672,7 +672,7 @@ ORDER BY ""Index"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="sourceTableName"></param>
@@ -760,7 +760,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="dbSetting"></param>
@@ -776,7 +776,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
             .WriteText("ORDER BY \"Index\", \"Identity\"");
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="sourceTableName"></param>
@@ -842,7 +842,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="sourceTableName"></param>
@@ -897,7 +897,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     #region BinaryBulkUpdate
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sourceTableName"></param>
     /// <param name="destinationTableName"></param>
@@ -989,7 +989,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     #region BinaryBulkDelete
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sourceTableName"></param>
     /// <param name="destinationTableName"></param>
@@ -1076,7 +1076,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     #region BinaryBulkDeleteByKey
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sourceTableName"></param>
     /// <param name="destinationTableName"></param>
@@ -1150,7 +1150,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     #region Helpers
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="dbSetting"></param>
@@ -1160,7 +1160,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         $"_RepoDb_BinaryBulkInsert_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="dbSetting"></param>
@@ -1170,7 +1170,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         $"_RepoDb_BinaryBulkMerge_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="dbSetting"></param>
@@ -1180,7 +1180,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         $"_RepoDb_BinaryBulkUpdate_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="dbSetting"></param>
@@ -1190,7 +1190,7 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         $"_RepoDb_BinaryBulkDelete_{tableName.AsUnquoted(true, dbSetting).AsAlphaNumeric()}";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="dbSetting"></param>
@@ -1200,21 +1200,21 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
         $"_RepoDb_BinaryBulkDeleteByKey_{tableName.AsUnquoted(true, dbSetting)}";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     private static string GetTemporaryReturnIdentityTableName() =>
         "_RepoDb_ReturnIdentity";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     private static OrderField GetOderColumnOrderField() =>
         new OrderField("__RepoDb_OrderColumn", Order.Ascending);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="qualifiers"></param>
     /// <param name="tableName"></param>
@@ -1229,11 +1229,11 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="fields"></param>
     /// <param name="qualifiers"></param>
-    /// 
+    ///
     private static void ThrowOnMissingQualifiers(IEnumerable<Field> fields,
         IEnumerable<Field> qualifiers)
     {
@@ -1246,11 +1246,11 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="fields"></param>
     /// <param name="qualifiers"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static IEnumerable<Field> GetMissingQualifiers(IEnumerable<Field> fields,
         IEnumerable<Field> qualifiers) =>
@@ -1260,11 +1260,11 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
                     string.Equals(field.FieldName, qualifier.FieldName, StringComparison.OrdinalIgnoreCase)) == null);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="qualifiers"></param>
     /// <param name="primaryField"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static IEnumerable<Field>? EnsurePrimaryAsQualifier(IEnumerable<Field>? qualifiers,
         Field? primaryField)
@@ -1278,12 +1278,12 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="fields"></param>
     /// <param name="identityField"></param>
     /// <param name="identityBehavior"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static IEnumerable<Field> GetInsertableFields(IEnumerable<Field> fields,
         Field? identityField,
@@ -1297,12 +1297,12 @@ SET ""Identity"" = EXCLUDED.""Identity"";";
             });
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="fields"></param>
     /// <param name="qualfiers"></param>
     /// <param name="primaryField"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static IEnumerable<Field> GetUpdatableFields(IEnumerable<Field> fields,
         IEnumerable<Field> qualfiers,

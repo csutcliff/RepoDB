@@ -29,10 +29,10 @@ public class BaseStatementBuilderCreateMaxAllTest
         var field = new Field("Value");
 
         // Act
-        var actual = statementBuilder.CreateMaxAll(field: field,
+        var actual = statementBuilder.CreateMax(field: field,
             tableName: tableName,
             hints: null);
-        var expected = "SELECT MAX ([Value]) AS [MaxValue] FROM [Table];";
+        var expected = "SELECT MAX([Value]) AS [MaxValue] FROM [Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -48,10 +48,10 @@ public class BaseStatementBuilderCreateMaxAllTest
         var hints = "WITH (NOLOCK)";
 
         // Act
-        var actual = statementBuilder.CreateMaxAll(tableName: tableName,
+        var actual = statementBuilder.CreateMax(tableName: tableName,
             field: field,
             hints: hints);
-        var expected = "SELECT MAX ([Value]) AS [MaxValue] FROM [Table] WITH (NOLOCK);";
+        var expected = "SELECT MAX([Value]) AS [MaxValue] FROM [Table] WITH (NOLOCK);";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -66,10 +66,10 @@ public class BaseStatementBuilderCreateMaxAllTest
         var field = new Field("Value");
 
         // Act
-        var actual = statementBuilder.CreateMaxAll(tableName: tableName,
+        var actual = statementBuilder.CreateMax(tableName: tableName,
             field: field,
             hints: null);
-        var expected = "SELECT MAX ([Value]) AS [MaxValue] FROM [dbo].[Table];";
+        var expected = "SELECT MAX([Value]) AS [MaxValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -84,10 +84,10 @@ public class BaseStatementBuilderCreateMaxAllTest
         var field = new Field("Value");
 
         // Act
-        var actual = statementBuilder.CreateMaxAll(tableName: tableName,
+        var actual = statementBuilder.CreateMax(tableName: tableName,
             field: field,
             hints: null);
-        var expected = "SELECT MAX ([Value]) AS [MaxValue] FROM [dbo].[Table];";
+        var expected = "SELECT MAX([Value]) AS [MaxValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -102,7 +102,7 @@ public class BaseStatementBuilderCreateMaxAllTest
         var field = new Field("Value");
 
         // Act
-        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateMaxAll(tableName: tableName,
+        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateMax(tableName: tableName,
             field: field,
             hints: null));
     }
@@ -117,7 +117,7 @@ public class BaseStatementBuilderCreateMaxAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateMaxAll(tableName: tableName,
+        () => statementBuilder.CreateMax(tableName: tableName,
             field: field,
             hints: null));
     }
@@ -132,7 +132,7 @@ public class BaseStatementBuilderCreateMaxAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateMaxAll(tableName: tableName,
+        () => statementBuilder.CreateMax(tableName: tableName,
             field: field,
             hints: null));
     }
@@ -146,7 +146,7 @@ public class BaseStatementBuilderCreateMaxAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateMaxAll(tableName: tableName,
+        () => statementBuilder.CreateMax(tableName: tableName,
             field: null,
             hints: null));
     }
@@ -160,7 +160,7 @@ public class BaseStatementBuilderCreateMaxAllTest
         var field = new Field("Value");
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => statementBuilder.CreateMaxAll(tableName: tableName,
+        Assert.ThrowsExactly<NotSupportedException>(() => statementBuilder.CreateMax(tableName: tableName,
             field: field,
             hints: "Hints"));
     }

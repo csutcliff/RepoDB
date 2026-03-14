@@ -73,6 +73,9 @@ public interface IDbSetting
     /// </summary>
     bool GenerateFinalSemiColon { get; }
 
+    /// <summary>
+    ///
+    /// </summary>
     int? UseInValuesTreshold { get; }
 
     /// <summary>
@@ -80,5 +83,8 @@ public interface IDbSetting
     /// </summary>
     int? UseArrayParameterTreshold { get; }
 
+    /// <summary>
+    ///
+    /// </summary>
     int MaxArrayParameterValueCount { get; }
 }

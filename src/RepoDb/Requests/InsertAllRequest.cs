@@ -120,7 +120,9 @@ internal sealed class InsertAllRequest : BaseRequest
         {
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(InsertAllRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 BatchSize,
                 Hints,
                 Fields);

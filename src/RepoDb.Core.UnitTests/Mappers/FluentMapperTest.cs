@@ -117,7 +117,7 @@ public partial class FluentMapperTest
 
     #region Table
 
-    /* 
+    /*
      * No MapAttribute
      */
 
@@ -184,7 +184,7 @@ public partial class FluentMapperTest
 
     #region Primary
 
-    /* 
+    /*
      * No MapAttribute
      */
 
@@ -257,7 +257,7 @@ public partial class FluentMapperTest
 
     #region Identity
 
-    /* 
+    /*
      * No MapAttribute
      */
 
@@ -324,7 +324,7 @@ public partial class FluentMapperTest
 
     #region Column
 
-    /* 
+    /*
      * No MapAttribute
      */
 
@@ -391,7 +391,7 @@ public partial class FluentMapperTest
 
     #region DbType
 
-    /* 
+    /*
      * No MapAttribute
      */
 
@@ -460,7 +460,7 @@ public partial class FluentMapperTest
 
     #region PropertyValueAttribute
 
-    /* 
+    /*
      * No MapAttribute
      */
 

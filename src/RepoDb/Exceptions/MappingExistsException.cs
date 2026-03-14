@@ -13,9 +13,13 @@ public class MappingExistsException : DbException
     /// <param name="message">The exception message.</param>
     public MappingExistsException(string? message)
         : base(message) { }
+
+    /// <inheritdoc />
     public MappingExistsException()
     {
     }
+
+    /// <inheritdoc />
     public MappingExistsException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

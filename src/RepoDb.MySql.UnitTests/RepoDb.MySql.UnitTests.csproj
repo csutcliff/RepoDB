@@ -15,4 +15,7 @@
     <ProjectReference Include="..\RepoDb.MySql\RepoDb.MySql.csproj" />
     <ProjectReference Include="..\RepoDb.TestCore\RepoDb.TestCore.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\RepoDb\Compat.cs" />
+  </ItemGroup>
 </Project>

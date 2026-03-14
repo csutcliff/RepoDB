@@ -1,8 +1,17 @@
 ﻿using System.Data.Common;
 using RepoDb.Enumerations;
 using RepoDb.Extensions;
+using RepoDb.Interfaces;
 
 namespace RepoDb.Schema;
+
+/// <summary>
+/// Provides extension methods for checking the existence of schema objects in a database connection.
+/// </summary>
+/// <remarks>These methods require an implementation of the IDbHelper interface for the target database
+/// connection. The extensions support both synchronous and asynchronous operations, and allow filtering by object name,
+/// schema, and type. They are designed to work with various database providers that support schema
+/// inspection.</remarks>
 public static class DbSchemaExtensions
 {
     /// <summary>
@@ -64,7 +73,7 @@ public static class DbSchemaExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="connection"></param>
@@ -73,10 +82,12 @@ public static class DbSchemaExtensions
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static async ValueTask<bool> SchemaObjectExistsAsync<TEntity>(this DbConnection connection, DbSchemaType? type = null, DbTransaction? transaction = null, CancellationToken cancellationToken = default)
-        => await SchemaObjectExistsAsync<TEntity>(connection, null, type, transaction, cancellationToken).ConfigureAwait(false);
+    {
+        return await SchemaObjectExistsAsync<TEntity>(connection, null, type, transaction, cancellationToken).ConfigureAwait(false);
+    }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="connection"></param>

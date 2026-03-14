@@ -43,7 +43,6 @@ internal partial class Compiler
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="reader"></param>
-    /// <param name="dbSetting"></param>
     /// <returns></returns>
     private static Func<DbDataReader, TResult> CompileDataReaderToTargetType<TResult>(DbDataReader reader)
     {

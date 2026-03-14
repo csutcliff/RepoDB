@@ -497,6 +497,17 @@ public sealed class SqlServerDbHelper : BaseDbHelper
         return null;
     }
 
+    public override string? GetJsonColumnType(DbConnection sql, DbTransaction transaction)
+    {
+        if (sql.GetDbRuntimeSetting(transaction) is { } info)
+        {
+            if (info.EngineVersion.Major >= 17)
+                return "JSON";
+        }
+
+        return "VARCHAR(max)";
+    }
+
     public override object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
         if (parameter is SqlParameter sp)

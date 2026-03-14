@@ -49,7 +49,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -81,7 +81,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -117,7 +117,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -149,7 +149,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -189,7 +189,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -220,7 +220,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -251,7 +251,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -275,7 +275,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -299,7 +299,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -323,7 +323,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -351,7 +351,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -382,7 +382,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -413,7 +413,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -437,7 +437,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -461,7 +461,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -488,7 +488,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         Assert.ThrowsExactly<InvalidParameterException>(() => connection.ExecuteQuery<IdentityTable>(sql, where));
@@ -543,7 +543,7 @@ public class ExecuteQueryBuilderTest
 
         // Setup
         var builder = connection.GetStatementBuilder();
-        var sql = builder.CreateAverageAll(
+        var sql = builder.CreateAverage(
             ClassMappedNameCache.Get<IdentityTable>(),
             field: Field.Parse<IdentityTable>(e => e.ColumnInt).First());
 
@@ -635,7 +635,7 @@ public class ExecuteQueryBuilderTest
 
         // Setup
         var builder = connection.GetStatementBuilder();
-        var sql = builder.CreateCountAll(
+        var sql = builder.CreateCount(
             ClassMappedNameCache.Get<IdentityTable>());
 
         // Act
@@ -696,7 +696,7 @@ public class ExecuteQueryBuilderTest
 
         // Setup
         var builder = connection.GetStatementBuilder();
-        var sql = builder.CreateDeleteAll(
+        var sql = builder.CreateDelete(
             ClassMappedNameCache.Get<IdentityTable>());
 
         // Act
@@ -814,7 +814,7 @@ public class ExecuteQueryBuilderTest
 
         // Setup
         var builder = connection.GetStatementBuilder();
-        var sql = builder.CreateMaxAll(
+        var sql = builder.CreateMax(
             ClassMappedNameCache.Get<IdentityTable>(),
             field: Field.Parse<IdentityTable>(e => e.ColumnInt).First());
 
@@ -910,7 +910,7 @@ public class ExecuteQueryBuilderTest
 
         // Setup
         var builder = connection.GetStatementBuilder();
-        var sql = builder.CreateMinAll(
+        var sql = builder.CreateMin(
             ClassMappedNameCache.Get<IdentityTable>(),
             field: Field.Parse<IdentityTable>(e => e.ColumnInt).First());
 
@@ -942,7 +942,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -977,7 +977,7 @@ public class ExecuteQueryBuilderTest
         var sql = builder.CreateQuery(
             ClassMappedNameCache.Get<IdentityTable>(),
             fields: fields,
-            where: where);
+            where: where, offset: 0);
 
         // Act
         var result = connection.ExecuteQuery<IdentityTable>(sql, where);
@@ -1067,7 +1067,7 @@ public class ExecuteQueryBuilderTest
 
         // Setup
         var builder = connection.GetStatementBuilder();
-        var sql = builder.CreateSumAll(
+        var sql = builder.CreateSum(
             ClassMappedNameCache.Get<IdentityTable>(),
             field: Field.Parse<IdentityTable>(e => e.ColumnInt).First());
 

@@ -1,4 +1,5 @@
 #nullable enable
+using System.Collections.Concurrent;
 using System.Data;
 using System.Data.Common;
 using System.Linq.Expressions;
@@ -45,7 +46,7 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
     private static string GetCommandText()
     {
         return @"
-                SELECT 
+                SELECT
                     C.column_name,
                     (PK.column_name IS NOT NULL) AS IsPrimary,
                     (
@@ -59,7 +60,7 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
                     (C.is_generated = 'ALWAYS') AS IsComputed
                 FROM information_schema.columns C
                 LEFT JOIN (
-                    SELECT 
+                    SELECT
                         KU.table_schema,
                         KU.table_name,
                         KU.column_name
@@ -285,15 +286,20 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
 
     public override object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
-        if (value is IDbJsonValue jv)
+        if (parameter is NpgsqlParameter np)
         {
-            (parameter as NpgsqlParameter)?.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Json;
-            return jv.JsonNode?.ToJsonString(Converter.JsonSerializerOptions);
-        }
-        else if (value is JsonNode jn)
-        {
-            (parameter as NpgsqlParameter)?.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Json;
-            return jn.ToJsonString(Converter.JsonSerializerOptions);
+            if (value is IDbJsonValue jv)
+            {
+                np.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Json;
+                return jv.JsonNode?.ToJsonString(Converter.JsonSerializerOptions);
+            }
+            else if (value is JsonNode jn)
+            {
+                np.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Json;
+                return jn.ToJsonString(Converter.JsonSerializerOptions);
+            }
+            else if (MaybeUpdateNpgsqlParameterCallback?.Invoke(ref value, np) == true)
+                return value;
         }
 
         return base.ParameterValueToDb(value, parameter);
@@ -351,4 +357,12 @@ public sealed class PostgreSqlDbHelper : BaseDbHelper
             ParameterTypeMap = null // No TVPs
         };
     }
+
+
+
+    // For access by PostgreSql.Vectors
+
+    internal delegate bool MaybeUpdateNpgsqlParameter(ref object? value, NpgsqlParameter parameter);
+    internal static new ConcurrentDictionary<(Type fromType, Type toType), Func<Expression, Expression?>> ProviderSpecificTypeTransforms => BaseDbHelper.ProviderSpecificTypeTransforms;
+    internal static MaybeUpdateNpgsqlParameter? MaybeUpdateNpgsqlParameterCallback;
 }

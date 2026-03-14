@@ -258,6 +258,8 @@ public abstract class JsonTestsBase<TDbInstance> : DbTestBase<TDbInstance> where
             return; // Npgsql.PostgresException: 42883: operator does not exist: json = json
         else if (sql.GetType().Name.Contains("oracle", StringComparison.OrdinalIgnoreCase))
             return; // json = json returns false
+        else if (sql.GetType().Name.Contains("SqlConnection", StringComparison.OrdinalIgnoreCase) && sql.GetDbRuntimeSetting(null)?.EngineVersion.Major >= 17)
+            return; // sqlserver2025 uses native json, which doesn't handle string compare
 
         if (!await sql.SchemaObjectExistsAsync<JsonTestClass>(cancellationToken: TestContext.CancellationToken))
         {

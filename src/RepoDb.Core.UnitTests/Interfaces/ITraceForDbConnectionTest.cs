@@ -928,7 +928,7 @@ public class ITraceForDbConnectionTest
         var trace = new Mock<ITrace>();
         var connection = new TraceDbConnection();
 
-        // Actawait 
+        // Act
         await connection.DeleteAsync(ClassMappedNameCache.Get<TraceEntity>(),
             new
             {

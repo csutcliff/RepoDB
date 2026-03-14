@@ -18,7 +18,7 @@ public static partial class SqlConnectionExtension
     #region Helpers
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entities"></param>
@@ -64,7 +64,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entities"></param>
@@ -109,7 +109,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dataTable"></param>
     /// <param name="reader"></param>
@@ -131,7 +131,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dataTable"></param>
     /// <param name="reader"></param>
@@ -155,7 +155,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sqlBulkCopy"></param>
     /// <param name="mappings"></param>
@@ -176,7 +176,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dictionary"></param>
     /// <returns></returns>
@@ -189,7 +189,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="qualifiers"></param>
@@ -199,7 +199,7 @@ public static partial class SqlConnectionExtension
         qualifiers != null ? Field.Parse<TEntity>(qualifiers) : default;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="dbSetting"></param>
@@ -209,7 +209,7 @@ public static partial class SqlConnectionExtension
         DataEntityExtension.GetTableName(tableName, dbSetting);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="transaction"></param>
@@ -223,7 +223,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dataTable"></param>
     /// <returns></returns>
@@ -236,7 +236,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dataTable"></param>
     /// <param name="rowState"></param>
@@ -256,7 +256,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dataTable"></param>
     /// <returns></returns>
@@ -275,7 +275,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="mappings"></param>
     private static List<BulkInsertMapItem> AddOrderColumnMapping(IEnumerable<BulkInsertMapItem> mappings)
@@ -286,7 +286,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="fields"></param>
     /// <returns></returns>
@@ -299,7 +299,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="reader"></param>
     internal static void ThrowIfNullOrEmpty(DbDataReader reader)
@@ -312,7 +312,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dataTable"></param>
     internal static void ThrowIfNullOrEmpty(DataTable dataTable)
@@ -325,7 +325,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entities"></param>
@@ -447,7 +447,7 @@ public static partial class SqlConnectionExtension
     #region SQL Helpers
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="tempTableName"></param>
@@ -484,14 +484,14 @@ public static partial class SqlConnectionExtension
             .TableNameFrom(tableName, dbSetting)
             .Where()
             .WriteText("(1 = 0)")
-            .End();
+            .End(dbSetting);
 
         // Return the text
         return builder.ToString();
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tempTableName"></param>
     /// <param name="qualifiers"></param>
@@ -523,14 +523,14 @@ public static partial class SqlConnectionExtension
             .OpenParen()
             .WriteText(clusteredIndexFields)
             .CloseParen()
-            .End();
+            .End(dbSetting);
 
         // Return the sql
         return builder.ToString();
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tempTableName"></param>
     /// <param name="dbSetting"></param>
@@ -540,7 +540,7 @@ public static partial class SqlConnectionExtension
         $"DROP TABLE {tempTableName.AsQuoted(dbSetting)};";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="tempTableName"></param>
@@ -580,14 +580,14 @@ public static partial class SqlConnectionExtension
                 .Select(
                     field => field.AsJoinQualifier("S", "T", true, dbSetting))
                         .Join(" AND "))
-            .End();
+            .End(dbSetting);
 
         // Return the sql
         return builder.ToString();
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="tempTableName"></param>
@@ -691,7 +691,7 @@ public static partial class SqlConnectionExtension
         }
 
         // End
-        builder.End();
+        builder.End(dbSetting);
 
         // SET IDENTITY_INSERT OFF (probably not necessary, but it won't hurt)
         if (forceIdentityColumn)
@@ -707,7 +707,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="tempTableName"></param>
@@ -847,7 +847,7 @@ public static partial class SqlConnectionExtension
         }
 
         // End the builder
-        builder.End();
+        builder.End(dbSetting);
 
         // SET IDENTITY_INSERT OFF (probably not necessary, but it won't hurt)
         if (forceIdentityColumn)
@@ -863,7 +863,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="tempTableName"></param>
@@ -923,14 +923,14 @@ public static partial class SqlConnectionExtension
                 .Select(
                     field => field.AsJoinQualifier("S", "T", true, dbSetting))
                         .Join(" AND "))
-            .End();
+            .End(dbSetting);
 
         // Return the sql
         return builder.ToString();
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="field"></param>
     /// <param name="values"></param>

@@ -11,9 +11,13 @@ public class ConverterNotFoundException : Exception
     /// <param name="message">The exception message.</param>
     public ConverterNotFoundException(string message)
         : base(message) { }
+
+    /// <inheritdoc />
     public ConverterNotFoundException()
     {
     }
+
+    /// <inheritdoc />
     public ConverterNotFoundException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

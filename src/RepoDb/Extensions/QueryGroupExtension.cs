@@ -28,18 +28,20 @@ public static class QueryGroupExtension
     /// </summary>
     /// <typeparam name="TEntity">The target type where the current <see cref="QueryGroup"/> is to be mapped.</typeparam>
     /// <param name="queryGroup">The <see cref="QueryGroup"/> object to be mapped.</param>
+    /// <param name="tableName"></param>
     /// <returns>An instance of <see cref="QueryGroupTypeMap"/> object that holds the mapping.</returns>
-    internal static QueryGroupTypeMap MapTo<TEntity>(this QueryGroup queryGroup)
+    internal static QueryGroupTypeMap MapTo<TEntity>(this QueryGroup queryGroup, string? tableName = null)
         where TEntity : class =>
-        new(queryGroup, typeof(TEntity));
+        new(queryGroup, typeof(TEntity), tableName ?? ClassMappedNameCache.Get<TEntity>(false));
 
     /// <summary>
     /// Maps the current <see cref="QueryGroup"/> object to a type.
     /// </summary>
     /// <param name="queryGroup">The <see cref="QueryGroup"/> object to be mapped.</param>
     /// <param name="type">The target type where the current <see cref="QueryGroup"/> is to be mapped.</param>
+    /// <param name="tableName"></param>
     /// <returns>An instance of <see cref="QueryGroupTypeMap"/> object that holds the mapping.</returns>
     internal static QueryGroupTypeMap MapTo(this QueryGroup queryGroup,
-        Type? type) =>
-        new(queryGroup, type);
+        Type? type, string? tableName) =>
+        new(queryGroup, type, tableName);
 }

@@ -75,6 +75,12 @@ public static class DbCommandExtension
         return parameter;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="parameter"></param>
+    /// <param name="value"></param>
     public static void SetValue(this IDbCommand command, IDbDataParameter parameter, object? value)
     {
         ArgumentNullException.ThrowIfNull(command);
@@ -95,8 +101,6 @@ public static class DbCommandExtension
     /// <param name="commandArrayParametersText"></param>
     internal static void CreateParametersFromArray(
         this DbCommand command,
-        DbConnection connection,
-        IDbTransaction? transaction,
         CommandArrayParametersText commandArrayParametersText)
     {
         if (commandArrayParametersText?.CommandArrayParameters?.Count is not > 0)
@@ -106,52 +110,32 @@ public static class DbCommandExtension
         var dbSetting = command.Connection!.GetDbSetting();
         foreach (var commandArrayParameter in commandArrayParametersText.CommandArrayParameters)
         {
-            CreateParametersFromArray(command,
-                connection,
-                transaction,
-                commandArrayParameter,
-                commandArrayParametersText.DbType, dbSetting);
-        }
-    }
+            var dbType = commandArrayParametersText.DbType;
+            var values = commandArrayParameter.Values.AsTypedSet();
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="commandArrayParameter"></param>
-    /// <param name="dbType"></param>
-    /// <param name="dbSetting"></param>
-    private static void CreateParametersFromArray(this DbCommand command,
-        DbConnection connection,
-        IDbTransaction? transaction,
-        CommandArrayParameter commandArrayParameter,
-        DbType? dbType,
-        IDbSetting dbSetting)
-    {
-        var values = commandArrayParameter.Values.AsTypedSet();
-
-        if (values.Count == 0)
-        {
-            command.Parameters.Add(
-                command.CreateParameter(commandArrayParameter.ParameterName, null, dbType));
-        }
-        else if (values.Count > 5 && dbSetting.UseArrayParameterTreshold < values.Count
-            && command.Connection?.GetDbHelper().CreateTableParameter(connection, transaction, null,
-            values, commandArrayParameter.ParameterName) is { } tableParameter)
-        {
-            command.Parameters.Add(tableParameter);
-        }
-        else
-        {
-            var i = 0;
-            foreach (var value in values)
+            if (values.Count == 0)
             {
-                var name = string.Concat(commandArrayParameter.ParameterName, i.ToString(CultureInfo.InvariantCulture));
-                dbType ??= value?.GetType().GetDbType();
                 command.Parameters.Add(
-                    command.CreateParameter(name, value, dbType));
+                    command.CreateParameter(commandArrayParameter.ParameterName, null, dbType));
+            }
+            else if (values.Count > 5 && dbSetting.UseArrayParameterTreshold < values.Count
+                && command.Connection?.GetDbHelper().CreateTableParameter(command.Connection, command.Transaction, null,
+                values, commandArrayParameter.ParameterName) is { } tableParameter)
+            {
+                command.Parameters.Add(tableParameter);
+            }
+            else
+            {
+                var i = 0;
+                foreach (var value in values)
+                {
+                    var name = string.Concat(commandArrayParameter.ParameterName, i.ToString(CultureInfo.InvariantCulture));
+                    dbType ??= value?.GetType().GetDbType();
+                    command.Parameters.Add(
+                        command.CreateParameter(name, value, dbType));
 
-                i++;
+                    i++;
+                }
             }
         }
     }
@@ -965,21 +949,19 @@ public static class DbCommandExtension
     {
         if (dbFields is null || dbFields.IsEmpty()) return null;
 
-        var fieldNameSpan = fieldName.AsSpan();
-
-        if (fieldNameSpan.IsEmpty || fieldNameSpan.IsWhiteSpace())
+        if (string.IsNullOrWhiteSpace(fieldName))
         {
             return null;
         }
 
-        var index = fieldNameSpan.IndexOf("_In_".AsSpan(), StringComparison.OrdinalIgnoreCase);
+        var index = fieldName.IndexOf("_In_", StringComparison.OrdinalIgnoreCase);
 
         if (index >= 0)
         {
-            fieldNameSpan = fieldNameSpan.Slice(0, index);
+            fieldName = fieldName.Substring(0, index);
         }
 
-        return dbFields.GetByFieldName(fieldNameSpan.ToString());
+        return dbFields.GetByFieldName(fieldName);
     }
 
     /// <summary>

@@ -2,6 +2,12 @@
 
 public partial class QueryGroupTest
 {
+    [TestInitialize]
+    public void Init()
+    {
+        GlobalConfiguration.Setup(new());
+    }
+
     #region Name
 
     [TestMethod]
@@ -55,6 +61,26 @@ public partial class QueryGroupTest
     }
 
     [TestMethod]
+    [DoNotParallelize]
+    public void TestQueryGroupParseExpressionWithDoubleSameFieldsForAnd2()
+    {
+        GlobalConfiguration.Setup(new() { ExpressionNullSemantics = RepoDb.Enumerations.ExpressionNullSemantics.NullNotEqual });
+        try
+        {
+            // Act
+            var actual = QueryGroup.Parse<QueryGroupTestExpressionClass>(e => e.PropertyInt == 1 && e.PropertyInt == 2).GetString(m_dbSetting);
+            var expected = "(([PropertyInt] = @PropertyInt AND [PropertyInt] IS NOT NULL) AND ([PropertyInt] = @PropertyInt_2 AND [PropertyInt] IS NOT NULL))";
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        finally
+        {
+            GlobalConfiguration.Setup(new());
+        }
+    }
+
+    [TestMethod]
     public void TestQueryGroupParseExpressionWithDoubleSameFieldsForOr()
     {
         // Act
@@ -64,6 +90,27 @@ public partial class QueryGroupTest
         // Assert
         Assert.AreEqual(expected, actual);
     }
+
+    [TestMethod]
+    [DoNotParallelize]
+    public void TestQueryGroupParseExpressionWithDoubleSameFieldsForOr2()
+    {
+        GlobalConfiguration.Setup(new() { ExpressionNullSemantics = RepoDb.Enumerations.ExpressionNullSemantics.NullNotEqual });
+        try
+        {
+            // Act
+            var actual = QueryGroup.Parse<QueryGroupTestExpressionClass>(e => e.PropertyInt == 1 || e.PropertyInt == 2).GetString(m_dbSetting);
+            var expected = "(([PropertyInt] = @PropertyInt AND [PropertyInt] IS NOT NULL) OR ([PropertyInt] = @PropertyInt_2 AND [PropertyInt] IS NOT NULL))";
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+        finally
+        {
+            GlobalConfiguration.Setup(new());
+        }
+    }
+
 
     #endregion
 

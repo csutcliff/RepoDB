@@ -8,6 +8,9 @@ namespace RepoDb;
 
 public partial class QueryField
 {
+    /// <summary>
+    ///
+    /// </summary>
     protected internal virtual bool NoParametersNeeded => Operation is Operation.IsNotNull or Operation.IsNull;
 
     /// <summary>
@@ -61,13 +64,6 @@ public partial class QueryField
         return new QueryField(field, operation, enumerable.AsTypedSet(), null, false);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="enumerable"></param>
-    /// <param name="unaryNodeType"></param>
-    /// <returns></returns>
     private static IEnumerable<QueryField> ToQueryFields(Field field,
         System.Collections.IEnumerable enumerable,
         ExpressionType? unaryNodeType = null)
@@ -83,7 +79,7 @@ public partial class QueryField
     /// <summary>
     ///
     /// </summary>
-    /// <param name="fieldName"></param>
+    /// <param name="field"></param>
     /// <param name="value"></param>
     /// <param name="unaryNodeType"></param>
     /// <returns></returns>
@@ -104,16 +100,16 @@ public partial class QueryField
     private static string ConvertToLikeableValue(string methodName,
         string value)
     {
-        if (methodName == "Contains")
+        if (methodName == nameof(string.Contains))
         {
             value = value.StartsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat("%", value);
             value = value.EndsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat(value, "%");
         }
-        else if (methodName == "StartsWith")
+        else if (methodName == nameof(string.StartsWith))
         {
             value = value.EndsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat(value, "%");
         }
-        else if (methodName == "EndsWith")
+        else if (methodName == nameof(string.EndsWith))
         {
             value = value.StartsWith("%", StringComparison.OrdinalIgnoreCase) ? value : string.Concat("%", value);
         }
@@ -270,7 +266,7 @@ public partial class QueryField
     ExpressionType? unaryNodeType = null)
     where TEntity : class
     {
-        if (expression.Method.Name == "Equals")
+        if (expression.Method.Name == nameof(string.Equals))
         {
             var r = ParseEquals<TEntity>(expression);
             if (unaryNodeType == ExpressionType.Not)
@@ -287,20 +283,20 @@ public partial class QueryField
 
             return r.AsEnumerable();
         }
-        else if (expression.Method.Name == "Contains")
+        else if (expression.Method.Name == nameof(string.Contains))
         {
             return ParseContains<TEntity>(expression, unaryNodeType)?.AsEnumerable();
         }
-        else if (expression.Method.Name == "StartsWith" ||
-            expression.Method.Name == "EndsWith")
+        else if (expression.Method.Name == nameof(string.StartsWith) ||
+            expression.Method.Name == nameof(string.EndsWith))
         {
-            return ParseWith<TEntity>(expression, unaryNodeType)?.AsEnumerable();
+            return ParseStartEndsWith<TEntity>(expression, unaryNodeType)?.AsEnumerable();
         }
-        else if (expression.Method.Name == "All")
+        else if (expression.Method.Name == nameof(Enumerable.All))
         {
             return ParseAll<TEntity>(expression, unaryNodeType);
         }
-        else if (expression.Method.Name == "Any")
+        else if (expression.Method.Name == nameof(Enumerable.Any))
         {
             return ParseAny<TEntity>(expression, unaryNodeType);
         }
@@ -422,7 +418,7 @@ public partial class QueryField
     /// <param name="expression"></param>
     /// <param name="unaryNodeType"></param>
     /// <returns></returns>
-    internal static QueryField ParseWith<TEntity>(MethodCallExpression expression,
+    internal static QueryField ParseStartEndsWith<TEntity>(MethodCallExpression expression,
         ExpressionType? unaryNodeType = null)
         where TEntity : class
     {

@@ -17,7 +17,7 @@ public class QuotationTest
         // Setup
         var text = "Value";
 
-        //  
+        //
         var actual = text.AsQuoted(m_dbSetting);
         var expected = "[Value]";
 

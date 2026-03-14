@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Linq.Expressions;
 using RepoDb.Interfaces;
-using RepoDb.Requests;
 
 namespace RepoDb;
 
@@ -35,7 +34,8 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null)
         where TEntity : class
     {
-        return AverageAllInternal<TEntity, object>(connection: connection,
+        return AverageInternal<TEntity, object>(connection: connection,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -68,7 +68,8 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null)
         where TEntity : class
     {
-        return AverageAllInternal<TEntity, object>(connection: connection,
+        return AverageInternal<TEntity, object>(connection: connection,
+            where: null,
             field: Field.Parse(field).First(),
             hints: hints,
             commandTimeout: commandTimeout,
@@ -102,7 +103,8 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null)
         where TEntity : class
     {
-        return AverageAllInternal<TEntity, TResult>(connection: connection,
+        return AverageInternal<TEntity, TResult>(connection: connection,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -136,7 +138,8 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null)
         where TEntity : class
     {
-        return AverageAllInternal<TEntity, TResult>(connection: connection,
+        return AverageInternal<TEntity, TResult>(connection: connection,
+            where: null,
             field: Field.Parse(field).First(),
             hints: hints,
             commandTimeout: commandTimeout,
@@ -144,49 +147,6 @@ public static partial class DbConnectionExtension
             transaction: transaction,
             trace: trace,
             statementBuilder: statementBuilder);
-    }
-
-    /// <averagemary>
-    /// Computes the average value of the target field.
-    /// </averagemary>
-    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="field">The field to be averaged.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="statementBuilder">The statement builder object to be used.</param>
-    /// <returns>The average value of the target field.</returns>
-    internal static TResult AverageAllInternal<TEntity, TResult>(this IDbConnection connection,
-        Field field,
-        string? hints = null,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.AverageAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        IStatementBuilder? statementBuilder = null)
-        where TEntity : class
-    {
-        // Variables
-        var request = new AverageAllRequest(typeof(TEntity),
-            connection,
-            transaction,
-            field,
-            hints,
-            statementBuilder);
-        object? param = null;
-
-        // Return the result
-        return AverageAllInternalBase<TResult>(connection: connection,
-            request: request,
-            param: param,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace);
     }
 
     #endregion
@@ -218,7 +178,8 @@ public static partial class DbConnectionExtension
         CancellationToken cancellationToken = default)
         where TEntity : class
     {
-        return await AverageAllInternalAsync<TEntity, object>(connection: connection,
+        return await AverageInternalAsync<TEntity, object>(connection: connection,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -254,7 +215,8 @@ public static partial class DbConnectionExtension
         CancellationToken cancellationToken = default)
         where TEntity : class
     {
-        return await AverageAllInternalAsync<TEntity, object>(connection: connection,
+        return await AverageInternalAsync<TEntity, object>(connection: connection,
+            where: null,
             field: Field.Parse(field).First(),
             hints: hints,
             commandTimeout: commandTimeout,
@@ -291,7 +253,8 @@ public static partial class DbConnectionExtension
         CancellationToken cancellationToken = default)
         where TEntity : class
     {
-        return await AverageAllInternalAsync<TEntity, TResult>(connection: connection,
+        return await AverageInternalAsync<TEntity, TResult>(connection: connection,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -328,7 +291,8 @@ public static partial class DbConnectionExtension
         CancellationToken cancellationToken = default)
         where TEntity : class
     {
-        return await AverageAllInternalAsync<TEntity, TResult>(connection: connection,
+        return await AverageInternalAsync<TEntity, TResult>(connection: connection,
+            where: null,
             field: Field.Parse(field).First(),
             hints: hints,
             commandTimeout: commandTimeout,
@@ -337,52 +301,6 @@ public static partial class DbConnectionExtension
             trace: trace,
             statementBuilder: statementBuilder,
             cancellationToken: cancellationToken).ConfigureAwait(false);
-    }
-
-    /// <averagemary>
-    /// Computes the average value of the target field in an asynchronous way.
-    /// </averagemary>
-    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="field">The field to be averaged.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="statementBuilder">The statement builder object to be used.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// <returns>The average value of the target field.</returns>
-    internal static ValueTask<TResult> AverageAllInternalAsync<TEntity, TResult>(this IDbConnection connection,
-        Field field,
-        string? hints = null,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.AverageAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        IStatementBuilder? statementBuilder = null,
-        CancellationToken cancellationToken = default)
-        where TEntity : class
-    {
-        // Variables
-        var request = new AverageAllRequest(typeof(TEntity),
-            connection,
-            transaction,
-            field,
-            hints,
-            statementBuilder);
-        object? param = null;
-
-        // Return the result
-        return AverageAllInternalBaseAsync<TResult>(connection: connection,
-            request: request,
-            param: param,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace,
-            cancellationToken: cancellationToken);
     }
 
     #endregion
@@ -412,8 +330,9 @@ public static partial class DbConnectionExtension
         ITrace? trace = null,
         IStatementBuilder? statementBuilder = null)
     {
-        return AverageAllInternal<object>(connection: connection,
+        return AverageInternal<object>(connection: connection,
             tableName: tableName,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -447,8 +366,9 @@ public static partial class DbConnectionExtension
         ITrace? trace = null,
         IStatementBuilder? statementBuilder = null)
     {
-        return AverageAllInternal<TResult>(connection: connection,
+        return AverageInternal<TResult>(connection: connection,
             tableName: tableName,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -456,48 +376,6 @@ public static partial class DbConnectionExtension
             transaction: transaction,
             trace: trace,
             statementBuilder: statementBuilder);
-    }
-
-    /// <averagemary>
-    /// Computes the average value of the target field.
-    /// </averagemary>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="tableName">The name of the target table to be used.</param>
-    /// <param name="field">The field to be averaged.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="statementBuilder">The statement builder object to be used.</param>
-    /// <returns>The average value of the target field.</returns>
-    internal static TResult AverageAllInternal<TResult>(this IDbConnection connection,
-        string tableName,
-        Field field,
-        string? hints = null,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.AverageAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        IStatementBuilder? statementBuilder = null)
-    {
-        // Variables
-        var request = new AverageAllRequest(tableName,
-            connection,
-            transaction,
-            field,
-            hints,
-            statementBuilder);
-
-        // Return the result
-        return AverageAllInternalBase<TResult>(connection: connection,
-            request: request,
-            param: null,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace);
     }
 
     #endregion
@@ -529,8 +407,9 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null,
         CancellationToken cancellationToken = default)
     {
-        return await AverageAllInternalAsync<object>(connection: connection,
+        return await AverageInternalAsync<object>(connection: connection,
             tableName: tableName,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -567,8 +446,9 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null,
         CancellationToken cancellationToken = default)
     {
-        return await AverageAllInternalAsync<TResult>(connection: connection,
+        return await AverageInternalAsync<TResult>(connection: connection,
             tableName: tableName,
+            where: null,
             field: field,
             hints: hints,
             commandTimeout: commandTimeout,
@@ -577,142 +457,6 @@ public static partial class DbConnectionExtension
             trace: trace,
             statementBuilder: statementBuilder,
             cancellationToken: cancellationToken).ConfigureAwait(false);
-    }
-
-    /// <averagemary>
-    /// Computes the average value of the target field in an asynchronous way.
-    /// </averagemary>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="tableName">The name of the target table to be used.</param>
-    /// <param name="field">The field to be averaged.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="statementBuilder">The statement builder object to be used.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// <returns>The average value of the target field.</returns>
-    internal static ValueTask<TResult> AverageAllInternalAsync<TResult>(this IDbConnection connection,
-        string tableName,
-        Field field,
-        string? hints = null,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.AverageAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        IStatementBuilder? statementBuilder = null,
-        CancellationToken cancellationToken = default)
-    {
-        // Variables
-        var request = new AverageAllRequest(tableName,
-            connection,
-            transaction,
-            field,
-            hints,
-            statementBuilder);
-
-        // Return the result
-        return AverageAllInternalBaseAsync<TResult>(connection: connection,
-            request: request,
-            param: null,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace,
-            cancellationToken: cancellationToken);
-    }
-
-    #endregion
-
-    #region AverageAllInternalBase
-
-    /// <averagemary>
-    /// Computes the average value of the target field.
-    /// </averagemary>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="request">The actual <see cref="AverageAllRequest"/> object.</param>
-    /// <param name="param">The mapped object parameters.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <returns>The average value of the target field.</returns>
-    internal static TResult AverageAllInternalBase<TResult>(this IDbConnection connection,
-        AverageAllRequest request,
-        object? param,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.AverageAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null)
-    {
-        // Variables
-        var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetAverageAllText(request);
-
-        // Actual Execution
-        var result = ExecuteScalarInternal<TResult>(connection: connection,
-            commandText: commandText,
-            param: param,
-            commandType: commandType,
-            commandTimeout: commandTimeout,
-            transaction: transaction,
-            entityType: request.Type,
-            dbFields: param is { } ? DbFieldCache.Get(connection, request.Name, transaction, true) : null,
-            trace: trace,
-            traceKey: traceKey);
-
-        // Result
-        return result!;
-    }
-
-    #endregion
-
-    #region AverageAllInternalBaseAsync
-
-    /// <averagemary>
-    /// Computes the average value of the target field in an asynchronous way.
-    /// </averagemary>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="request">The actual <see cref="AverageAllRequest"/> object.</param>
-    /// <param name="param">The mapped object parameters.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// <returns>The average value of the target field.</returns>
-    internal static async ValueTask<TResult> AverageAllInternalBaseAsync<TResult>(this IDbConnection connection,
-        AverageAllRequest request,
-        object? param,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.AverageAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        CancellationToken cancellationToken = default)
-    {
-        // Variables
-        var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetAverageAllText(request);
-
-        // Actual Execution
-        var result = await ExecuteScalarInternalAsync<TResult>(connection: connection,
-            commandText: commandText,
-            param: param,
-            commandType: commandType,
-            commandTimeout: commandTimeout,
-            transaction: transaction,
-            entityType: request.Type,
-            dbFields: param is { } ? await DbFieldCache.GetAsync(connection, request.Name, transaction, true, cancellationToken).ConfigureAwait(false) : null,
-            trace: trace,
-            traceKey: traceKey,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        // Result
-        return result!;
     }
 
     #endregion

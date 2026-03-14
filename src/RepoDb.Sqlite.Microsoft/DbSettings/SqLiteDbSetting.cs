@@ -29,4 +29,16 @@ public sealed record SqLiteDbSetting : BaseDbSetting
         ParameterPrefix = "@";
         MaxQueriesInBatchCount = 10; // No need to optimize using higher value as there is no network latency in SQLite
     }
+
+    protected override string TranslateFunctionalFormat(string format)
+    {
+        if (format.StartsWith("LEFT({0}, ", StringComparison.Ordinal))
+#pragma warning disable CA1845 // Use span-based 'string.Concat'
+            return "SUBSTR({0}, 1, " + format.Substring("LEFT({0}, ".Length);
+        else if (format.StartsWith("RIGHT({0}, ", StringComparison.Ordinal))
+            return "SUBSTR({0}, -" + format.Substring("RIGHT({0}, ".Length);
+#pragma warning restore CA1845 // Use span-based 'string.Concat'
+
+        return base.TranslateFunctionalFormat(format);
+    }
 }

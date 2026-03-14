@@ -28,7 +28,7 @@ public static class MySqlBootstrap
     public static void Initialize() => InitializeInternal();
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     internal static void InitializeInternal()
     {

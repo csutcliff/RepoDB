@@ -31,7 +31,7 @@ public class BaseStatementBuilderCreateQueryTest
 
         // Act
         var actual = statementBuilder.CreateQuery(tableName: tableName,
-            fields: fields);
+            fields: fields, offset: 0);
         var expected = "SELECT [Field1], [Field2], [Field3] FROM [Table];";
 
         // Assert
@@ -48,7 +48,7 @@ public class BaseStatementBuilderCreateQueryTest
 
         // Act
         var actual = statementBuilder.CreateQuery(tableName: tableName,
-            fields: fields);
+            fields: fields, offset: 0);
         var expected = "SELECT [Field1], [Field2], [Field3] FROM [dbo].[Table];";
 
         // Assert
@@ -65,7 +65,7 @@ public class BaseStatementBuilderCreateQueryTest
 
         // Act
         var actual = statementBuilder.CreateQuery(tableName: tableName,
-            fields: fields);
+            fields: fields, offset: 0);
         var expected = "SELECT [Field1], [Field2], [Field3] FROM [dbo].[Table];";
 
         // Assert
@@ -84,7 +84,7 @@ public class BaseStatementBuilderCreateQueryTest
         // Act
         var actual = statementBuilder.CreateQuery(tableName: tableName,
             fields: fields,
-            where: where);
+            where: where, offset: 0);
         var expected =
             "SELECT [Field1], [Field2], [Field3] " +
             "FROM [Table] " +
@@ -106,7 +106,7 @@ public class BaseStatementBuilderCreateQueryTest
         // Act
         var actual = statementBuilder.CreateQuery(tableName: tableName,
             fields: fields,
-            orderBy: orderBy);
+            orderBy: orderBy, offset: 0);
         var expected =
             "SELECT [Field1], [Field2], [Field3] " +
             "FROM [Table] " +
@@ -128,7 +128,7 @@ public class BaseStatementBuilderCreateQueryTest
         // Act
         var actual = statementBuilder.CreateQuery(tableName: tableName,
             fields: fields,
-            top: top);
+            take: top, offset: 0);
         var expected = "SELECT TOP (100) [Field1], [Field2], [Field3] FROM [Table];";
 
         // Assert
@@ -147,7 +147,7 @@ public class BaseStatementBuilderCreateQueryTest
         // Act
         var actual = statementBuilder.CreateQuery(tableName: tableName,
             fields: fields,
-            hints: hints);
+            hints: hints, offset: 0);
         var expected = "SELECT [Field1], [Field2], [Field3] FROM [Table] WITH (NOLOCK);";
 
         // Assert
@@ -171,7 +171,7 @@ public class BaseStatementBuilderCreateQueryTest
             fields: fields,
             where: where,
             orderBy: orderBy,
-            top: top,
+            offset: 0, take: top,
             hints: hints);
         var expected =
             "SELECT TOP (100) [Field1], [Field2], [Field3] " +
@@ -192,7 +192,7 @@ public class BaseStatementBuilderCreateQueryTest
 
         // Act
         Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateQuery(tableName: tableName,
-            fields: null));
+            fields: null, offset: 0));
     }
 
     [TestMethod]
@@ -205,7 +205,7 @@ public class BaseStatementBuilderCreateQueryTest
 
         // Act
         Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateQuery(tableName: tableName,
-            fields: fields));
+            fields: fields, offset: 0));
     }
 
     [TestMethod]
@@ -219,7 +219,7 @@ public class BaseStatementBuilderCreateQueryTest
         // Act
         Assert.Throws<ArgumentException>(
         () => statementBuilder.CreateQuery(tableName: tableName,
-            fields: fields));
+            fields: fields, offset: 0));
     }
 
     [TestMethod]
@@ -233,7 +233,7 @@ public class BaseStatementBuilderCreateQueryTest
         // Act
         Assert.Throws<ArgumentException>(
         () => statementBuilder.CreateQuery(tableName: tableName,
-            fields: fields));
+            fields: fields, offset: 0));
     }
 
     [TestMethod]
@@ -247,6 +247,6 @@ public class BaseStatementBuilderCreateQueryTest
         // Act
         Assert.ThrowsExactly<NotSupportedException>(() => statementBuilder.CreateQuery(tableName: tableName,
             fields: fields,
-            hints: "Hints"));
+            hints: "Hints", offset: 0));
     }
 }

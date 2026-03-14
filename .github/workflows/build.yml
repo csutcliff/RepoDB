@@ -18,7 +18,7 @@ on:
 
 env:
   REPODB_MYSQL_CONSTR_SYS: "Server=127.0.0.1;Port=43306;Database=sys;User ID=root;Password=ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2;"
-  REPODB_ORACLE_CONSTR_MASTER: "Data Source=127.0.0.1:41521/FREEPDB1;User Id=system;Password=oracle;"
+  REPODB_ORACLE_CONSTR_MASTER: "Data Source=127.0.0.1:41521/APPDB;User Id=system;Password=ddd53e85-b15e-4da8;"
   REPODB_POSTGRESQL_CONSTR_POSTGRESDB: "Server=127.0.0.1;Port=45432;Database=postgres;User Id=postgres;Password=ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2;"
   REPODB_SQLSERVER_CONSTR_MASTER: "Server=tcp:127.0.0.1,41433;Database=master;User ID=sa;Password=ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2;TrustServerCertificate=True;"
 
@@ -36,16 +36,16 @@ jobs:
             MYSQL_ROOT_PASSWORD: ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2
 
         oracle:
-           image: gvenzl/oracle-free:23-slim-faststart
+           image: gvenzl/oracle-free:slim-faststart
            ports:
             - 127.0.0.1:41521:1521
             - 127.0.0.1:45500:5500
            env:
-             ORACLE_PASSWORD: "oracle"
-             ORACLE_ALLOW_REMOTE: "true"
+             ORACLE_PASSWORD: ddd53e85-b15e-4da8
+             ORACLE_ALLOW_REMOTE: true
 
         postgresql:
-          image: postgres:17-alpine
+          image: pgvector/pgvector:pg18
           ports:
             - 127.0.0.1:45432:5432
           env:
@@ -88,8 +88,7 @@ jobs:
         run: dotnet pack -c Release -p:Version="${{ steps.version.outputs.version }}" -p:PackagePrefix=AmpScm. -o release
 
       - name: Package nupkg files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release
           path: release/*nupkg
-

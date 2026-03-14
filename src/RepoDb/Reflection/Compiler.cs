@@ -334,7 +334,7 @@ internal sealed partial class Compiler
     /// </summary>
     /// <param name="reader"></param>
     /// <param name="dbFields"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static IEnumerable<DataReaderField> GetDataReaderFields(DbDataReader reader,
         DbFieldCollection? dbFields)
@@ -389,20 +389,10 @@ internal sealed partial class Compiler
         static Expression UnwrapUnary(Expression e) => e is UnaryExpression ue ? UnwrapUnary(ue.Operand) : e;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="targetType"></param>
-    /// <returns></returns>
     private static MethodInfo? GetDbReaderGetValueMethod(Type targetType, Type? readerType) =>
         readerType?.GetMethod(string.Concat("Get", targetType?.Name), [StaticType.Int32])
         ?? StaticType.DbDataReader.GetMethod(string.Concat("Get", targetType?.Name));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="readerField"></param>
-    /// <returns></returns>
     private static MethodInfo GetDbReaderGetValueOrDefaultMethod(DataReaderField readerField, Type readerType)
         => GetDbReaderGetValueMethod(readerField.Type, readerType) ?? GetMethodInfo<DbDataReader>((x) => x.GetValue(default));
 
@@ -634,7 +624,7 @@ internal sealed partial class Compiler
     /// <param name="expression"></param>
     /// <param name="fromType"></param>
     /// <param name="toEnumType"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static Expression ConvertExpressionToEnumExpression(Expression expression,
         Type fromType,
@@ -1404,16 +1394,11 @@ internal sealed partial class Compiler
             ]);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="readerParameterExpression"></param>
-    /// <param name="classPropertyParameterInfo"></param>
-    /// <param name="readerField"></param>
-    /// <returns></returns>
-    private static Expression GetClassPropertyParameterInfoValueExpression(ParameterExpression readerParameterExpression,
+    private static Expression GetClassPropertyParameterInfoValueExpression(
+        ParameterExpression readerParameterExpression,
         ClassPropertyParameterInfo classPropertyParameterInfo,
-        DataReaderField readerField, Type readerType)
+        DataReaderField readerField,
+        Type readerType)
     {
         // False expression
         var falseExpression = GetClassPropertyParameterInfoIsDbNullFalseValueExpression(readerParameterExpression,
@@ -1487,14 +1472,6 @@ internal sealed partial class Compiler
         return valueExpression;
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="readerParameterExpression"></param>
-    /// <param name="classPropertyParameterInfo"></param>
-    /// <param name="readerField"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static Expression GetClassPropertyParameterInfoIsDbNullFalseValueExpression(ParameterExpression readerParameterExpression,
         ClassPropertyParameterInfo classPropertyParameterInfo,
         DataReaderField readerField,
@@ -1586,13 +1563,6 @@ internal sealed partial class Compiler
         ? Expression.New(StaticType.Nullable.MakeGenericType(TypeCache.Get(targetType).UnderlyingType))
         : Expression.Constant(null, targetType);
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="readerFieldsName"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     private static List<ClassPropertyParameterInfo> GetClassPropertyParameterInfos<TResult>(IEnumerable<string> readerFieldsName)
     {
         var typeOfResult = typeof(TResult);
@@ -1653,6 +1623,7 @@ internal sealed partial class Compiler
     /// <typeparam name="TResult">The target entity type.</typeparam>
     /// <param name="readerParameterExpression">The data reader parameter.</param>
     /// <param name="readerFields">The list of fields to be bound from the data reader.</param>
+    /// <param name="readerType"></param>
     /// <returns>The enumerable list of <see cref="MemberBinding"/> objects.</returns>
     private static List<MemberBinding> GetMemberBindingsForDataEntity<TResult>(ParameterExpression readerParameterExpression,
         IEnumerable<DataReaderField> readerFields,
@@ -1768,6 +1739,7 @@ internal sealed partial class Compiler
     /// </summary>
     /// <param name="readerParameterExpression">The data reader parameter.</param>
     /// <param name="readerFields">The list of fields to be bound from the data reader.</param>
+    /// <param name="readerType"></param>
     /// <returns>The enumerable list of child elements initializations.</returns>
     private static List<ElementInit> GetMemberBindingsForDictionary(ParameterExpression readerParameterExpression,
         List<DataReaderField> readerFields,
@@ -1949,15 +1921,6 @@ internal sealed partial class Compiler
         return ConvertExpressionToTypeExpression(expression, StaticType.Object);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbParameterExpression"></param>
-    /// <param name="entityExpression"></param>
-    /// <param name="propertyExpression"></param>
-    /// <param name="classProperty"></param>
-    /// <param name="dbField"></param>
-    /// <returns></returns>
     private static TryExpression GetDataEntityDbParameterValueAssignmentExpression(ParameterExpression dbParameterExpression,
         Expression entityExpression,
         ParameterExpression propertyExpression,
@@ -2115,12 +2078,6 @@ internal sealed partial class Compiler
         return Expression.Assign(dbParameterValueName, paramaterNameExpression);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dbParameterExpression"></param>
-    /// <param name="valueExpression"></param>
-    /// <returns></returns>
     private static Expression GetDbParameterValueAssignmentExpression(Expression dbParameterExpression,
         Expression valueExpression,
         ParameterExpression? dbCommandExpression = null)

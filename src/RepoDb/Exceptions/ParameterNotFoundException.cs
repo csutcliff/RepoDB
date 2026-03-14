@@ -11,9 +11,13 @@ public class ParameterNotFoundException : ArgumentException
     /// <param name="message">The exception message.</param>
     public ParameterNotFoundException(string message)
         : base(message: message, innerException: null) { }
+
+    /// <inheritdoc />
     public ParameterNotFoundException()
     {
     }
+
+    /// <inheritdoc />
     public ParameterNotFoundException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

@@ -808,7 +808,7 @@ public static partial class DbConnectionExtension
 
         // Converts to property mapped object. Do this after creating text
 
-        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null)], connection, transaction, tableName) : null;
+        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null, tableName)], connection, transaction, tableName) : null;
 
         // Return the result
         return DeleteInternalBase(
@@ -1047,7 +1047,7 @@ public static partial class DbConnectionExtension
 
         // Converts to property mapped object
 
-        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
+        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null, tableName)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
 
         // Return the result
         return await DeleteInternalBaseAsync(
@@ -1086,7 +1086,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetDeleteText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetDeleteText);
 
         // Actual Execution
         var result = ExecuteNonQueryInternal(connection: connection,
@@ -1098,7 +1098,7 @@ public static partial class DbConnectionExtension
             transaction: transaction,
             trace: trace,
             entityType: request.Type,
-            dbFields: DbFieldCache.Get(connection, request.Name, transaction, true),
+            dbFields: DbFieldCache.Get(connection, request.TableName, transaction, true),
             skipCommandArrayParametersCheck: true);
 
         // Result
@@ -1132,7 +1132,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetDeleteText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetDeleteText);
 
         // Actual Execution
         var result = await ExecuteNonQueryInternalAsync(connection: (DbConnection)connection,
@@ -1144,7 +1144,7 @@ public static partial class DbConnectionExtension
             transaction: transaction,
             trace: trace,
             entityType: request.Type,
-            dbFields: param is { } ? await DbFieldCache.GetAsync(connection, request.Name, transaction, true, cancellationToken).ConfigureAwait(false) : null,
+            dbFields: param is { } ? await DbFieldCache.GetAsync(connection, request.TableName, transaction, true, cancellationToken).ConfigureAwait(false) : null,
             skipCommandArrayParametersCheck: true,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 

@@ -9,6 +9,6 @@ public static class OrmNameConstants
     public const string EFCore = "EFCore 7.0.0";
 
     public const string Dapper = "Dapper 2.1.21";
-    
+
     public const string Linq2db = "linq2db 5.3.2";
 }

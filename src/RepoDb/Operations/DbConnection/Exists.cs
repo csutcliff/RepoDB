@@ -336,7 +336,7 @@ public static partial class DbConnectionExtension
     /// </summary>
     /// <typeparam name="TEntity">The type of the data entity.</typeparam>
     /// <param name="connection">The connection object to be used.</param>
-    /// <param name="what">The dynamic expression or the key value to be used.</param>
+    /// <param name="entity"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -805,7 +805,7 @@ public static partial class DbConnectionExtension
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null)], connection, transaction, tableName) : null;
+        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null, tableName)], connection, transaction, tableName) : null;
 
         // Return the result
         return ExistsInternalBase(connection: connection,
@@ -1042,7 +1042,7 @@ public static partial class DbConnectionExtension
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
+        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null, tableName)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
 
         // Return the result
         return await ExistsInternalBaseAsync(connection: connection,
@@ -1080,7 +1080,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetExistsText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetExistsText);
 
         // Actual Execution
         var result = ExecuteScalarInternal<bool>(connection: connection,
@@ -1090,7 +1090,7 @@ public static partial class DbConnectionExtension
             commandTimeout: commandTimeout,
             transaction: transaction,
             entityType: request.Type,
-            dbFields: param is { } ? DbFieldCache.Get(connection, request.Name, transaction, true) : null,
+            dbFields: param is { } ? DbFieldCache.Get(connection, request.TableName, transaction, true) : null,
             trace: trace,
             traceKey: traceKey);
 
@@ -1125,7 +1125,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetExistsText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetExistsText);
 
         // Actual Execution
         var result = await ExecuteScalarInternalAsync<bool>(connection: connection,
@@ -1135,7 +1135,7 @@ public static partial class DbConnectionExtension
             commandTimeout: commandTimeout,
             transaction: transaction,
             entityType: request.Type,
-            dbFields: param is { } ? await DbFieldCache.GetAsync(connection, request.Name, transaction, true, cancellationToken).ConfigureAwait(false) : null,
+            dbFields: param is { } ? await DbFieldCache.GetAsync(connection, request.TableName, transaction, true, cancellationToken).ConfigureAwait(false) : null,
             trace: trace,
             traceKey: traceKey,
             cancellationToken: cancellationToken).ConfigureAwait(false);

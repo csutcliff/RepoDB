@@ -68,20 +68,6 @@ public class StatementBuilderTest
     }
 
     [TestMethod]
-    public void ThrowExceptionOnMySqlStatementBuilderCreateBatchQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var builder = StatementBuilderMapper.Get<MySqlConnection>();
-
-        // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateBatchQuery("Table",
-            Field.From("Id", "Name"),
-            0,
-            10,
-            null));
-    }
-
-    [TestMethod]
     public void ThrowExceptionOnMySqlStatementBuilderCreateBatchQueryIfThePageValueIsNullOrOutOfRange()
     {
         // Setup
@@ -116,7 +102,7 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateBatchQuery("Table",
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => builder.CreateBatchQuery("Table",
             Field.From("Id", "Name"),
             0,
             -1,
@@ -184,8 +170,8 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        var query = builder.CreateCountAll("Table",
-            null);
+        var query = builder.CreateCount("Table",
+            null, null);
         var expected = "SELECT COUNT(*) AS `CountValue` FROM `Table`;";
 
         // Assert
@@ -199,7 +185,7 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateCountAll("Table",
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateCount("Table", null,
             "WhatEver"));
     }
 
@@ -434,9 +420,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        var query = builder.CreateMaxAll("Table",
+        var query = builder.CreateMax("Table",
             new Field("Field", typeof(int)),
-            null);
+            null, null);
         var expected = "SELECT MAX(`Field`) AS `MaxValue` FROM `Table`;";
 
         // Assert
@@ -450,8 +436,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMaxAll("Table",
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMax("Table",
             new Field("Field", typeof(int)),
+            null,
             "WhatEver"));
     }
 
@@ -517,9 +504,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        var query = builder.CreateMinAll("Table",
+        var query = builder.CreateMin("Table",
             new Field("Field", typeof(int)),
-            null);
+            null, null);
         var expected = "SELECT MIN(`Field`) AS `MinValue` FROM `Table`;";
 
         // Assert
@@ -533,8 +520,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMinAll("Table",
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMin("Table",
             new Field("Field", typeof(int)),
+            null,
             "WhatEver"));
     }
 
@@ -744,7 +732,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            null);
+            null, 0);
         var expected = "SELECT `Id`, `Name`, `Address` FROM `Table`;";
 
         // Assert
@@ -778,7 +766,7 @@ public class StatementBuilderTest
             Field.From("Id", "Name", "Address"),
             null,
             null,
-            10,
+            0, 10,
             null);
         var expected = "SELECT `Id`, `Name`, `Address` FROM `Table` LIMIT 10;";
 
@@ -796,7 +784,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending }));
+            OrderField.Parse(new { Id = Order.Ascending }), 0);
         var expected = "SELECT `Id`, `Name`, `Address` FROM `Table` ORDER BY `Id` ASC;";
 
         // Assert
@@ -813,7 +801,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Ascending }));
+            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Ascending }), 0);
         var expected = "SELECT `Id`, `Name`, `Address` FROM `Table` ORDER BY `Id` ASC, `Name` ASC;";
 
         // Assert
@@ -830,7 +818,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Descending }), 0);
         var expected = "SELECT `Id`, `Name`, `Address` FROM `Table` ORDER BY `Id` DESC;";
 
         // Assert
@@ -847,7 +835,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Descending, Name = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Descending, Name = Order.Descending }), 0);
         var expected = "SELECT `Id`, `Name`, `Address` FROM `Table` ORDER BY `Id` DESC, `Name` DESC;";
 
         // Assert
@@ -864,7 +852,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Descending }), 0);
         var expected = "SELECT `Id`, `Name`, `Address` FROM `Table` ORDER BY `Id` ASC, `Name` DESC;";
 
         // Assert
@@ -882,7 +870,7 @@ public class StatementBuilderTest
             Field.From("Id", "Name", "Address"),
             null,
             null,
-            hints: "WhatEver"));
+            0, hints: "WhatEver"));
     }
 
     #endregion
@@ -940,20 +928,6 @@ public class StatementBuilderTest
     }
 
     [TestMethod]
-    public void ThrowExceptionOnMySqlStatementBuilderCreateSkipQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var builder = StatementBuilderMapper.Get<MySqlConnection>();
-
-        // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateSkipQuery("Table",
-            Field.From("Id", "Name"),
-            0,
-            10,
-            null));
-    }
-
-    [TestMethod]
     public void ThrowExceptionOnMySqlStatementBuilderCreateSkipQueryIfTheSkipValueIsNullOrOutOfRange()
     {
         // Setup
@@ -991,7 +965,7 @@ public class StatementBuilderTest
         Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateSkipQuery("Table",
             Field.From("Id", "Name"),
             0,
-            -1,
+            0,
             OrderField.Parse(new { Id = Order.Ascending }),
             null,
             "WhatEver"));
@@ -1059,9 +1033,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        var query = builder.CreateSumAll("Table",
+        var query = builder.CreateSum("Table",
             new Field("Field", typeof(int)),
-            null);
+            null, null);
         var expected = "SELECT SUM(`Field`) AS `SumValue` FROM `Table`;";
 
         // Assert
@@ -1075,9 +1049,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<MySqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateSumAll("Table",
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateSum("Table",
             new Field("Field", typeof(int)),
-            "WhatEver"));
+            null, "WhatEver"));
     }
 
     #endregion

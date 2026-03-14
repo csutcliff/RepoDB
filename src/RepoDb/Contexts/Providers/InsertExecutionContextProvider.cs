@@ -77,7 +77,7 @@ internal static class InsertExecutionContextProvider
             fields,
             hints,
             statementBuilder);
-        var commandText = CommandTextCache.GetInsertText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetInsertText);
 
         // Call
         context = CreateInternal(entityType, connection,
@@ -137,7 +137,7 @@ internal static class InsertExecutionContextProvider
             fields,
             hints,
             statementBuilder);
-        var commandText = await CommandTextCache.GetInsertTextAsync(request, cancellationToken).ConfigureAwait(false);
+        var commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetInsertText, cancellationToken).ConfigureAwait(false);
 
         // Call
         context = CreateInternal(entityType,

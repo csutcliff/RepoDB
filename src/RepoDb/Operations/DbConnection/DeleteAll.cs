@@ -3,7 +3,6 @@ using System.Data.Common;
 using RepoDb.Enumerations;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
-using RepoDb.Requests;
 
 namespace RepoDb;
 
@@ -347,20 +346,15 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null)
         where TEntity : class
     {
-        // Variables
-        var request = new DeleteAllRequest(typeof(TEntity),
-            connection,
-            transaction,
-            hints,
-            statementBuilder);
-
-        // Return the result
-        return DeleteAllInternalBase(connection: (DbConnection)connection,
-            request: request,
+        return DeleteInternal(connection,
+            ClassMappedNameCache.Get<TEntity>(),
+            where: null,
+            hints: hints,
             commandTimeout: commandTimeout,
             traceKey: traceKey,
             transaction: transaction,
-            trace: trace);
+            trace: trace,
+            statementBuilder: statementBuilder);
     }
 
     #endregion
@@ -751,20 +745,16 @@ public static partial class DbConnectionExtension
         CancellationToken cancellationToken = default)
         where TEntity : class
     {
-        // Variables
-        var request = new DeleteAllRequest(typeof(TEntity),
+        return DeleteInternalAsync(
             connection,
-            transaction,
-            hints,
-            statementBuilder);
-
-        // Return the result
-        return DeleteAllInternalBaseAsync(connection: (DbConnection)connection,
-            request: request,
+            ClassMappedNameCache.Get<TEntity>(),
+            where: null,
+            hints: hints,
             commandTimeout: commandTimeout,
             traceKey: traceKey,
             transaction: transaction,
             trace: trace,
+            statementBuilder: statementBuilder,
             cancellationToken: cancellationToken);
     }
 
@@ -827,51 +817,15 @@ public static partial class DbConnectionExtension
         ITrace? trace = null,
         IStatementBuilder? statementBuilder = null)
     {
-        return DeleteAllInternal(connection: (DbConnection)connection,
-            tableName: tableName,
-            hints: hints,
+        return DeleteInternal(
+            connection,
+            tableName,
+            where: null,
             commandTimeout: commandTimeout,
             traceKey: traceKey,
             transaction: transaction,
             trace: trace,
             statementBuilder: statementBuilder);
-    }
-
-    /// <summary>
-    /// Delete all the rows from the table.
-    /// </summary>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="statementBuilder">The statement builder object to be used.</param>
-    /// <returns>The number of rows that has been deleted from the table.</returns>
-    internal static int DeleteAllInternal(this IDbConnection connection,
-        string tableName,
-        string? hints = null,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.DeleteAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        IStatementBuilder? statementBuilder = null)
-    {
-        // Variables
-        var request = new DeleteAllRequest(tableName,
-            connection,
-            transaction,
-            hints,
-            statementBuilder);
-
-        // Return the result
-        return DeleteAllInternalBase(connection: (DbConnection)connection,
-            request: request,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace);
     }
 
     /// <summary>
@@ -1014,8 +968,10 @@ public static partial class DbConnectionExtension
         IStatementBuilder? statementBuilder = null,
         CancellationToken cancellationToken = default)
     {
-        return await DeleteAllInternalAsync(connection: (DbConnection)connection,
+        return await DeleteInternalAsync(
+            connection: connection,
             tableName: tableName,
+            where: null,
             hints: hints,
             commandTimeout: commandTimeout,
             traceKey: traceKey,
@@ -1023,46 +979,6 @@ public static partial class DbConnectionExtension
             trace: trace,
             statementBuilder: statementBuilder,
             cancellationToken: cancellationToken).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Delete all the rows from the table in an asynchronous way.
-    /// </summary>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="statementBuilder">The statement builder object to be used.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// <returns>The number of rows that has been deleted from the table.</returns>
-    internal static ValueTask<int> DeleteAllInternalAsync(this IDbConnection connection,
-        string tableName,
-        string? hints = null,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.DeleteAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        IStatementBuilder? statementBuilder = null,
-        CancellationToken cancellationToken = default)
-    {
-        // Variables
-        var request = new DeleteAllRequest(tableName,
-            connection,
-            transaction,
-            hints,
-            statementBuilder);
-
-        // Return the result
-        return DeleteAllInternalBaseAsync(connection: (DbConnection)connection,
-            request: request,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace,
-            cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -1141,93 +1057,6 @@ public static partial class DbConnectionExtension
 
         // Return the value
         return deletedRows;
-    }
-
-    #endregion
-
-    #region DeleteAllInternalBase
-
-    /// <summary>
-    /// Delete all the rows from the table.
-    /// </summary>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="request">The actual <see cref="DeleteAllRequest"/> object.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <returns>The number of rows that has been deleted from the table.</returns>
-    internal static int DeleteAllInternalBase(this IDbConnection connection,
-        DeleteAllRequest request,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.DeleteAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null)
-    {
-        // Variables
-        var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetDeleteAllText(request);
-
-        // Actual Execution
-        var result = ExecuteNonQueryInternal(connection: (DbConnection)connection,
-            commandText: commandText,
-            param: null,
-            commandType: commandType,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace,
-            entityType: request.Type,
-            dbFields: null,
-            skipCommandArrayParametersCheck: true);
-
-        // Result
-        return result;
-    }
-
-    #endregion
-
-    #region DeleteAllInternalBaseAsync
-
-    /// <summary>
-    /// Delete all the rows from the table.
-    /// </summary>
-    /// <param name="connection">The connection object to be used.</param>
-    /// <param name="request">The actual <see cref="DeleteAllRequest"/> object.</param>
-    /// <param name="traceKey">The tracing key to be used.</param>
-    /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
-    /// <param name="transaction">The transaction to be used.</param>
-    /// <param name="trace">The trace object to be used.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// <returns>The number of rows that has been deleted from the table.</returns>
-    internal static async ValueTask<int> DeleteAllInternalBaseAsync(this IDbConnection connection,
-        DeleteAllRequest request,
-        int commandTimeout = 0,
-        string? traceKey = TraceKeys.DeleteAll,
-        IDbTransaction? transaction = null,
-        ITrace? trace = null,
-        CancellationToken cancellationToken = default)
-    {
-        // Variables
-        var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetDeleteAllText(request);
-
-        // Actual Execution
-        var result = await ExecuteNonQueryInternalAsync(connection: (DbConnection)connection,
-            commandText: commandText,
-            param: null,
-            commandType: commandType,
-            commandTimeout: commandTimeout,
-            traceKey: traceKey,
-            transaction: transaction,
-            trace: trace,
-            entityType: request.Type,
-            dbFields: null,
-            skipCommandArrayParametersCheck: true,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        // Result
-        return result;
     }
 
     #endregion

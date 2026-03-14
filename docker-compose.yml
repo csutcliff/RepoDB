@@ -8,17 +8,17 @@ services:
       MYSQL_ROOT_PASSWORD: ddd53e85-b15e-4da8-91e5-a7d3b00a0ab2
 
   oracle:
-    image: gvenzl/oracle-free:23-slim-faststart
+    image: gvenzl/oracle-free:slim-faststart
     ports:
       - 127.0.0.1:41521:1521
       - 127.0.0.1:45500:5500
     environment:
-      ORACLE_PASSWORD: "oracle"
+      ORACLE_PASSWORD: "ddd53e85-b15e-4da8"
       ORACLE_ALLOW_REMOTE: "true"
     shm_size: '1gb'
 
   postgresql:
-    image: postgres:17-alpine
+    image: pgvector/pgvector:pg18
     ports:
       - 127.0.0.1:45432:5432
     environment:

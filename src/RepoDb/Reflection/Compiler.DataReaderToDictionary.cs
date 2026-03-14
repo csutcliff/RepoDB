@@ -12,7 +12,7 @@ internal partial class Compiler
     /// </summary>
     /// <param name="reader"></param>
     /// <param name="dbFields"></param>
-    /// 
+    ///
     /// <returns></returns>
     public static Func<DbDataReader, ExpandoObject> CompileDataReaderToExpandoObject(DbDataReader reader,
         DbFieldCollection? dbFields)

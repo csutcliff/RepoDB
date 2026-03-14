@@ -36,7 +36,6 @@ public static class PrimaryCache
     /// <summary>
     /// Gets the cached primary property of the data entity.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the data entity.</typeparam>
     /// <returns>The cached primary property.</returns>
     public static IEnumerable<ClassProperty>? GetPrimaryKeys(Type entityType)
         => cache.GetOrAdd(entityType, PrimaryResolver.Instance.Resolve);

@@ -21,6 +21,12 @@ public static class ClassMappedNameCache
         Get(typeof(T));
 
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="throwOnError"></param>
+    /// <returns></returns>
     public static string? Get<T>(bool throwOnError) => Get(typeof(T), throwOnError);
 
     /// <summary>
@@ -30,6 +36,13 @@ public static class ClassMappedNameCache
     /// <returns>The cached mapped name of the data entity.</returns>
     public static string Get(Type entityType) => Get(entityType, true)!;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="entityType"></param>
+    /// <param name="throwOnError"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static string? Get(Type entityType, bool throwOnError)
     {
         ArgumentNullException.ThrowIfNull(entityType);

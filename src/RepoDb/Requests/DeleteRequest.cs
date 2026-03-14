@@ -79,7 +79,9 @@ internal sealed class DeleteRequest : BaseRequest
         {
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(DeleteRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Where,
                 Hints);
         }

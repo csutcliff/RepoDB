@@ -3,14 +3,14 @@
 namespace RepoDb.PostgreSql.BulkOperations;
 
 /// <summary>
-/// 
+///
 /// </summary>
 internal static class LocalCommandTextCache
 {
     private static readonly ConcurrentDictionary<int, string> cache = new();
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="key"></param>
     /// <param name="commandText"></param>
@@ -28,7 +28,7 @@ internal static class LocalCommandTextCache
         return cache.TryAdd(key, commandText);
     }
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>

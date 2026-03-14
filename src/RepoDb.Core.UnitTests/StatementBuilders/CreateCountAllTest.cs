@@ -28,9 +28,9 @@ public class BaseStatementBuilderCreateCountAllTest
         var tableName = "Table";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
+        var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [Table];";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -45,9 +45,9 @@ public class BaseStatementBuilderCreateCountAllTest
         var hints = "WITH (NOLOCK)";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
+        var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: hints);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [Table] WITH (NOLOCK);";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -61,9 +61,9 @@ public class BaseStatementBuilderCreateCountAllTest
         var tableName = "[dbo].[Table]";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
+        var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [dbo].[Table];";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -77,9 +77,9 @@ public class BaseStatementBuilderCreateCountAllTest
         var tableName = "dbo.Table";
 
         // Act
-        var actual = statementBuilder.CreateCountAll(tableName: tableName,
+        var actual = statementBuilder.CreateCount(tableName: tableName,
             hints: null);
-        var expected = "SELECT COUNT (*) AS [CountValue] FROM [dbo].[Table];";
+        var expected = "SELECT COUNT(*) AS [CountValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -93,7 +93,7 @@ public class BaseStatementBuilderCreateCountAllTest
         string? tableName = null;
 
         // Act
-        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateCountAll(tableName: tableName,
+        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateCount(tableName: tableName,
             hints: null));
     }
 
@@ -106,7 +106,7 @@ public class BaseStatementBuilderCreateCountAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateCountAll(tableName: tableName,
+        () => statementBuilder.CreateCount(tableName: tableName,
             hints: null));
     }
 
@@ -119,7 +119,7 @@ public class BaseStatementBuilderCreateCountAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateCountAll(tableName: tableName,
+        () => statementBuilder.CreateCount(tableName: tableName,
             hints: null));
     }
 
@@ -131,7 +131,7 @@ public class BaseStatementBuilderCreateCountAllTest
         var tableName = "Table";
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => statementBuilder.CreateCountAll(tableName: tableName,
+        Assert.ThrowsExactly<NotSupportedException>(() => statementBuilder.CreateCount(tableName: tableName,
             hints: "Hints"));
     }
 }

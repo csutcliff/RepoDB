@@ -29,10 +29,10 @@ public class BaseStatementBuilderCreateSumAllTest
         var field = new Field("Value");
 
         // Act
-        var actual = statementBuilder.CreateSumAll(field: field,
+        var actual = statementBuilder.CreateSum(field: field,
             tableName: tableName,
             hints: null);
-        var expected = "SELECT SUM ([Value]) AS [SumValue] FROM [Table];";
+        var expected = "SELECT SUM([Value]) AS [SumValue] FROM [Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -48,10 +48,10 @@ public class BaseStatementBuilderCreateSumAllTest
         var hints = "WITH (NOLOCK)";
 
         // Act
-        var actual = statementBuilder.CreateSumAll(tableName: tableName,
+        var actual = statementBuilder.CreateSum(tableName: tableName,
             field: field,
             hints: hints);
-        var expected = "SELECT SUM ([Value]) AS [SumValue] FROM [Table] WITH (NOLOCK);";
+        var expected = "SELECT SUM([Value]) AS [SumValue] FROM [Table] WITH (NOLOCK);";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -66,10 +66,10 @@ public class BaseStatementBuilderCreateSumAllTest
         var field = new Field("Value");
 
         // Act
-        var actual = statementBuilder.CreateSumAll(tableName: tableName,
+        var actual = statementBuilder.CreateSum(tableName: tableName,
             field: field,
             hints: null);
-        var expected = "SELECT SUM ([Value]) AS [SumValue] FROM [dbo].[Table];";
+        var expected = "SELECT SUM([Value]) AS [SumValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -84,10 +84,10 @@ public class BaseStatementBuilderCreateSumAllTest
         var field = new Field("Value");
 
         // Act
-        var actual = statementBuilder.CreateSumAll(tableName: tableName,
+        var actual = statementBuilder.CreateSum(tableName: tableName,
             field: field,
             hints: null);
-        var expected = "SELECT SUM ([Value]) AS [SumValue] FROM [dbo].[Table];";
+        var expected = "SELECT SUM([Value]) AS [SumValue] FROM [dbo].[Table];";
 
         // Assert
         Assert.AreEqual(expected, actual);
@@ -102,7 +102,7 @@ public class BaseStatementBuilderCreateSumAllTest
         var field = new Field("Value");
 
         // Act
-        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateSumAll(tableName: tableName,
+        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateSum(tableName: tableName,
             field: field,
             hints: null));
     }
@@ -117,7 +117,7 @@ public class BaseStatementBuilderCreateSumAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateSumAll(tableName: tableName,
+        () => statementBuilder.CreateSum(tableName: tableName,
             field: field,
             hints: null));
     }
@@ -132,7 +132,7 @@ public class BaseStatementBuilderCreateSumAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateSumAll(tableName: tableName,
+        () => statementBuilder.CreateSum(tableName: tableName,
             field: field,
             hints: null));
     }
@@ -146,7 +146,7 @@ public class BaseStatementBuilderCreateSumAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateSumAll(tableName: tableName,
+        () => statementBuilder.CreateSum(tableName: tableName,
             field: null,
             hints: null));
     }
@@ -160,7 +160,7 @@ public class BaseStatementBuilderCreateSumAllTest
         var field = new Field("Value");
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => statementBuilder.CreateSumAll(tableName: tableName,
+        Assert.ThrowsExactly<NotSupportedException>(() => statementBuilder.CreateSum(tableName: tableName,
             field: field,
             hints: "Hints"));
     }

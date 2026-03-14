@@ -19,7 +19,7 @@ public class VectorTests : VectorTestsBase<SqlServerDbInstance>
     {
         using var sql = CreateConnection();
 
-        var info = DbRuntimeSettingCache.Get(sql, null);
+        var info = sql.GetDbRuntimeSetting();
 
         return info?.EngineVersion.Major >= 17; // Vector support was added with SqlServer 2025
     }

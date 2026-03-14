@@ -34,7 +34,6 @@ public sealed class DiagnosticsTracer : ITrace
     /// <param name="log"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     public ValueTask AfterExecutionAsync<TResult>(ResultTraceLog<TResult> log, CancellationToken cancellationToken = default)
     {
         if (_timeMap.TryGetValue(log.SessionId, out var startTime))

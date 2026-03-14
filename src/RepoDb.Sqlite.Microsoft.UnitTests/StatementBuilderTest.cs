@@ -68,20 +68,6 @@ public class StatementBuilderTest
     }
 
     [TestMethod]
-    public void ThrowExceptionOnMdsSqLiteStatementBuilderCreateBatchQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var builder = StatementBuilderMapper.Get<SqliteConnection>();
-
-        // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateBatchQuery("Table",
-            Field.From("Id", "Name"),
-            0,
-            10,
-            null));
-    }
-
-    [TestMethod]
     public void ThrowExceptionOnMdsSqLiteStatementBuilderCreateBatchQueryIfThePageValueIsNullOrOutOfRange()
     {
         // Setup
@@ -116,7 +102,7 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<SqliteConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateBatchQuery("Table",
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => builder.CreateBatchQuery("Table",
             Field.From("Id", "Name"),
             0,
             -1,
@@ -445,7 +431,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            null);
+            null, 0);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table];";
 
         // Assert
@@ -462,7 +448,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             QueryGroup.Parse(new { Id = 1, Name = "Michael" }),
-            null);
+            null, 0);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table] WHERE ([Id] = @Id AND [Name] = @Name);";
 
         // Assert
@@ -480,7 +466,7 @@ public class StatementBuilderTest
             Field.From("Id", "Name", "Address"),
             null,
             null,
-            10,
+            0, 10,
             null);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table] LIMIT 10;";
 
@@ -498,7 +484,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending }));
+            OrderField.Parse(new { Id = Order.Ascending }), 0);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table] ORDER BY [Id] ASC;";
 
         // Assert
@@ -515,7 +501,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Ascending }));
+            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Ascending }), 0);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table] ORDER BY [Id] ASC, [Name] ASC;";
 
         // Assert
@@ -532,7 +518,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Descending }), 0);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table] ORDER BY [Id] DESC;";
 
         // Assert
@@ -549,7 +535,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Descending, Name = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Descending, Name = Order.Descending }), 0);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table] ORDER BY [Id] DESC, [Name] DESC;";
 
         // Assert
@@ -566,7 +552,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Descending }), 0);
         var expected = "SELECT [Id], [Name], [Address] FROM [Table] ORDER BY [Id] ASC, [Name] DESC;";
 
         // Assert
@@ -584,7 +570,7 @@ public class StatementBuilderTest
             Field.From("Id", "Name", "Address"),
             null,
             null,
-            hints: "WhatEver"));
+            0, hints: "WhatEver"));
     }
 
     #endregion
@@ -642,20 +628,6 @@ public class StatementBuilderTest
     }
 
     [TestMethod]
-    public void ThrowExceptionOnMdsSqLiteStatementBuilderCreateSkipQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var builder = StatementBuilderMapper.Get<SqliteConnection>();
-
-        // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateSkipQuery("Table",
-            Field.From("Id", "Name"),
-            0,
-            10,
-            null));
-    }
-
-    [TestMethod]
     public void ThrowExceptionOnMdsSqLiteStatementBuilderCreateSkipQueryIfThePageValueIsNullOrOutOfRange()
     {
         // Setup
@@ -693,7 +665,7 @@ public class StatementBuilderTest
         Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateSkipQuery("Table",
             Field.From("Id", "Name"),
             0,
-            -1,
+            0,
             OrderField.Parse(new { Id = Order.Ascending }),
             null,
             "WhatEver"));

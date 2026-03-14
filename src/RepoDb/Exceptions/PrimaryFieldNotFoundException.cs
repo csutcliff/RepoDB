@@ -11,9 +11,13 @@ public class PrimaryFieldNotFoundException : Exception
     /// <param name="message">The exception message.</param>
     public PrimaryFieldNotFoundException(string message)
         : base(message) { }
+
+    /// <inheritdoc />
     public PrimaryFieldNotFoundException()
     {
     }
+
+    /// <inheritdoc />
     public PrimaryFieldNotFoundException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

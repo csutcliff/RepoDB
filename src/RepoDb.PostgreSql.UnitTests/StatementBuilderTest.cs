@@ -60,25 +60,11 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateBatchQuery("Table",
+        Assert.ThrowsExactly<ArgumentNullException>(() => builder.CreateBatchQuery("Table",
             null,
             0,
             10,
             OrderField.Parse(new { Id = Order.Ascending })));
-    }
-
-    [TestMethod]
-    public void ThrowExceptionOnPostgreSqlStatementBuilderCreateBatchQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
-
-        // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateBatchQuery("Table",
-            Field.From("Id", "Name"),
-            0,
-            10,
-            null));
     }
 
     [TestMethod]
@@ -116,7 +102,7 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateBatchQuery("Table",
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => builder.CreateBatchQuery("Table",
             Field.From("Id", "Name"),
             0,
             -1,
@@ -139,7 +125,7 @@ public class StatementBuilderTest
         var query = builder.CreateCount("Table",
             null,
             null);
-        var expected = "SELECT COUNT (*) AS \"CountValue\" FROM \"Table\";";
+        var expected = "SELECT COUNT(*) AS \"CountValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -155,7 +141,7 @@ public class StatementBuilderTest
         var query = builder.CreateCount("Table",
             QueryGroup.Parse(new { Id = 1 }),
             null);
-        var expected = "SELECT COUNT (*) AS \"CountValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
+        var expected = "SELECT COUNT(*) AS \"CountValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -184,9 +170,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        var query = builder.CreateCountAll("Table",
-            null);
-        var expected = "SELECT COUNT (*) AS \"CountValue\" FROM \"Table\";";
+        var query = builder.CreateCount("Table",
+            null, null);
+        var expected = "SELECT COUNT(*) AS \"CountValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -199,8 +185,8 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateCountAll("Table",
-            "WhatEver"));
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateCount("Table",
+            null, "WhatEver"));
     }
 
     #endregion
@@ -393,7 +379,7 @@ public class StatementBuilderTest
             new Field("Field", typeof(int)),
             null,
             null);
-        var expected = "SELECT MAX (\"Field\") AS \"MaxValue\" FROM \"Table\";";
+        var expected = "SELECT MAX(\"Field\") AS \"MaxValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -410,7 +396,7 @@ public class StatementBuilderTest
             new Field("Field", typeof(int)),
             QueryGroup.Parse(new { Id = 1 }),
             null);
-        var expected = "SELECT MAX (\"Field\") AS \"MaxValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
+        var expected = "SELECT MAX(\"Field\") AS \"MaxValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -440,10 +426,10 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        var query = builder.CreateMaxAll("Table",
+        var query = builder.CreateMax("Table",
             new Field("Field", typeof(int)),
-            null);
-        var expected = "SELECT MAX (\"Field\") AS \"MaxValue\" FROM \"Table\";";
+            null, null);
+        var expected = "SELECT MAX(\"Field\") AS \"MaxValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -456,9 +442,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMaxAll("Table",
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMax("Table",
             new Field("Field", typeof(int)),
-            "WhatEver"));
+            null, "WhatEver"));
     }
 
     #endregion
@@ -476,7 +462,7 @@ public class StatementBuilderTest
             new Field("Field", typeof(int)),
             null,
             null);
-        var expected = "SELECT MIN (\"Field\") AS \"MinValue\" FROM \"Table\";";
+        var expected = "SELECT MIN(\"Field\") AS \"MinValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -493,7 +479,7 @@ public class StatementBuilderTest
             new Field("Field", typeof(int)),
             QueryGroup.Parse(new { Id = 1 }),
             null);
-        var expected = "SELECT MIN (\"Field\") AS \"MinValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
+        var expected = "SELECT MIN(\"Field\") AS \"MinValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -523,10 +509,10 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        var query = builder.CreateMinAll("Table",
+        var query = builder.CreateMin("Table",
             new Field("Field", typeof(int)),
-            null);
-        var expected = "SELECT MIN (\"Field\") AS \"MinValue\" FROM \"Table\";";
+            null, null);
+        var expected = "SELECT MIN(\"Field\") AS \"MinValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -539,9 +525,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMinAll("Table",
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateMin("Table",
             new Field("Field", typeof(int)),
-            "WhatEver"));
+            null, "WhatEver"));
     }
 
     #endregion
@@ -782,7 +768,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            null);
+            null, 0);
         var expected = "SELECT \"Id\", \"Name\", \"Address\" FROM \"Table\";";
 
         // Assert
@@ -816,7 +802,7 @@ public class StatementBuilderTest
             Field.From("Id", "Name", "Address"),
             null,
             null,
-            10,
+            0, 10,
             null);
         var expected = "SELECT \"Id\", \"Name\", \"Address\" FROM \"Table\" LIMIT 10;";
 
@@ -834,7 +820,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending }));
+            OrderField.Parse(new { Id = Order.Ascending }), 0);
         var expected = "SELECT \"Id\", \"Name\", \"Address\" FROM \"Table\" ORDER BY \"Id\" ASC;";
 
         // Assert
@@ -851,7 +837,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Ascending }));
+            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Ascending }), 0);
         var expected = "SELECT \"Id\", \"Name\", \"Address\" FROM \"Table\" ORDER BY \"Id\" ASC, \"Name\" ASC;";
 
         // Assert
@@ -868,7 +854,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Descending }), 0);
         var expected = "SELECT \"Id\", \"Name\", \"Address\" FROM \"Table\" ORDER BY \"Id\" DESC;";
 
         // Assert
@@ -885,7 +871,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Descending, Name = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Descending, Name = Order.Descending }), 0);
         var expected = "SELECT \"Id\", \"Name\", \"Address\" FROM \"Table\" ORDER BY \"Id\" DESC, \"Name\" DESC;";
 
         // Assert
@@ -902,7 +888,7 @@ public class StatementBuilderTest
         var query = builder.CreateQuery("Table",
             Field.From("Id", "Name", "Address"),
             null,
-            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Descending }));
+            OrderField.Parse(new { Id = Order.Ascending, Name = Order.Descending }), 0);
         var expected = "SELECT \"Id\", \"Name\", \"Address\" FROM \"Table\" ORDER BY \"Id\" ASC, \"Name\" DESC;";
 
         // Assert
@@ -920,7 +906,7 @@ public class StatementBuilderTest
             Field.From("Id", "Name", "Address"),
             null,
             null,
-            hints: "WhatEver"));
+            0, hints: "WhatEver"));
     }
 
     #endregion
@@ -970,25 +956,11 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateSkipQuery("Table",
+        Assert.ThrowsExactly<ArgumentNullException>(() => builder.CreateSkipQuery("Table",
             null,
             0,
             10,
             OrderField.Parse(new { Id = Order.Ascending })));
-    }
-
-    [TestMethod]
-    public void ThrowExceptionOnPostgreSqlStatementBuilderCreateSkipQueryIfThereAreNoOrderFields()
-    {
-        // Setup
-        var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
-
-        // Act
-        Assert.ThrowsExactly<EmptyException>(() => builder.CreateSkipQuery("Table",
-            Field.From("Id", "Name"),
-            0,
-            10,
-            null));
     }
 
     [TestMethod]
@@ -1029,7 +1001,7 @@ public class StatementBuilderTest
         Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateSkipQuery("Table",
             Field.From("Id", "Name"),
             0,
-            -1,
+            0,
             OrderField.Parse(new { Id = Order.Ascending }),
             null,
             "WhatEver"));
@@ -1050,7 +1022,7 @@ public class StatementBuilderTest
             new Field("Field", typeof(int)),
             null,
             null);
-        var expected = "SELECT SUM (\"Field\") AS \"SumValue\" FROM \"Table\";";
+        var expected = "SELECT SUM(\"Field\") AS \"SumValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -1067,7 +1039,7 @@ public class StatementBuilderTest
             new Field("Field", typeof(int)),
             QueryGroup.Parse(new { Id = 1 }),
             null);
-        var expected = "SELECT SUM (\"Field\") AS \"SumValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
+        var expected = "SELECT SUM(\"Field\") AS \"SumValue\" FROM \"Table\" WHERE (\"Id\" = @Id);";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -1097,10 +1069,10 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        var query = builder.CreateSumAll("Table",
+        var query = builder.CreateSum("Table",
             new Field("Field", typeof(int)),
-            null);
-        var expected = "SELECT SUM (\"Field\") AS \"SumValue\" FROM \"Table\";";
+            null, null);
+        var expected = "SELECT SUM(\"Field\") AS \"SumValue\" FROM \"Table\";";
 
         // Assert
         Assert.AreEqual(expected, query);
@@ -1113,9 +1085,9 @@ public class StatementBuilderTest
         var builder = StatementBuilderMapper.Get<NpgsqlConnection>();
 
         // Act
-        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateSumAll("Table",
+        Assert.ThrowsExactly<NotSupportedException>(() => builder.CreateSum("Table",
             new Field("Field", typeof(int)),
-            "WhatEver"));
+            null, "WhatEver"));
     }
 
     #endregion

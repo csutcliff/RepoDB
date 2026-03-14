@@ -64,123 +64,6 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
     { }
 #endif
 
-    #region CreateBatchQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for batch query operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be queried.</param>
-    /// <param name="page">The page of the batch.</param>
-    /// <param name="rowsPerBatch">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public override string CreateBatchQuery(string tableName,
-        IEnumerable<Field> fields,
-        int page,
-        int rowsPerBatch,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        // Ensure with guards
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new ArgumentNullException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
-
-        // Validate order by
-        if (orderBy == null || orderBy.Any() != true)
-        {
-            throw new EmptyException(nameof(orderBy), "The argument 'orderBy' is required.");
-        }
-
-        // Validate the page
-        if (page < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(page), "The page must be equals or greater than 0.");
-        }
-
-        // Validate the page
-        if (rowsPerBatch < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowsPerBatch), "The rows per batch must be equals or greater than 1.");
-        }
-
-        // Skipping variables
-        var skip = (page * rowsPerBatch);
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .FieldsFrom(fields, DbSetting)
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .WhereFrom(where, DbSetting)
-            .OrderByFrom(orderBy, DbSetting)
-            .LimitTake(rowsPerBatch, skip)
-            .End();
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateCount
-
-    /// <summary>
-    /// Creates a SQL Statement for count operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for count operation.</returns>
-    public override string CreateCount(string tableName,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        var result = base.CreateCount(tableName,
-            where,
-            hints);
-
-        // Return the query
-        return result.Replace("COUNT (", "COUNT(");
-    }
-
-    #endregion
-
-    #region CreateCountAll
-
-    /// <summary>
-    /// Creates a SQL Statement for count-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for count-all operation.</returns>
-    public override string CreateCountAll(string tableName,
-        string? hints = null)
-    {
-        var result = base.CreateCountAll(tableName,
-            hints);
-
-        // Return the query
-        return result.Replace("COUNT (", "COUNT(");
-    }
-
-    #endregion
-
     #region CreateExists
 
     /// <summary>
@@ -212,7 +95,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
             .Limit(1)
-            .End();
+            .End(DbSetting);
 
         // Return the query
         return builder.ToString();
@@ -345,7 +228,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
         // Close
         builder
-            .End();
+            .End(DbSetting);
 
         if (keyFields.Any())
         {
@@ -396,59 +279,10 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
                 .OpenParen()
                 .FieldsFrom(keyFields, DbSetting)
                 .CloseParen()
-                .End();
+                .End(DbSetting);
         }
 
         return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateMax
-
-    /// <summary>
-    /// Creates a SQL Statement for maximum operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be maximumd.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for maximum operation.</returns>
-    public override string CreateMax(string tableName,
-        Field field,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        var result = base.CreateMax(tableName,
-            field,
-            where,
-            hints);
-
-        // Return the query
-        return result.Replace("MAX (", "MAX(");
-    }
-
-    #endregion
-
-    #region CreateMaxAll
-
-    /// <summary>
-    /// Creates a SQL Statement for maximum-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be maximumd.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for maximum-all operation.</returns>
-    public override string CreateMaxAll(string tableName,
-        Field field,
-        string? hints = null)
-    {
-        var result = base.CreateMaxAll(tableName,
-            field,
-            hints);
-
-        // Return the query
-        return result.Replace("MAX (", "MAX(");
     }
 
     #endregion
@@ -538,10 +372,10 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
                 .WriteText("ON DUPLICATE KEY")
                 .Update();
 
-            IdentityFieldsAndParametersFrom(builder, fields, updatableFields, 0, identityField);
+            IdentityFieldsAndParametersFrom(builder, updatableFields, 0, identityField);
         }
         builder
-            .End();
+            .End(DbSetting);
 
         if (keyFields.Any())
         {
@@ -664,7 +498,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
                 .WriteText("ON DUPLICATE KEY")
                 .Update();
 
-            IdentityFieldsAndParametersFrom(builder, fields, updatableFields, index, identityField);
+            IdentityFieldsAndParametersFrom(builder, updatableFields, index, identityField);
 
             builder
                 .End(DbSetting);
@@ -699,7 +533,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
                     builder.As(kf.FieldName, DbSetting);
                 }
 
-                builder.End();
+                builder.End(DbSetting);
             }
         }
 
@@ -707,7 +541,7 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
-    private void IdentityFieldsAndParametersFrom(QueryBuilder builder, IEnumerable<Field> fields, IEnumerable<Field> updateFields, int index, DbField? identityField)
+    private void IdentityFieldsAndParametersFrom(QueryBuilder builder, IEnumerable<Field> updateFields, int index, DbField? identityField)
     {
         if (identityField is null)
         {
@@ -733,55 +567,6 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
 
     #endregion
 
-    #region CreateMin
-
-    /// <summary>
-    /// Creates a SQL Statement for minimum operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be minimumd.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for minimum operation.</returns>
-    public override string CreateMin(string tableName,
-        Field field,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        var result = base.CreateMin(tableName,
-            field,
-            where,
-            hints);
-
-        // Return the query
-        return result.Replace("MIN (", "MIN(");
-    }
-
-    #endregion
-
-    #region CreateMinAll
-
-    /// <summary>
-    /// Creates a SQL Statement for minimum-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be minimumd.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for minimum-all operation.</returns>
-    public override string CreateMinAll(string tableName,
-        Field field,
-        string? hints = null)
-    {
-        var result = base.CreateMinAll(tableName,
-            field,
-            hints);
-
-        // Return the query
-        return result.Replace("MIN (", "MIN(");
-    }
-
-    #endregion
-
     #region CreateQuery
 
     /// <summary>
@@ -791,26 +576,25 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
     /// <param name="fields">The list of fields.</param>
     /// <param name="where">The query expression.</param>
     /// <param name="orderBy">The list of fields for ordering.</param>
+    /// <param name="offset"></param>
     /// <param name="top">The number of rows to be returned.</param>
-    /// <param name="hints">The table hints to be used.</param>
     /// <returns>A sql statement for query operation.</returns>
+    /// <param name="hints">The table hints to be used.</param>
     public override string CreateQuery(string tableName,
         IEnumerable<Field> fields,
         QueryGroup? where = null,
         IEnumerable<OrderField>? orderBy = null,
-        int top = 0,
+        int offset = 0,
+        int take = 0,
         string? hints = null)
     {
+        ArgumentNullException.ThrowIfNull(fields);
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThan(take, 0);
 
         // Validate the hints
         GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new ArgumentNullException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
 
         // Initialize the builder
         var builder = new QueryBuilder();
@@ -823,134 +607,12 @@ public sealed class MySqlConnectorStatementBuilder : BaseStatementBuilder
             .TableNameFrom(tableName, DbSetting)
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
-            .OrderByFrom(orderBy, DbSetting);
-        if (top > 0)
-        {
-            builder.Limit(top);
-        }
-        builder.End();
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateSkipQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for 'BatchQuery' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
-    /// <param name="skip">The number of rows to skip.</param>
-    /// <param name="take">The number of rows to take.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public override string CreateSkipQuery(string tableName,
-        IEnumerable<Field> fields,
-        int skip,
-        int take,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new ArgumentNullException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
-
-        // Validate order by
-        if (orderBy == null || orderBy.Any() != true)
-        {
-            throw new EmptyException(nameof(orderBy), "The argument 'orderBy' is required.");
-        }
-
-        // Validate the skip
-        if (skip < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(skip), "The rows skipped must be equals or greater than 0.");
-        }
-
-        // Validate the take
-        if (take < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(take), "The rows per batch must be equals or greater than 1.");
-        }
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .FieldsFrom(fields, DbSetting)
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .WhereFrom(where, DbSetting)
             .OrderByFrom(orderBy, DbSetting)
-            .LimitTake(take, skip)
-            .End();
+            .LimitTake(take, offset)
+            .End(DbSetting);
 
         // Return the query
         return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateSum
-
-    /// <summary>
-    /// Creates a SQL Statement for sum operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be sumd.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for sum operation.</returns>
-    public override string CreateSum(string tableName,
-        Field field,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        var result = base.CreateSum(tableName,
-            field,
-            where,
-            hints);
-
-        // Return the query
-        return result.Replace("SUM (", "SUM(");
-    }
-
-    #endregion
-
-    #region CreateSumAll
-
-    /// <summary>
-    /// Creates a SQL Statement for sum-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be sumd.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for sum-all operation.</returns>
-    public override string CreateSumAll(string tableName,
-        Field field,
-        string? hints = null)
-    {
-        var result = base.CreateSumAll(tableName,
-            field,
-            hints);
-
-        // Return the query
-        return result.Replace("SUM (", "SUM(");
     }
 
     #endregion

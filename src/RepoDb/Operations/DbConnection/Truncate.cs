@@ -305,7 +305,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetTruncateText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetTruncateText);
 
         // Actual Execution
         var result = ExecuteNonQueryInternal(connection: (DbConnection)connection,
@@ -349,7 +349,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetTruncateText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetTruncateText);
 
         // Actual Execution
         var result = await ExecuteNonQueryInternalAsync(connection: (DbConnection)connection,

@@ -1,0 +1,142 @@
+
+# Dynamics / Anonymous Types
+
+---
+
+This feature allows you to create a simplified and targeted operation by simply maximizing the usage of the anonymous types. It is very useful if you wish to do the CRUD operations on the targeted columns and/or make the CRUD operations without even having a class model.
+
+This feature is being called DYNAMICS as it is enabling the dynamic capabilities if we are to use it on the context of an ORM. Therefore, do not get confused comparing the terminology against the dynamics within .NET ecosystem.
+
+## Querying a Data
+
+Use the [Query](/docs/operations/query.md) operation and pass the target table as a literal string and a filter expression as an anonymous object.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var customer = connection.Query("[dbo].[Customer]", 10045).FirstOrDefault();
+}
+```
+
+Or filtering a result via anonymous types.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var param = new
+    {
+        FirstName = "John",
+        LastName = "Doe"
+    };
+    var customer = connection.Query("[dbo].[Customer]", param).FirstOrDefault();
+}
+```
+
+Or with specific columns.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var customer = connection.Query("[dbo].[Customer]",
+        10045,
+        Field.From("Id","FirstName", "LastName")).FirstOrDefault();
+}
+```
+
+## Iterating the Result
+
+When fetching a data from the database, it is automatically converted into an enumerable of [ExpandoObject](https://learn.microsoft.com/en-us/dotnet/api/system.dynamic.expandoobject?view=net-7.0) object.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var customers = connection.Query("[dbo].[Customer]", new { Country = "Denmark" },
+        Field.From("Id","FirstName", "LastName"));
+
+    foreach (var customer in customers)
+    {
+        ...
+    }
+}
+```
+
+## Inserting a Data
+
+Use the [Insert](/docs/operations/insert.md) operation and pass the target table as a literal string and an anonymous entity object.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var entity = new
+    {
+        FirstName = "John",
+        LastName = "Doe",
+        CreatedDateUtc = DateTime.UtcNow
+    };
+    var id = connection.Insert<int>("[dbo].[Customer]", entity);
+}
+```
+
+Or via [Dictionary](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2?view=net-7.0) or [ExpandoObject](https://learn.microsoft.com/en-us/dotnet/api/system.dynamic.expandoobject?view=net-7.0).
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var entity = new Dictionary<string, object>
+    {
+        { "FirstName", "John" },
+        { "LastName", "Doe" },
+        { "CreatedDateUtc", DateTime.UtcNow }
+    };
+    var id = connection.Insert<int>("[dbo].[Customer]", entity);
+}
+```
+> Please note that the library will add the newly created value of the identity column into the [Dictionary](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2?view=net-7.0) or [ExpandoObject](https://learn.microsoft.com/en-us/dotnet/api/system.dynamic.expandoobject?view=net-7.0) object (if not present).
+
+## Deleting a Data
+
+Use the [Delete](/docs/operations/delete.md) operation and pass the target table as a literal string and a filter expression as an anonymous object.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var deletedRows = connection.Delete("[dbo].[Customer]", new { IsActive = false });
+}
+```
+
+## Merging a Data
+
+Use the [Merge](/docs/operations/merge.md) operation and pass the target table as a literal string and an anonymous entity object.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var entity = new
+    {
+        Id = 10045,
+        FirstName = "John",
+        LastName = "Doe",
+        Address = "New York",
+        LastUpdatedDateUtc = DateTime.UtcNow
+    };
+    var updatedRows = connection.Merge("[dbo].[Customer]", entity);
+}
+```
+
+## Updating a Data
+
+Use the [Update](/docs/operations/update.md) operation and pass the target table as a literal string and a anonymous entity object.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var entity = new
+    {
+        Id = 10045,
+        FirstName = "James",
+        LastUpdatedDateUtc = DateTime.UtcNow
+    };
+    var updatedRows = connection.Update("[dbo].[Customer]", entity);
+}
+```
+> Please be noted, in general, you can always target the specific columns during the [Query](/docs/operations/query.md), [Insert](/docs/operations/insert.md), [Merge](/docs/operations/merge.md) or [Update](/docs/operations/update.md) operations.

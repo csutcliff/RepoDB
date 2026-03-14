@@ -16,5 +16,8 @@ public class PropertyHandlerTypeLevelResolver : IResolver<Type, object>
         PropertyHandlerMapper.Get<object>(type);
 
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly PropertyHandlerTypeLevelResolver Instance = new();
 }

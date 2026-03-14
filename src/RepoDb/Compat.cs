@@ -1,13 +1,12 @@
 ﻿using System.Data;
 using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using RepoDb.Interfaces;
 
 #if !NET
 using System.Reflection;
-#pragma warning disable CA1018 // SpecifyAttributeUsage
+using System.Diagnostics.CodeAnalysis;
 #pragma warning disable CS8777 // Compiler bug on 'public static void ThrowIfNullOrWhiteSpace([NotNull] string? argument'
-#pragma warning disable IDE0161 // Convert to file-scoped namespace
 namespace System.Runtime.CompilerServices
 {
 
@@ -82,7 +81,7 @@ namespace System
             if (comparisonType == StringComparison.Ordinal)
                 return value.IndexOf(charToSeek);
             else
-                return value.IndexOf(charToSeek.ToString(), comparisonType) ;
+                return value.IndexOf(charToSeek.ToString(), comparisonType);
         }
 
 
@@ -111,13 +110,17 @@ namespace System
             else
                 throw new NotSupportedException($"String replacement '{comparisonType}' is not supported for char search.");
         }
-    }
 
+        public static bool ContainsAny(this string value, char[] values)
+        {
+            return value.IndexOfAny(values) >= 0;
+        }
+    }
 }
 
 namespace System.Diagnostics.CodeAnalysis
 {
-    [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.ReturnValue, Inherited=false)]
+    [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.ReturnValue, Inherited = false)]
     internal sealed class NotNullAttribute : Attribute
     {
     }
@@ -266,9 +269,9 @@ namespace RepoDb
         {
             public static bool TryParse(Type type, string? value, [NotNullWhen(true)] out object? result)
             {
-                object r = typeof(NetCompatExtensions).GetMethod(nameof(EnumTryParse), BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(type).Invoke(null, [ value ]);
+                object r = typeof(NetCompatExtensions).GetMethod(nameof(EnumTryParse), BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(type).Invoke(null, [value]);
 
-                if (r is {})
+                if (r is { })
                 {
                     result = r;
                     return true;
@@ -314,8 +317,11 @@ namespace RepoDb
             if (dbTransaction is DbTransaction dbTransaction1)
                 await dbTransaction1.CommitAsync(cancellationToken).ConfigureAwait(false);
             else
-#endif
                 dbTransaction.Commit();
+#else
+            dbTransaction.Commit();
+#endif
+
         }
 
         public static async ValueTask RollbackAsync(this IDbTransaction dbTransaction, CancellationToken cancellationToken = default)
@@ -409,5 +415,58 @@ namespace RepoDb
             return segment.Array![segment.Offset + index];
 #endif
         }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="statementBuilder"></param>
+        /// <param name="tableName"></param>
+        /// <param name="fields"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="where"></param>
+        /// <param name="hints"></param>
+        /// <returns></returns>
+        public static string CreateSkipQuery(this IStatementBuilder statementBuilder,
+            string tableName,
+            IEnumerable<Field> fields,
+            int skip,
+            int take,
+            IEnumerable<OrderField>? orderBy = null,
+            QueryGroup? where = null,
+            string? hints = null) =>
+            statementBuilder.CreateQuery(tableName, fields, where, orderBy, skip, take, hints);
+
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="statementBuilder"></param>
+        /// <param name="tableName"></param>
+        /// <param name="fields"></param>
+        /// <param name="page"></param>
+        /// <param name="rowsPerBatch"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="where"></param>
+        /// <param name="hints"></param>
+        /// <returns></returns>
+        public static string CreateBatchQuery(this IStatementBuilder statementBuilder,
+            string tableName,
+            IEnumerable<Field> fields,
+            int page,
+            int rowsPerBatch,
+            IEnumerable<OrderField>? orderBy = null,
+            QueryGroup? where = null,
+            string? hints = null)
+            => statementBuilder.CreateQuery(tableName, fields, where, orderBy, page * rowsPerBatch, rowsPerBatch, hints);
+
+
+        public static string CreateQueryAll(this IStatementBuilder statementBuilder,
+            string tableName,
+            IEnumerable<Field> fields,
+            IEnumerable<OrderField>? orderBy = null,
+            string? hints = null)
+            => statementBuilder.CreateQuery(tableName, fields, where: null, orderBy, offset: 0, take: 0, hints: hints);
     }
 }

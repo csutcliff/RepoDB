@@ -1920,7 +1920,7 @@ public static partial class DbConnectionExtension
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null)], connection, transaction, tableName) : null;
+        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null, tableName)], connection, transaction, tableName) : null;
 
         // Return the result
         return MaxInternalBase<object>(connection: connection,
@@ -2120,7 +2120,7 @@ public static partial class DbConnectionExtension
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null)], connection, transaction, tableName) : null;
+        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo(null, tableName)], connection, transaction, tableName) : null;
 
         // Return the result
         return MaxInternalBase<TResult>(connection: connection,
@@ -2333,7 +2333,7 @@ public static partial class DbConnectionExtension
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
+        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null, tableName)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
 
         // Return the result
         return await MaxInternalBaseAsync<object>(connection: connection,
@@ -2548,7 +2548,7 @@ public static partial class DbConnectionExtension
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
+        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo(null, tableName)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
 
         // Return the result
         return await MaxInternalBaseAsync<TResult>(connection: connection,
@@ -2586,7 +2586,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetMaxText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetMaxText);
 
         // Actual Execution
         var result = ExecuteScalarInternal<TResult>(connection: connection,
@@ -2596,7 +2596,7 @@ public static partial class DbConnectionExtension
             commandTimeout: commandTimeout,
             transaction: transaction,
             entityType: request.Type,
-            dbFields: param is { } ? DbFieldCache.Get(connection, request.Name, transaction, true) : null,
+            dbFields: param is { } ? DbFieldCache.Get(connection, request.TableName, transaction, true) : null,
             trace: trace,
             traceKey: traceKey)!;
 
@@ -2631,7 +2631,7 @@ public static partial class DbConnectionExtension
     {
         // Variables
         var commandType = CommandType.Text;
-        var commandText = CommandTextCache.GetMaxText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetMaxText);
 
         // Actual Execution
         var result = await ExecuteScalarInternalAsync<TResult>(connection: connection,
@@ -2641,7 +2641,7 @@ public static partial class DbConnectionExtension
             commandTimeout: commandTimeout,
             transaction: transaction,
             entityType: request.Type,
-            dbFields: param is { } ? await DbFieldCache.GetAsync(connection, request.Name, transaction, true, cancellationToken).ConfigureAwait(false) : null,
+            dbFields: param is { } ? await DbFieldCache.GetAsync(connection, request.TableName, transaction, true, cancellationToken).ConfigureAwait(false) : null,
             trace: trace,
             traceKey: traceKey,
             cancellationToken: cancellationToken).ConfigureAwait(false);

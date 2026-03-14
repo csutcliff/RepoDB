@@ -40,6 +40,21 @@ public sealed class DbField : Field, IEquatable<DbField>
         : this(name, isPrimary, isIdentity, isNullable, type, size, precision, scale, databaseType, hasDefaultValue, false, provider)
     { }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="isPrimary"></param>
+    /// <param name="isIdentity"></param>
+    /// <param name="isNullable"></param>
+    /// <param name="type"></param>
+    /// <param name="size"></param>
+    /// <param name="precision"></param>
+    /// <param name="scale"></param>
+    /// <param name="databaseType"></param>
+    /// <param name="hasDefaultValue"></param>
+    /// <param name="isGenerated"></param>
+    /// <param name="provider"></param>
     public DbField(string name,
         bool isPrimary,
         bool isIdentity,
@@ -144,6 +159,10 @@ public sealed class DbField : Field, IEquatable<DbField>
     /// <returns></returns>
     public Type TypeNullable() => IsNullable && Type.IsValueType ? typeof(Nullable<>).MakeGenericType(Type) : Type;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
     public Field AsField() => this;
 
     #endregion

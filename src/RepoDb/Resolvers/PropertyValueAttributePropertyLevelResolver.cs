@@ -18,5 +18,8 @@ public class PropertyValueAttributePropertyLevelResolver : IResolver<PropertyInf
     public IEnumerable<PropertyValueAttribute> Resolve(PropertyInfo propertyInfo) =>
         propertyInfo.GetPropertyValueAttributes();
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly PropertyValueAttributePropertyLevelResolver Instance = new();
 }

@@ -16,16 +16,20 @@ public partial class QueryGroup
     /// </summary>
     /// <param name="queryGroupTypeMaps">The list of <see cref="QueryGroupTypeMap"/> objects to be converted.</param>
     /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="tableName"></param>
     /// <returns>An instance of an object that contains all the definition of the converted underlying <see cref="QueryFields"/>s.</returns>
-    /// <param name="transaction"></param><param name="fixParameters">A boolean value whether to fix the parameter name before converting.</param>
-    internal static object AsMappedObject(IReadOnlyList<QueryGroupTypeMap> queryGroupTypeMaps,
-        IDbConnection connection, IDbTransaction? transaction, string? tableName)
+    internal static object AsMappedObject(
+        IReadOnlyList<QueryGroupTypeMap> queryGroupTypeMaps,
+        IDbConnection connection,
+        IDbTransaction? transaction,
+        string? tableName = null)
     {
         var dictionary = new ExpandoObject() as IDictionary<string, object?>;
 
         foreach (var queryGroupTypeMap in queryGroupTypeMaps)
         {
-            AsMappedObject(dictionary, queryGroupTypeMap, tableName, connection, transaction);
+            AsMappedObject(dictionary, queryGroupTypeMap, connection, transaction, tableName);
         }
 
         return (ExpandoObject)dictionary;
@@ -38,10 +42,16 @@ public partial class QueryGroup
     /// </summary>
     /// <param name="queryGroupTypeMaps">The list of <see cref="QueryGroupTypeMap"/> objects to be converted.</param>
     /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="tableName"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns>An instance of an object that contains all the definition of the converted underlying <see cref="QueryFields"/>s.</returns>
-    /// <param name="transaction"></param><param name="fixParameters">A boolean value whether to fix the parameter name before converting.</param>
-    internal static async ValueTask<object> AsMappedObjectAsync(IReadOnlyList<QueryGroupTypeMap> queryGroupTypeMaps,
-        IDbConnection connection, IDbTransaction? transaction, string? tableName, CancellationToken cancellationToken = default)
+    internal static async ValueTask<object> AsMappedObjectAsync(
+        IReadOnlyList<QueryGroupTypeMap> queryGroupTypeMaps,
+        IDbConnection connection,
+        IDbTransaction? transaction,
+        string? tableName = null,
+        CancellationToken cancellationToken = default)
     {
         var dictionary = new ExpandoObject() as IDictionary<string, object?>;
 
@@ -55,9 +65,9 @@ public partial class QueryGroup
 
     private static void AsMappedObject(IDictionary<string, object?> dictionary,
         in QueryGroupTypeMap queryGroupTypeMap,
-        string? tableName,
         IDbConnection connection,
-        IDbTransaction? transaction = null)
+        IDbTransaction? transaction = null,
+        string? tableName = null)
     {
         var queryFields = queryGroupTypeMap
             .QueryGroup?
@@ -69,6 +79,7 @@ public partial class QueryGroup
             return;
         }
 
+        tableName ??= queryGroupTypeMap.TableName;
         // Fix the variables for the parameters
         if (tableName is { })
         {
@@ -109,12 +120,6 @@ public partial class QueryGroup
         return new();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <param name="queryGroupTypeMap"></param>
-    /// <param name="queryFields"></param>
     private static void AsMappedObjectForQueryFields(IDictionary<string, object?> dictionary,
         in QueryGroupTypeMap queryGroupTypeMap,
         IEnumerable<QueryField> queryFields,
@@ -187,12 +192,6 @@ public partial class QueryGroup
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="dictionary"></param>
-    /// <param name="queryGroupTypeMap"></param>
-    /// <param name="queryField"></param>
     private static void AsMappedObjectForInQueryField(IDictionary<string, object?> dictionary,
         in QueryGroupTypeMap queryGroupTypeMap,
         QueryField queryField,

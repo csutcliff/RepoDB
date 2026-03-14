@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json.Nodes;
 using RepoDb.Attributes.Parameter;
+using RepoDb.DbSettings;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
 using RepoDb.Resolvers;
@@ -34,10 +35,10 @@ public static class DbTestExtensions
     {
         var tableName = ClassMappedNameCache.Get<TEntity>();
 
-        await CreateTableAsync<TEntity>(connection, tableName, trace, cancellationToken);
+        await CreateTableAsync<TEntity>(connection, tableName, null, trace, cancellationToken);
     }
 
-    public static async Task CreateTableAsync<TEntity>(this DbConnection sql, string tableName, ITrace? trace = null, CancellationToken cancellationToken = default) where TEntity : class
+    public static async Task CreateTableAsync<TEntity>(this DbConnection sql, string tableName, DbTransaction? transaction=null, ITrace? trace = null, CancellationToken cancellationToken = default) where TEntity : class
     {
         var dbSetting = sql.GetDbSetting();
         var stmt = (BaseStatementBuilder)sql.GetStatementBuilder();
@@ -82,7 +83,8 @@ public static class DbTestExtensions
             string? columnTypeName = null;
             if ((type == typeof(JsonNode) || type == typeof(JsonObject) || type == typeof(JsonArray))
                 && sql.GetStatementBuilder() is BaseStatementBuilder bs
-                && bs.JsonColumnType is { } jsonColumnType)
+                && sql.GetDbHelper() is BaseDbHelper dbHelper
+                && dbHelper.GetJsonColumnType(sql, transaction) is { } jsonColumnType)
             {
                 columnTypeName = jsonColumnType;
             }
@@ -138,7 +140,7 @@ public static class DbTestExtensions
                 qb.WriteText(stmt.IdentityDefinition ?? "IDENTITY");
             }
 
-            if (primaryKeys.OneOrDefault() is { } primaryKey && primaryKey.FieldName == prop.FieldName)
+            if (primaryKeys.OneOrDefault() is { } primaryKey && primaryKey.FieldName == prop.FieldName && stmt.PrimaryBeforeIdentity is { })
             {
                 qb.WriteText("PRIMARY KEY");
                 primaryKeys = []; // Handled here. Don't add separate key

@@ -45,6 +45,9 @@ public partial class QueryGroup
     /// </summary>
     /// <typeparam name="TEntity">The target entity type</typeparam>
     /// <param name="expression">The expression to be converted to a <see cref="QueryGroup"/> object.</param>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="tableName"></param>
     /// <returns>An instance of the <see cref="QueryGroup"/> object that contains the parsed query expression.</returns>
     public static QueryGroup Parse<TEntity>(Expression<Func<TEntity, bool>> expression, IDbConnection? connection = null, IDbTransaction? transaction = null, string? tableName = null)
         where TEntity : class
@@ -188,23 +191,26 @@ public partial class QueryGroup
         else if (expression.Left is MethodCallExpression m3
             && m3.Object is { }
             && m3.Method.DeclaringType == StaticType.String
-            && m3.Method.Name is nameof(string.Trim) or nameof(string.TrimStart) or nameof(string.TrimEnd) or nameof(string.ToUpper) or nameof(string.ToLower) or nameof(string.ToUpperInvariant) or nameof(string.ToLowerInvariant)
+            && m3.Method.Name is nameof(string.Trim) or nameof(string.TrimStart) or nameof(string.TrimEnd) or nameof(string.ToUpper) or nameof(string.ToLower) or nameof(string.ToUpperInvariant) or nameof(string.ToLowerInvariant) or nameof(string.Substring)
             && isSimpleCheck
             && QueryField.GetProperty<TEntity>(m3.Object) is { } propExpr3)
         {
             var value = expression.Right.GetValue();
 
-            QueryField qf = m3.Method.Name switch
+            QueryField? qf = m3.Method.Name switch
             {
                 nameof(string.Trim) => new TrimQueryField(propExpr3.AsField().FieldName, QueryField.GetOperation(expression.NodeType), value),
                 nameof(string.TrimStart) => new LeftTrimQueryField(propExpr3.AsField().FieldName, QueryField.GetOperation(expression.NodeType), value),
                 nameof(string.TrimEnd) => new RightTrimQueryField(propExpr3.AsField().FieldName, QueryField.GetOperation(expression.NodeType), value),
                 nameof(string.ToUpper) or nameof(string.ToUpperInvariant) => new UpperQueryField(propExpr3.AsField().FieldName, QueryField.GetOperation(expression.NodeType), value),
                 nameof(string.ToLower) or nameof(string.ToLowerInvariant) => new LowerQueryField(propExpr3.AsField().FieldName, QueryField.GetOperation(expression.NodeType), value),
-                _ => throw new NotImplementedException()
+                nameof(string.Substring) when m3.Arguments.Count == 2 && m3.Arguments[0].GetValue() is int v1 && v1 == 0 && m3.Arguments[1].GetValue() is int left => new LeftQueryField(propExpr3.AsField().FieldName, QueryField.GetOperation(expression.NodeType), value, dbType: null, left),
+                _ => null
             };
 
-            return new QueryGroup(qf.AsEnumerable());
+            if (qf is { })
+                return new QueryGroup(qf.AsEnumerable());
+            // Fall through to cleaner error message
         }
         else if (expression.Left is MemberExpression m4
             && m4.Expression is { }

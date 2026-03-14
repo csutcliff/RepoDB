@@ -1,31 +1,31 @@
 ﻿namespace RepoDb;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public sealed record class DbRuntimeSetting
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public string EngineName { get; init; } = "";
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public Version EngineVersion { get; init; } = new Version(0, 0);
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public Version CompatibilityVersion { get; init; } = new Version(0, 0);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public IReadOnlyDictionary<Type, DbDataParameterTypeMap>? ParameterTypeMap { get; set; }
 }
 
 /// <summary>
-/// 
+///
 /// </summary>
 /// <param name="ParameterType"></param>
 /// <param name="SchemaObject"></param>

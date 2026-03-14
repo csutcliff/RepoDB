@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using RepoDb.Attributes;
 using RepoDb.Enumerations;
+using RepoDb.Extensions.QueryFields;
 using RepoDb.Schema;
 using RepoDb.Trace;
 
@@ -385,7 +386,9 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
     {
         var sql = CreateConnection().EnsureOpen();
 
-        var t = sql.ExecuteQuery<Tuple<int, string>>("SELECT 1, 'a'").FirstOrDefault();
+        var fromDUAL = sql.GetType().Name.Contains("Oracle") ? " FROM dual" : "";
+
+        var t = sql.ExecuteQuery<Tuple<int, string>>("SELECT 1, 'a'" + fromDUAL).FirstOrDefault();
         Assert.AreEqual(1, t.Item1);
         Assert.AreEqual("a", t.Item2);
     }
@@ -395,7 +398,8 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
     {
         var sql = CreateConnection().EnsureOpen();
 
-        var (v1, c2) = sql.ExecuteQuery<(int v1, string c2)>("SELECT 1, 'a'").FirstOrDefault();
+        var fromDUAL = sql.GetType().Name.Contains("Oracle") ? " FROM dual" : "";
+        var (v1, c2) = sql.ExecuteQuery<(int v1, string c2)>("SELECT 1, 'a'" + fromDUAL).FirstOrDefault();
 
         Assert.AreEqual(1, v1);
         Assert.AreEqual("a", c2);
@@ -535,6 +539,9 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
 
         if (sql.GetType().Name.Contains("Oracle") == false)
             Assert.AreEqual(2, r);
+
+
+        r = await sql.MergeAllAsync(ftf, trace: new DiagnosticsTracer(), cancellationToken: TestContext.CancellationToken);
 
         var data = (await sql.QueryAllAsync<FieldLengthTable>(cancellationToken: TestContext.CancellationToken)).ToArray();
 
@@ -933,6 +940,8 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
             await sql.CreateTableAsync<RelatedTable>();
         }
 
+        await sql.InsertAsync(new RelatedTable() { Name = "A" });
+
         await sql.QueryAsync<RelatedTable>(x => x.Name.StartsWith("A"));
         await sql.QueryAsync<RelatedTable>(x => x.Name.EndsWith("A"));
         await sql.QueryAsync<RelatedTable>(x => x.Name.Equals("A"));
@@ -942,13 +951,62 @@ public abstract partial class NullTestsBase<TDbInstance> : DbTestBase<TDbInstanc
         await sql.QueryAsync<RelatedTable>(x => x.Name.ToUpper() == "A");
         await sql.QueryAsync<RelatedTable>(x => x.Name.ToLower() == "a");
         await sql.QueryAsync<RelatedTable>(x => x.Name.Length == 1, trace: new DiagnosticsTracer());
+        await sql.QueryAsync<RelatedTable>(x => x.Name.Substring(0, 3) == "AAA", trace: new DiagnosticsTracer());
+        await sql.QueryAsync<RelatedTable>(new RightQueryField("Name", "AAA"), trace: new DiagnosticsTracer());
     }
+
+    [TestMethod]
+    public async Task SkipQueryTest()
+    {
+        using var sql = await CreateOpenConnectionAsync();
+
+        if (!await sql.SchemaObjectExistsAsync<RelatedTable>(cancellationToken: TestContext.CancellationToken))
+        {
+            await sql.CreateTableAsync<RelatedTable>();
+        }
+        else
+            await sql.TruncateAsync<RelatedTable>();
+
+        var idSrc = await sql.InsertAllAsync(Enumerable.Range(0, 20).Select(x => new RelatedTable { ID = x, Name = $"N{x}" }));
+
+        var r = await sql.SkipQueryAsync<RelatedTable>(5, 9, orderBy: [OrderField.Parse<RelatedTable>(x => x.Name, Order.Ascending)], where: (object?)null, trace: new DiagnosticsTracer());
+
+        Assert.AreEqual("N13,N14,N15,N16,N17,N18,N19,N2,N3", string.Join(",", r.Select(x => x.Name)));
+    }
+
+
+    [TestMethod]
+    public async Task QueryMultipleTest()
+    {
+        using var sql = await CreateOpenConnectionAsync();
+
+        if (!await sql.SchemaObjectExistsAsync<RelatedTable>(cancellationToken: TestContext.CancellationToken))
+        {
+            await sql.CreateTableAsync<RelatedTable>();
+        }
+        else
+            await sql.TruncateAsync<RelatedTable>();
+
+        var idSrc = await sql.InsertAllAsync(Enumerable.Range(0, 20).Select(x => new RelatedTable { ID = x, Name = $"N{x}" }));
+
+        var (r, s, t) = await sql.QueryMultipleAsync<RelatedTable, RelatedTable, RelatedTable>(
+            where1: x => x.Name.StartsWith("N1"),
+            where2: x => x.Name.StartsWith("N2"),
+            where3: x => x.Name.StartsWith("N"),
+            trace: new DiagnosticsTracer(),
+            cancellationToken: TestContext.CancellationToken);
+
+        Assert.HasCount(11, r);
+        Assert.HasCount(1, s);
+        Assert.HasCount(20, t);
+    }
+
 
 
 #if NET
     class HalfFloatTest
     {
-        [Identity]
+        [Identity, Primary]
         public int ID { get; set; }
         public float F { get; set; }
         public double D { get; set; }

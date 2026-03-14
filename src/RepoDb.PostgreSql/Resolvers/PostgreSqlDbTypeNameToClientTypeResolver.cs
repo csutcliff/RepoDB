@@ -155,15 +155,15 @@ public class PostgreSqlDbTypeNameToClientTypeResolver : IResolver<string, Type>
 
         return dbTypeName.ToLowerInvariant() switch
         {
-            "bigint" => typeof(Int64),
-            "char" or "\"char\"" => typeof(Char),
+            "bigint" => typeof(long),
+            "char" or "\"char\"" => typeof(char),
             "array" => typeof(Array),
-            "character" or "character varying" or "jsonpath" or "name" or "pg_dependencies" or "pg_lsn" or "pg_mcv_list" or "pg_ndistinct" or "pg_node_tree" or "refcursor" or "regclass" or "regdictionary" or "regnamespace" or "regoper" or "regoperator" or "regproc" or "regprocedure" or "regrole" or "text" or "txid_snapshot" or "xml" => typeof(String),
+            "character" or "character varying" or "jsonpath" or "name" or "pg_dependencies" or "pg_lsn" or "pg_mcv_list" or "pg_ndistinct" or "pg_node_tree" or "refcursor" or "regclass" or "regdictionary" or "regnamespace" or "regoper" or "regoperator" or "regproc" or "regprocedure" or "regrole" or "text" or "txid_snapshot" or "xml" => typeof(string),
             "json" or "jsonb" => typeof(JsonNode),
-            "bit" or "boolean" => typeof(Boolean),
+            "bit" or "boolean" => typeof(bool),
             "bit varying" => typeof(System.Collections.BitArray),
             "box" => typeof(NpgsqlTypes.NpgsqlBox),
-            "bytea" => typeof(Byte[]),
+            "bytea" => typeof(byte[]),
             "cid" or "oid" or "regconfig" or "regtype" or "xid" => typeof(UInt32),
             "circle" => typeof(NpgsqlTypes.NpgsqlCircle),
             "date"
@@ -174,9 +174,9 @@ public class PostgreSqlDbTypeNameToClientTypeResolver : IResolver<string, Type>
 #endif
             "timestamp without time zone" or "timestamp" => typeof(DateTime),
             "timestamp with time zone" or "timestamptz" => typeof(DateTimeOffset),
-            "double precision" => typeof(Double),
+            "double precision" => typeof(double),
             "inet" => typeof(System.Net.IPAddress),
-            "integer" => typeof(Int32),
+            "integer" => typeof(int),
             "time without time zone" or "time"
 #if NET
                 => typeof(TimeOnly),
@@ -187,17 +187,22 @@ public class PostgreSqlDbTypeNameToClientTypeResolver : IResolver<string, Type>
             "line" => typeof(NpgsqlTypes.NpgsqlLine),
             "lseg" => typeof(NpgsqlTypes.NpgsqlLSeg),
             "macaddr" or "macaddr8" => typeof(System.Net.NetworkInformation.PhysicalAddress),
-            "money" or "numeric" => typeof(Decimal),
+            "money" or "numeric" => typeof(decimal),
             "path" => typeof(NpgsqlTypes.NpgsqlPath),
             "point" => typeof(NpgsqlTypes.NpgsqlPoint),
             "polygon" => typeof(NpgsqlTypes.NpgsqlPolygon),
-            "real" => typeof(Single),
-            "smallint" => typeof(Int16),
+            "real" => typeof(float),
+            "smallint" => typeof(short),
             "tid" => typeof(NpgsqlTypes.NpgsqlTid),
             "timetz" or "time with time zone" => typeof(DateTimeOffset),
             "tsquery" => typeof(NpgsqlTypes.NpgsqlTsQuery),
             "tsvector" => typeof(NpgsqlTypes.NpgsqlTsVector),
             "uuid" => typeof(Guid),
+
+            "vector" => VectorType ?? typeof(object),
+            "halfvec" => HalfVectorType ?? typeof(object),
+            "sparsevec" => SparseVectorType ?? typeof(object),
+
             _ => typeof(object),
         };
     }
@@ -227,4 +232,11 @@ public class PostgreSqlDbTypeNameToClientTypeResolver : IResolver<string, Type>
     //}
 
     #endregion
+
+
+    // These are updated by RepoDb.PostgreSql.Vectors to light up vector support.
+#pragma warning disable CS0649 // Field is never assigned
+    internal static Type? VectorType;
+    internal static Type? HalfVectorType;
+    internal static Type? SparseVectorType;
 }

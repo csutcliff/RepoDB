@@ -2,7 +2,13 @@
 
 namespace RepoDb.Interfaces;
 
+/// <summary>
+///
+/// </summary>
 public interface IDbJsonValue
 {
+    /// <summary>
+    ///
+    /// </summary>
     JsonNode? JsonNode { get; }
 }

@@ -1,23 +1,24 @@
 [![MSBuild-CI](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml/badge.svg)](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml)
-[![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb.SqlServer.BulkOperations)
+[![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb.SqlServer.BulkOperations?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb.SqlServer.BulkOperations)
 [![GitterChat](https://img.shields.io/gitter/room/mikependon/RepoDb?&logo=gitter&color=48B293)](https://gitter.im/RepoDb/community)
 
-# [RepoDb.SqlServer.BulkOperations](https://www.nuget.org/packages/RepoDb.SqlServer.BulkOperations)
+# RepoDb.SqlServer.BulkOperations
 
 An extension library that contains the official Bulk Operations of RepoDB for SQL Server.
 
 ## Important Pages
 
 - [GitHub Home Page](https://github.com/AmpScm/RepoDb) - to learn more about the core library.
-- [Website](https://repodb.net) - docs, features, classes, references, releases and blogs.
+- [Bulk Operations Guide](/docs/features/bulkoperations/sqlserver.md) - SQL Server bulk operations reference
+- [All Documentation](/docs) - comprehensive guides and references
 
 ## Why use the Bulk Operations?
 
-Basically, we do the normal [Delete](https://repodb.net/operation/delete), [Insert](https://repodb.net/operation/insert), [Merge](https://repodb.net/operation/merge) and [Update](https://repodb.net/operation/update) operations when interacting with the database. The data is processed in an atomic way. If we do call the batch operations, the multiple single operation is just being batched and executed at the same time. In short, there are round-trips between your application and the database. Thus does not give you the maximum performance when doing the CRUD operations.
+Bulk operations allow you to perform high-performance insert, update, delete, and merge operations on large datasets. Unlike regular operations, bulk operations bypass database constraints and logging to maximize performance—often improving performance by more than 90% when processing large datasets.
 
-With bulk operations, all data is brought from the client application to the database via [BulkInsert](https://repodb.net/operation/bulkinsert) process. It ignores the audit, logs, constraints and any other database special handling. After that, the data is being processed at the same time in the database (server).
+Basically, with normal [Delete](https://repodb.net/operation/delete), [Insert](https://repodb.net/operation/insert), [Merge](https://repodb.net/operation/merge), and [Update](https://repodb.net/operation/update) operations, the data is processed in an atomic way. With batch operations, multiple single operations are batched and executed together, but this still involves round-trips between your application and the database.
 
-The bulk operations can hugely improve the performance by more than 90% when processing a large datasets.
+With bulk operations, all data is brought from the client application to the database in one go via a bulk import process, then processed server-side to maximize performance.
 
 ## Core Features
 
@@ -33,12 +34,11 @@ The bulk operations can hugely improve the performance by more than 90% when pro
 
 - [GitHub](https://github.com/AmpScm/RepoDb/issues) - for any issues, requests and problems.
 - [StackOverflow](https://stackoverflow.com/search?q=RepoDB) - for any technical questions.
-- [Twitter](https://twitter.com/search?q=%23repodb) - for the latest news.
 - [Gitter Chat](https://gitter.im/RepoDb/community) - for direct and live Q&A.
 
 ## License
 
-[Apache-2.0](http://apache.org/licenses/LICENSE-2.0.html) 
+[Apache-2.0](http://apache.org/licenses/LICENSE-2.0.html)
 - Copyright © 2019 - 2024 [Michael Camara Pendon](https://github.com/mikependon)
 - Copyright © 2025 - now [Bert Huijben](https://github.com/rhuijben)
 
@@ -52,17 +52,20 @@ At the Package Manager Console, write the command below.
 > Install-Package AmpScm.RepoDb.SqlServer.BulkOperations
 ```
 
-Then call the bootstrapper once.
+Then call the setup once.
 
 ```csharp
-RepoDb.SqlServerBootstrap.Initialize();
+using RepoDb;
+using Microsoft.Data.SqlClient;
+
+GlobalConfiguration.Setup().UseSqlServer();
 ```
 
-Or, visit our [installation](https://repodb.net/tutorial/installation) page for more information.
+See the [Bulk Operations Guide](/docs/features/bulkoperations/sqlserver.md) for more information.
 
 ## Special Arguments
 
-The arguments `qualifiers`, `isReturnIdentity` and `usePhysicalPseudoTempTable` is provided at [BulkDelete](https://repodb.net/operation/bulkdelete), [BulkMerge](https://repodb.net/operation/bulkmerge) and [BulkUpdate](https://repodb.net/operation/bulkupdate) operations.
+The arguments `qualifiers`, `isReturnIdentity` and `usePhysicalPseudoTempTable` are provided at BulkDelete, BulkMerge and BulkUpdate operations (see [Bulk Operations Guide](../../tree/main/docs/features/bulkoperations/sqlserver.md)).
 
 The argument `qualifiers` is used to define the qualifier fields to be used in the operation. It usually refers to the `WHERE` expression of SQL Statements. If not given, the primary key (or identity) field will be used.
 
@@ -72,7 +75,7 @@ The argument `usePhysicalPseudoTempTable` is used to define whether a physical p
 
 ### Identity Setting Alignment
 
-The library has enforced an additional logic to ensure the identity setting alignment if the `isReturnIdentity` is enabled during the calls. This affects both the [BulkInsert](https://repodb.net/operation/bulkinsert) and [BulkMerge](https://repodb.net/operation/bulkmerge) operations.
+The library has enforced an additional logic to ensure the identity setting alignment if the `isReturnIdentity` is enabled during the calls. This affects both the BulkInsert and BulkMerge operations.
 
 Basically, a new column named `__RepoDb_OrderColumn` is being added into the pseudo-temporary table if the identity field is present on the underlying target table. This column will contain the actual index of the entity model from the `IEnumerable<T>` object.
 
@@ -86,9 +89,9 @@ All synchronous methods has an equivalent asynchronous (Async) methods.
 
 ## Caveats
 
-RepoDB is automatically setting the value of `options` argument to `SqlBulkCopyOptions.KeepIdentity` when calling the [BulkDelete](https://repodb.net/operation/bulkdelete), [BulkMerge](https://repodb.net/operation/bulkmerge) and [BulkUpdate](https://repodb.net/operation/bulkupdate) if you have not passed any `qualifiers` and if your table has an `IDENTITY` primary key column. The same logic will apply if there is no primary key but has an `IDENTITY` column defined in the table.
+RepoDB is automatically setting the value of `options` argument to `SqlBulkCopyOptions.KeepIdentity` when calling the BulkDelete, BulkMerge and BulkUpdate operations if you have not passed any `qualifiers` and if your table has an `IDENTITY` primary key column. The same logic will apply if there is no primary key but has an `IDENTITY` column defined in the table.
 
-In addition, when calling the [BulkDelete](https://repodb.net/operation/bulkdelete), [BulkMerge](https://repodb.net/operation/bulkmerge) and [BulkUpdate](https://repodb.net/operation/bulkupdate) operations, the library is creating a pseudo temporary table behind the scene. It requires your user to have the correct privilege to create a table in the database, otherwise a `SqlException` will be thrown.
+In addition, when calling the BulkDelete, BulkMerge and BulkUpdate operations, the library is creating a pseudo temporary table behind the scene. It requires your user to have the correct privilege to create a table in the database, otherwise a `SqlException` will be thrown.
 
 ## BulkDelete
 

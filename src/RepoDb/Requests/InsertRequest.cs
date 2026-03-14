@@ -107,7 +107,9 @@ internal sealed class InsertRequest : BaseRequest
             // Get first the entity hash code
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(InsertRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Hints,
                 Fields);
         }

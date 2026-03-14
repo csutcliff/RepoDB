@@ -39,7 +39,7 @@ In the event of consultancy, as needed by the other party, a schedule can be def
 
 ### Channels
 
-We strongly recommend to the .NET community to always reach our proper [channels](https://github.com/mikependon/RepoDB#engagements). Alternatively, directly reach us via [Twitter](https://twitter.com/mike_pendon) or [email](mailto:michael.c.pendon@outlook.com) account.
+We strongly recommend to the .NET community to always reach our proper [channels](https://github.com/AmpScm/RepoDB#engagements).
 
 ### Governance
 

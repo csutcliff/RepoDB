@@ -14,4 +14,7 @@
     <ProjectReference Include="..\RepoDb.SqlServer\RepoDb.SqlServer.csproj" />
     <ProjectReference Include="..\RepoDb.TestCore\RepoDb.TestCore.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\RepoDb\Compat.cs" />
+  </ItemGroup>
 </Project>

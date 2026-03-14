@@ -2,6 +2,10 @@
 using System.Data;
 
 namespace RepoDb;
+
+/// <summary>
+///
+/// </summary>
 public static class DbRuntimeSettingCache
 {
     private static readonly ConcurrentDictionary<(Type, string), DbRuntimeSetting> cache = new();
@@ -25,22 +29,10 @@ public static class DbRuntimeSettingCache
     /// Gets the cached list of <see cref="DbField"/> objects of the table based on the data entity mapped name.
     /// </summary>
     /// <param name="connection">The connection object to be used.</param>
-    /// <param name="tableName">The name of the target table.</param>
     /// <param name="transaction">The transaction object that is currently in used.</param>
     /// <returns>The cached field definitions of the entity.</returns>
-    public static DbRuntimeSetting Get(IDbConnection connection, IDbTransaction? transaction) =>
-        GetInternal(connection, transaction);
-
-    /// <summary>
-    /// Gets the cached field definitions of the entity.
-    /// </summary>
-    /// <typeparam name="TDbConnection">The type of <see cref="IDbConnection"/> object.</typeparam>
-    /// <param name="connection">The instance of the <see cref="IDbConnection"/> object.</param>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="transaction">The transaction object that is currently in used.</param>
-    /// <param name="enableValidation">Enables the validation after retrieving the database fields.</param>
-    /// <returns>The cached field definitions of the entity.</returns>
-    internal static DbRuntimeSetting GetInternal(IDbConnection connection,
+    public static DbRuntimeSetting Get(
+        IDbConnection connection,
         IDbTransaction? transaction)
     {
         ArgumentNullException.ThrowIfNull(connection);
@@ -62,26 +54,11 @@ public static class DbRuntimeSettingCache
     /// Gets the cached list of <see cref="DbField"/> objects of the table based on the data entity mapped name in an asynchronous way.
     /// </summary>
     /// <param name="connection">The connection object to be used.</param>
-    /// <param name="tableName">The name of the target table.</param>
     /// <param name="transaction">The transaction object that is currently in used.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
     /// <returns>The cached field definitions of the entity.</returns>
-    public static ValueTask<DbRuntimeSetting> GetAsync(IDbConnection connection,
-        IDbTransaction? transaction,
-        CancellationToken cancellationToken = default) =>
-        GetInternalAsync(connection, transaction, cancellationToken);
-
-    /// <summary>
-    /// Gets the cached field definitions of the entity in an asynchronous way.
-    /// </summary>
-    /// <typeparam name="TDbConnection">The type of <see cref="IDbConnection"/> object.</typeparam>
-    /// <param name="connection">The instance of the <see cref="IDbConnection"/> object.</param>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="transaction">The transaction object that is currently in used.</param>
-    /// <param name="enableValidation">Enables the validation after retrieving the database fields.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// <returns>The cached field definitions of the entity.</returns>
-    internal static async ValueTask<DbRuntimeSetting> GetInternalAsync(IDbConnection connection,
+    public static async ValueTask<DbRuntimeSetting> GetAsync(
+        IDbConnection connection,
         IDbTransaction? transaction,
         CancellationToken cancellationToken = default)
     {

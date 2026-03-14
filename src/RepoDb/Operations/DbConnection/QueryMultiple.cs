@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Linq.Expressions;
+using RepoDb.DbSettings;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
 using RepoDb.Reflection;
@@ -9468,9 +9469,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -9486,20 +9487,18 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<T1>, IEnumerable<T2>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -10169,9 +10168,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -10187,9 +10186,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -10205,20 +10204,18 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -11041,9 +11038,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -11059,9 +11056,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -11077,9 +11074,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -11095,20 +11092,18 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -12077,9 +12072,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -12095,9 +12090,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -12113,9 +12108,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -12131,9 +12126,9 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
         // Item5 Request
@@ -12149,20 +12144,18 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request5));
+            commandTexts.Add(CommandTextCache.GetCached(request5, CommandTextCache.GetQueryMultipleText));
             if (where5 is not null)
-                maps.Add(where5.MapTo<T5>());
+                maps.Add(where5.MapTo<T5>(tableName5));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -13277,9 +13270,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -13295,9 +13288,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -13313,9 +13306,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -13331,9 +13324,9 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
         // Item5 Request
@@ -13349,9 +13342,9 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request5));
+            commandTexts.Add(CommandTextCache.GetCached(request5, CommandTextCache.GetQueryMultipleText));
             if (where5 is not null)
-                maps.Add(where5.MapTo<T5>());
+                maps.Add(where5.MapTo<T5>(tableName5));
         }
 
         // Item6 Request
@@ -13367,20 +13360,18 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request6));
+            commandTexts.Add(CommandTextCache.GetCached(request6, CommandTextCache.GetQueryMultipleText));
             if (where6 is not null)
-                maps.Add(where6.MapTo<T6>());
+                maps.Add(where6.MapTo<T6>(tableName6));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -14641,9 +14632,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -14659,9 +14650,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -14677,9 +14668,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -14695,9 +14686,9 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
         // Item5 Request
@@ -14713,9 +14704,9 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request5));
+            commandTexts.Add(CommandTextCache.GetCached(request5, CommandTextCache.GetQueryMultipleText));
             if (where5 is not null)
-                maps.Add(where5.MapTo<T5>());
+                maps.Add(where5.MapTo<T5>(tableName5));
         }
 
         // Item6 Request
@@ -14731,9 +14722,9 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request6));
+            commandTexts.Add(CommandTextCache.GetCached(request6, CommandTextCache.GetQueryMultipleText));
             if (where6 is not null)
-                maps.Add(where6.MapTo<T6>());
+                maps.Add(where6.MapTo<T6>(tableName6));
         }
 
         // Item7 Request
@@ -14749,20 +14740,18 @@ public static partial class DbConnectionExtension
                 top7,
                 hints7,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request7));
+            commandTexts.Add(CommandTextCache.GetCached(request7, CommandTextCache.GetQueryMultipleText));
             if (where7 is not null)
-                maps.Add(where7.MapTo<T7>());
+                maps.Add(where7.MapTo<T7>(tableName7));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>, IEnumerable<T7>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -15254,7 +15243,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -15273,21 +15262,19 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -15827,7 +15814,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -15846,7 +15833,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -15865,21 +15852,18 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -16538,7 +16522,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -16557,7 +16541,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -16576,7 +16560,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -16595,21 +16579,19 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -17380,7 +17362,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -17399,7 +17381,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -17418,7 +17400,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -17437,7 +17419,7 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
@@ -17456,21 +17438,19 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request5));
+            commandTexts.Add(CommandTextCache.GetCached(request5, CommandTextCache.GetQueryMultipleText));
 
             if (where5 is not null)
                 maps.Add(where5.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -18355,7 +18335,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -18374,7 +18354,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -18393,7 +18373,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -18412,7 +18392,7 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
@@ -18431,7 +18411,7 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request5));
+            commandTexts.Add(CommandTextCache.GetCached(request5, CommandTextCache.GetQueryMultipleText));
 
             if (where5 is not null)
                 maps.Add(where5.MapTo());
@@ -18450,21 +18430,19 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request6));
+            commandTexts.Add(CommandTextCache.GetCached(request6, CommandTextCache.GetQueryMultipleText));
 
             if (where6 is not null)
                 maps.Add(where6.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -19462,7 +19440,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request1));
+            commandTexts.Add(CommandTextCache.GetCached(request1, CommandTextCache.GetQueryMultipleText));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -19481,7 +19459,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request2));
+            commandTexts.Add(CommandTextCache.GetCached(request2, CommandTextCache.GetQueryMultipleText));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -19500,7 +19478,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request3));
+            commandTexts.Add(CommandTextCache.GetCached(request3, CommandTextCache.GetQueryMultipleText));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -19519,7 +19497,7 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request4));
+            commandTexts.Add(CommandTextCache.GetCached(request4, CommandTextCache.GetQueryMultipleText));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
@@ -19538,7 +19516,7 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request5));
+            commandTexts.Add(CommandTextCache.GetCached(request5, CommandTextCache.GetQueryMultipleText));
 
             if (where5 is not null)
                 maps.Add(where5.MapTo());
@@ -19557,7 +19535,7 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request6));
+            commandTexts.Add(CommandTextCache.GetCached(request6, CommandTextCache.GetQueryMultipleText));
 
             if (where6 is not null)
                 maps.Add(where6.MapTo());
@@ -19576,21 +19554,19 @@ public static partial class DbConnectionExtension
                 top7,
                 hints7,
                 statementBuilder);
-            commandTexts.Add(CommandTextCache.GetQueryMultipleText(request7));
+            commandTexts.Add(CommandTextCache.GetCached(request7, CommandTextCache.GetQueryMultipleText));
 
             if (where7 is not null)
                 maps.Add(where7.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
 
-        var param = QueryGroup.AsMappedObject(maps, connection, transaction, null);
+        var (commandText, param) = CombineQueryMultiple(connection, transaction, commandTexts, maps, statementBuilder);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
         // Before Execution
-        var beforeExecutionCallback = new Func<DbCommand, TraceResult?>(command =>
+        var beforeExecutionCallback = CreateCallback(command =>
             traceResult = Tracer
                 .InvokeBeforeExecution(traceKey, trace, command));
 
@@ -20202,9 +20178,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -20220,15 +20196,12 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<T1>, IEnumerable<T2>> result;
         TraceResult? traceResult = null;
 
@@ -20252,7 +20225,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -20929,9 +20902,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -20947,9 +20920,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -20965,15 +20938,12 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>> result;
         TraceResult? traceResult = null;
 
@@ -20997,7 +20967,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -21828,9 +21798,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -21846,9 +21816,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -21864,9 +21834,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -21882,15 +21852,12 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>> result;
         TraceResult? traceResult = null;
 
@@ -21914,7 +21881,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -22893,9 +22860,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -22911,9 +22878,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -22929,9 +22896,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -22947,9 +22914,9 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
         // Item5 Request
@@ -22965,15 +22932,12 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request5, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request5, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where5 is not null)
-                maps.Add(where5.MapTo<T5>());
+                maps.Add(where5.MapTo<T5>(tableName5));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>> result;
         TraceResult? traceResult = null;
 
@@ -22997,7 +22961,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -24124,9 +24088,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -24142,9 +24106,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -24160,9 +24124,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -24178,9 +24142,9 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
         // Item5 Request
@@ -24196,9 +24160,9 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request5, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request5, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where5 is not null)
-                maps.Add(where5.MapTo<T5>());
+                maps.Add(where5.MapTo<T5>(tableName5));
         }
 
         // Item6 Request
@@ -24214,15 +24178,12 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request6, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request6, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where6 is not null)
-                maps.Add(where6.MapTo<T6>());
+                maps.Add(where6.MapTo<T6>(tableName6));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>> result;
         TraceResult? traceResult = null;
 
@@ -24246,7 +24207,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -25521,9 +25482,9 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where1 is not null)
-                maps.Add(where1.MapTo<T1>());
+                maps.Add(where1.MapTo<T1>(tableName1));
         }
 
         // Item2 Request
@@ -25539,9 +25500,9 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where2 is not null)
-                maps.Add(where2.MapTo<T2>());
+                maps.Add(where2.MapTo<T2>(tableName2));
         }
 
         // Item3 Request
@@ -25557,9 +25518,9 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where3 is not null)
-                maps.Add(where3.MapTo<T3>());
+                maps.Add(where3.MapTo<T3>(tableName3));
         }
 
         // Item4 Request
@@ -25575,9 +25536,9 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where4 is not null)
-                maps.Add(where4.MapTo<T4>());
+                maps.Add(where4.MapTo<T4>(tableName4));
         }
 
         // Item5 Request
@@ -25593,9 +25554,9 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request5, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request5, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where5 is not null)
-                maps.Add(where5.MapTo<T5>());
+                maps.Add(where5.MapTo<T5>(tableName5));
         }
 
         // Item6 Request
@@ -25611,9 +25572,9 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request6, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request6, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where6 is not null)
-                maps.Add(where6.MapTo<T6>());
+                maps.Add(where6.MapTo<T6>(tableName6));
         }
 
         // Item7 Request
@@ -25629,15 +25590,12 @@ public static partial class DbConnectionExtension
                 top7,
                 hints7,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request7, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request7, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
             if (where7 is not null)
-                maps.Add(where7.MapTo<T7>());
+                maps.Add(where7.MapTo<T7>(tableName7));
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>, IEnumerable<T6>, IEnumerable<T7>> result;
         TraceResult? traceResult = null;
 
@@ -25661,7 +25619,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -26160,7 +26118,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -26179,16 +26137,13 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
@@ -26212,7 +26167,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -26756,7 +26711,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -26775,7 +26730,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -26794,16 +26749,13 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
@@ -26827,7 +26779,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -27491,7 +27443,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -27510,7 +27462,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -27529,7 +27481,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -27548,16 +27500,13 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
@@ -27581,7 +27530,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -28360,7 +28309,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -28379,7 +28328,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -28398,7 +28347,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -28417,7 +28366,7 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
@@ -28436,16 +28385,13 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request5, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request5, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where5 is not null)
                 maps.Add(where5.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
@@ -28469,7 +28415,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -29363,7 +29309,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -29382,7 +29328,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -29401,7 +29347,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -29420,7 +29366,7 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
@@ -29439,7 +29385,7 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request5, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request5, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where5 is not null)
                 maps.Add(where5.MapTo());
@@ -29458,16 +29404,13 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request6, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request6, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where6 is not null)
                 maps.Add(where6.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
@@ -29491,7 +29434,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -30500,7 +30443,7 @@ public static partial class DbConnectionExtension
                 top1,
                 hints1,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request1, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request1, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where1 is not null)
                 maps.Add(where1.MapTo());
@@ -30519,7 +30462,7 @@ public static partial class DbConnectionExtension
                 top2,
                 hints2,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request2, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request2, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where2 is not null)
                 maps.Add(where2.MapTo());
@@ -30538,7 +30481,7 @@ public static partial class DbConnectionExtension
                 top3,
                 hints3,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request3, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request3, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where3 is not null)
                 maps.Add(where3.MapTo());
@@ -30557,7 +30500,7 @@ public static partial class DbConnectionExtension
                 top4,
                 hints4,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request4, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request4, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where4 is not null)
                 maps.Add(where4.MapTo());
@@ -30576,7 +30519,7 @@ public static partial class DbConnectionExtension
                 top5,
                 hints5,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request5, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request5, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where5 is not null)
                 maps.Add(where5.MapTo());
@@ -30595,7 +30538,7 @@ public static partial class DbConnectionExtension
                 top6,
                 hints6,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request6, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request6, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where6 is not null)
                 maps.Add(where6.MapTo());
@@ -30614,16 +30557,13 @@ public static partial class DbConnectionExtension
                 top7,
                 hints7,
                 statementBuilder);
-            commandTexts.Add(await CommandTextCache.GetQueryMultipleTextAsync(request7, cancellationToken).ConfigureAwait(false));
+            commandTexts.Add(await CommandTextCache.GetCachedAsync(request7, CommandTextCache.GetQueryMultipleText, cancellationToken).ConfigureAwait(false));
 
             if (where7 is not null)
                 maps.Add(where7.MapTo());
         }
 
-        // Shared variables
-        var commandText = string.Join(" ", commandTexts);
-
-        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, null, cancellationToken).ConfigureAwait(false);
+        var (commandText, param) = await CombineQueryMultipleAsync(connection, transaction, commandTexts, maps, statementBuilder, cancellationToken).ConfigureAwait(false);
         Tuple<IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>> result;
         TraceResult? traceResult = null;
 
@@ -30647,7 +30587,7 @@ public static partial class DbConnectionExtension
             entityType: null,
             dbFields: null,
             skipCommandArrayParametersCheck: true,
-            beforeExecutionCallbackAsync: beforeExecutionCallbackAsync,
+            beforeExecutionCallbackAsync: CreateCallbackAsync(beforeExecutionCallbackAsync),
             cancellationToken: cancellationToken).ConfigureAwait(false))
         {
             // Silent cancellation
@@ -30827,7 +30767,7 @@ public static partial class DbConnectionExtension
     /// <param name="transaction"></param>
     /// <param name="cache"></param>
     /// <param name="forwardToNextResult"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static IEnumerable<T> QueryMultipleInternal<T>(IDbConnection connection,
         DbDataReader reader,
@@ -30933,7 +30873,7 @@ public static partial class DbConnectionExtension
     /// <param name="cache"></param>
     /// <param name="forwardToNextResult"></param>
     /// <param name="cancellationToken"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static async ValueTask<IEnumerable<T>> QueryMultipleInternalAsync<T>(IDbConnection connection,
         DbDataReader reader,
@@ -30963,6 +30903,39 @@ public static partial class DbConnectionExtension
 
         return items;
     }
+
+    private static (string commandText, object param) CombineQueryMultiple(IDbConnection connection, IDbTransaction? transaction, List<string> commandTexts, List<QueryGroupTypeMap> maps, IStatementBuilder? statementBuilder)
+    {
+        var commandText =
+            (statementBuilder ?? connection.GetStatementBuilder()).CombineQueries(commandTexts);
+        var param = QueryGroup.AsMappedObject(maps, connection, transaction);
+
+        return (commandText, param);
+    }
+
+    private static async ValueTask<(string commandText, object param)> CombineQueryMultipleAsync(IDbConnection connection, IDbTransaction? transaction, List<string> commandTexts, List<QueryGroupTypeMap> maps, IStatementBuilder? statementBuilder, CancellationToken cancellationToken)
+    {
+        var commandText =
+            (statementBuilder ?? connection.GetStatementBuilder()).CombineQueries(commandTexts);
+        var param = await QueryGroup.AsMappedObjectAsync(maps, connection, transaction, cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return (commandText, param);
+    }
+
+    private static Func<DbCommand, TraceResult?> CreateCallback(Func<DbCommand, TraceResult?> func) =>
+        (command) =>
+        {
+            (command.Connection?.GetDbHelper() as BaseDbHelper)?.PrepareForBatchOperation(command, -1);
+            return func(command);
+        };
+
+    private static Func<DbCommand, CancellationToken, ValueTask<TraceResult?>> CreateCallbackAsync(Func<DbCommand, CancellationToken, ValueTask<TraceResult?>> func) =>
+        (command, cancellationToken) =>
+        {
+            (command.Connection?.GetDbHelper() as BaseDbHelper)?.PrepareForBatchOperation(command, -1);
+            return func(command, cancellationToken);
+        };
+
 
     #endregion
 }

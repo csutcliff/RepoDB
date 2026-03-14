@@ -54,8 +54,15 @@ public sealed class ClassProperty : IEquatable<ClassProperty>
     public string PropertyName => PropertyInfo.Name;
 
     private string? _fieldName;
+
+    /// <summary>
+    ///
+    /// </summary>
     public string FieldName => _fieldName ??= PropertyMappedNameCache.Get(DeclaringType, PropertyInfo);
 
+    /// <summary>
+    ///
+    /// </summary>
     [Obsolete("Please use .PropertyName or .FieldName")]
     public string Name => PropertyName;
 
@@ -73,7 +80,7 @@ public sealed class ClassProperty : IEquatable<ClassProperty>
 
     /// <summary>
     /// Gets the declaring parent type of the current property info. If the class inherits an interface, then this will return
-    /// the derived class type instead (if there is), otherwise the <see cref="PropertyInfo.DeclaringType"/> property.
+    /// the derived class type instead (if there is), otherwise the <see cref="MemberInfo.DeclaringType"/> property.
     /// </summary>
     /// <returns>The declaring type.</returns>
     public Type DeclaringType { get; }

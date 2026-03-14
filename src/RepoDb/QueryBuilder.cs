@@ -171,6 +171,11 @@ public sealed class QueryBuilder
     /// <returns>The current instance.</returns>
     public QueryBuilder End() => End(null);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="dbSetting"></param>
+    /// <returns></returns>
     public QueryBuilder End(IDbSetting? dbSetting)
     {
         if (dbSetting?.GenerateFinalSemiColon != false)
@@ -179,6 +184,12 @@ public sealed class QueryBuilder
             return this;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="fields"></param>
+    /// <param name="dbSetting"></param>
+    /// <returns></returns>
     public QueryBuilder WriteDefinitions(IEnumerable<DbField> fields, IDbSetting dbSetting)
     {
         ArgumentNullException.ThrowIfNull(fields);
@@ -228,7 +239,7 @@ public sealed class QueryBuilder
             ? field.FieldName.AsField(dbSetting)
             : convertResolver.Resolve(field, dbSetting);
 
-        return Append("AVG (")
+        return Append("AVG(")
             .Append(name, false)
             .Append(')');
     }
@@ -258,7 +269,7 @@ public sealed class QueryBuilder
             ? field.FieldName.AsField(dbSetting)
             : convertResolver.Resolve(field, dbSetting);
 
-        return Append("MIN (")
+        return Append("MIN(")
             .Append(name, false)
             .Append(')');
     }
@@ -288,7 +299,7 @@ public sealed class QueryBuilder
             ? field.FieldName.AsField(dbSetting)
             : convertResolver.Resolve(field, dbSetting);
 
-        return Append("MAX (")
+        return Append("MAX(")
             .Append(name, false)
             .Append(')');
     }
@@ -318,7 +329,7 @@ public sealed class QueryBuilder
             ? field.FieldName.AsField(dbSetting)
             : convertResolver.Resolve(field, dbSetting);
 
-        return Append("SUM (")
+        return Append("SUM(")
             .Append(name, false)
             .Append(')');
     }
@@ -334,7 +345,7 @@ public sealed class QueryBuilder
     {
         var name = field != null ? field.FieldName.AsField(dbSetting) : "*";
 
-        return Append("COUNT (")
+        return Append("COUNT(")
             .Append(name, false)
             .Append(')');
     }
@@ -350,7 +361,7 @@ public sealed class QueryBuilder
     {
         var name = field != null ? field.FieldName.AsField(dbSetting) : "*";
 
-        return Append("COUNT_BIG (")
+        return Append("COUNT_BIG(")
             .Append(name, false)
             .Append(')');
     }
@@ -403,6 +414,21 @@ public sealed class QueryBuilder
     /// <returns>The current instance.</returns>
     public QueryBuilder FieldsAndParametersFrom(IEnumerable<Field> fields, int index, IDbSetting dbSetting) =>
         AppendJoin(fields?.Select(field => field.FieldName.AsFieldAndParameter(index, true, dbSetting)));
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="check"></param>
+    /// <param name="qb"></param>
+    /// <returns></returns>
+    public QueryBuilder If(bool check, Action<QueryBuilder> qb)
+    {
+        if (check)
+            qb(this);
+
+        return this;
+    }
 
     /// <summary>
     /// Appends a stringified fields and parameters to the SQL Query Statement with aliases.
@@ -729,7 +755,7 @@ public sealed class QueryBuilder
     /// Appends a word LIMIT to the SQL Query Statement.
     /// </summary>
     /// <returns>The current instance.</returns>
-    public QueryBuilder Limit() => Limit(0);
+    public QueryBuilder Limit() => Append("LIMIT");
 
     /// <summary>
     /// Appends a word LIMIT to the SQL Query Statement.
@@ -740,11 +766,10 @@ public sealed class QueryBuilder
     {
         if (take > 0)
         {
-            return Append("LIMIT")
-                .Append(take.ToString(CultureInfo.InvariantCulture));
+            Limit();
+            Append(take.ToString(CultureInfo.InvariantCulture));
         }
-
-        return Append("LIMIT");
+        return this;
     }
 
     /// <summary>
@@ -762,9 +787,13 @@ public sealed class QueryBuilder
                 .Append(',')
                 .Append(take > 0 ? take.ToString(CultureInfo.InvariantCulture) : "");
         }
+        else if (take > 0)
+        {
+            return Append("LIMIT")
+                .Append(take > 0 ? take.ToString(CultureInfo.InvariantCulture) : "");
+        }
 
-        return Append("LIMIT")
-            .Append(take > 0 ? take.ToString(CultureInfo.InvariantCulture) : "");
+        return this;
     }
 
     /// <summary>
@@ -784,11 +813,16 @@ public sealed class QueryBuilder
     ///
     /// </summary>
     /// <param name="skip"></param>
+    /// <param name="take"></param>
     /// <returns></returns>
-    public QueryBuilder OffsetRows(int skip)
+    public QueryBuilder OffsetRowsFetchNextRowsOnly(int skip, int take)
     {
-        if (skip > 0)
+        if (skip > 0 && take > 0)
+            return WriteText($"OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY");
+        else if (skip > 0)
             return WriteText($"OFFSET {skip} ROWS");
+        else if (take > 0)
+            return WriteText($"FETCH FIRST {take} ROWS ONLY");
 
         return this;
     }
@@ -801,25 +835,25 @@ public sealed class QueryBuilder
     /// <returns>The current instance.</returns>
     public QueryBuilder LimitOffset(int take, int skip)
     {
+        if (take > 0)
+        {
+            Limit();
+            Append(take.ToString(CultureInfo.InvariantCulture));
+        }
         if (skip > 0)
         {
-            return Append("LIMIT")
-                .Append(take > 0 ? take.ToString(CultureInfo.InvariantCulture) : "")
-                .Append("OFFSET")
-                .Append(skip > 0 ? skip.ToString(CultureInfo.InvariantCulture) : "");
+            Offset();
+            Append(skip.ToString(CultureInfo.InvariantCulture));
         }
-        else
-        {
-            return Append("LIMIT")
-                .Append(take > 0 ? take.ToString(CultureInfo.InvariantCulture) : "");
-        }
+
+        return this;
     }
 
     /// <summary>
     /// Appends a word OFFSET to the SQL Query Statement.
     /// </summary>
     /// <returns>The current instance.</returns>
-    public QueryBuilder Offset() => Offset(0);
+    public QueryBuilder Offset() => Append("OFFSET");
 
     /// <summary>
     /// Appends a word OFFSET to the SQL Query Statement.
@@ -834,7 +868,7 @@ public sealed class QueryBuilder
                 .Append(skip.ToString(CultureInfo.InvariantCulture));
         }
 
-        return Append("OFFSET");
+        return this;
     }
 
     /// <summary>
@@ -1142,6 +1176,10 @@ public sealed class QueryBuilder
     /// <returns>The current instance.</returns>
     public QueryBuilder DoUpdate() => Append("DO UPDATE");
 
+    /// <summary>
+    /// Appends OUTPUT to the current statement
+    /// </summary>
+    /// <returns></returns>
     public QueryBuilder Output() => Append("OUTPUT");
 
     /// <summary>

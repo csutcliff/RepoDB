@@ -2,11 +2,19 @@
 
 namespace RepoDb;
 
+/// <summary>
+///
+/// </summary>
 public readonly struct DbSession : IAsyncDisposable, IDisposable, IEquatable<DbSession>
 {
     private readonly object _value; // Either DbConnection or DbTransaction
     private readonly bool _owns;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="ownsConnection"></param>
     public DbSession(DbConnection connection, bool ownsConnection = false)
     {
         ArgumentNullException.ThrowIfNull(connection);
@@ -15,6 +23,11 @@ public readonly struct DbSession : IAsyncDisposable, IDisposable, IEquatable<DbS
         _owns = ownsConnection;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="transaction"></param>
+    /// <param name="ownsTransaction"></param>
     public DbSession(DbTransaction transaction, bool ownsTransaction = false)
     {
         ArgumentNullException.ThrowIfNull(transaction);
@@ -23,12 +36,21 @@ public readonly struct DbSession : IAsyncDisposable, IDisposable, IEquatable<DbS
         _owns = ownsTransaction;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public DbConnection Connection =>
         _value is DbTransaction tx ? tx.Connection! : (DbConnection)_value;
 
+    /// <summary>
+    ///
+    /// </summary>
     public DbTransaction? Transaction =>
         _value as DbTransaction;
 
+    /// <summary>
+    ///
+    /// </summary>
     public void Dispose()
     {
         if (_owns)
@@ -40,6 +62,10 @@ public readonly struct DbSession : IAsyncDisposable, IDisposable, IEquatable<DbS
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
 #if NET
     public async ValueTask DisposeAsync()
     {
@@ -59,11 +85,13 @@ public readonly struct DbSession : IAsyncDisposable, IDisposable, IEquatable<DbS
     }
 #endif
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         return obj is DbSession other && Equals(other);
     }
 
+    /// <inheritdoc/>
     public bool Equals(DbSession other)
     {
         if (_value is DbTransaction tx1 && other._value is DbTransaction tx2)
@@ -77,13 +105,26 @@ public readonly struct DbSession : IAsyncDisposable, IDisposable, IEquatable<DbS
         return false;
     }
 
+    /// <inheritdoc/>
     public override int GetHashCode() => _value.GetHashCode();
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
     public static bool operator ==(DbSession left, DbSession right)
     {
         return left.Equals(right);
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
     public static bool operator !=(DbSession left, DbSession right)
     {
         return !(left == right);

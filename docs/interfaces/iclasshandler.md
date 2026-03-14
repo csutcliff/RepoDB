@@ -1,0 +1,73 @@
+
+# IClassHandler
+
+---
+
+This interface is used to mark a class to be a class handler object. This interface has `TEntity` generic types in which being used at both the `Get()` and `Set()`  methods.
+
+## Generic Types
+
+Below is the list of generic types.
+
+| Name | Description |
+|:-----|:------------|
+| TEntity | Refers to the type of the entity type. This type is used as the input to and result type of the `Get()` and `Set()`  methods. |
+
+## Methods
+
+Below is the list of methods.
+
+| Name | Description |
+|:-----|:------------|
+| Get | The method that is being invoked when the outbound execution is triggered (i.e.: [Query](/docs/operations/query.md), [QueryAll](/docs/operations/queryall.md) and [BatchQuery](/docs/operations/batchquery.md)). |
+| Set | The method that is being invoked when the inbound execution is triggered (i.e.: [Insert](/docs/operations/insert.md), [Update](/docs/operations/update.md), [Merge](/docs/operations/merge.md) and etc). |
+
+## How to Implement?
+
+You have to manually create a class that implements this interface.
+
+```csharp
+public class PersonClassHandler : IClassHandler<Person>
+{
+    public Person Get(Person input, ClassHandlerGetOptions options)
+    {
+        // Handle the Class before sending back to the caller
+    }
+
+    public string Set(Person input, ClassHandlerSetOptions options)
+    {
+        // Handle the Class before sending to DB
+    }
+}
+```
+
+## How to Map?
+
+There are various ways of mapping a class handler into an entity model. You can use either do the following approach.
+
+Via the [ClassHandlerMapper](/mapper/classhandlermapper) class.
+
+```csharp
+PropertyHandlerMapper
+    .Add(typeof(Person), new PersonClassHandler(), true);
+```
+
+Or, via the [FluentMapper](/mapper/fluentmapper) class.
+
+```csharp
+FluentMapper
+    .Entity<Person>()
+    .ClassHandler<PersonClassHandler>();
+```
+
+Or, via an explicit [ClassHandler](/attribute/classhandler) attribute.
+
+```csharp
+[ClassHandler(typeof(PersonClassHandler))]
+publi class Person
+{
+    ...
+}
+```
+
+

@@ -5,6 +5,7 @@
     <Project Path="src/RepoDb.MySqlConnector/RepoDb.MySqlConnector.csproj" />
     <Project Path="src/RepoDb.Oracle/RepoDb.Oracle.csproj" />
     <Project Path="src/RepoDb.PostgreSql.BulkOperations/RepoDb.PostgreSql.BulkOperations.csproj" />
+    <Project Path="src/RepoDb.PostgreSql.Vectors/RepoDb.PostgreSql.Vectors.csproj" />
     <Project Path="src/RepoDb.PostgreSql/RepoDb.PostgreSql.csproj" />
     <Project Path="src/RepoDb.Sqlite.Microsoft/RepoDb.Sqlite.Microsoft.csproj" />
     <Project Path="src/RepoDb.SQLite.System/RepoDb.SQLite.System.csproj" />
@@ -20,6 +21,7 @@
     <Project Path="src/RepoDb.MySqlConnector.IntegrationTests/RepoDb.MySqlConnector.IntegrationTests.csproj" />
     <Project Path="src/RepoDb.MySqlConnector.UnitTests/RepoDb.MySqlConnector.UnitTests.csproj" />
     <Project Path="src/RepoDb.Oracle.IntegrationTests/RepoDb.Oracle.IntegrationTests.csproj" />
+    <Project Path="src/RepoDb.Oracle.UnitTests/RepoDb.Oracle.UnitTests.csproj" Id="eb776225-d1da-4b38-98fa-98e154db2f3a" />
     <Project Path="src/RepoDb.PostgreSql.BulkOperations.IntegrationTests/RepoDb.PostgreSql.BulkOperations.IntegrationTests.csproj" />
     <Project Path="src/RepoDb.PostgreSql.IntegrationTests/RepoDb.PostgreSql.IntegrationTests.csproj" />
     <Project Path="src/RepoDb.PostgreSql.UnitTests/RepoDb.PostgreSql.UnitTests.csproj" />

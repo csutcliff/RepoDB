@@ -86,5 +86,8 @@ public class ClientTypeToDbTypeResolver : IResolver<Type, DbType?>
         return null;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static ClientTypeToDbTypeResolver Instance { get; } = new();
 }

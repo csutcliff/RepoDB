@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Globalization;
+using System.Text;
 using RepoDb.Exceptions;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -34,16 +35,12 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
               averageableClientTypeResolver)
     { }
 
-    public override string CreateBatchQuery(string tableName, IEnumerable<Field> fields, int page, int rowsPerBatch, IEnumerable<OrderField>? orderBy = null, QueryGroup? where = null, string? hints = null)
-    {
-        throw new NotImplementedException();
-    }
-
     public override string CreateMerge(string tableName,
                                    IEnumerable<Field> fields,
                                    IEnumerable<Field>? noUpdateFields,
                                    IEnumerable<DbField> keyFields,
-                                   IEnumerable<Field>? qualifiers, string? hints = null)
+                                   IEnumerable<Field> qualifiers,
+                                   string? hints = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
         ArgumentNullException.ThrowIfNull(fields);
@@ -130,14 +127,9 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
-    public override string CreateMergeAll(string tableName, IEnumerable<Field> fields, IEnumerable<Field>? noUpdateFields, IEnumerable<Field>? qualifiers, int batchSize, IEnumerable<DbField> keyFields, string? hints = null)
+    public override string CreateMergeAll(string tableName, IEnumerable<Field> fields, IEnumerable<Field>? noUpdateFields, IEnumerable<Field> qualifiers, int batchSize, IEnumerable<DbField> keyFields, string? hints = null)
     {
         return "/*FORALL*/" + CreateMerge(tableName, fields, noUpdateFields, keyFields, qualifiers, hints);
-    }
-
-    public override string CreateSkipQuery(string tableName, IEnumerable<Field> fields, int skip, int take, IEnumerable<OrderField>? orderBy = null, QueryGroup? where = null, string? hints = null)
-    {
-        throw new NotImplementedException();
     }
 
     /// <inheritdoc cref="BaseStatementBuilder.CreateInsert"/>
@@ -221,19 +213,17 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         IEnumerable<Field> fields,
         QueryGroup? where = null,
         IEnumerable<OrderField>? orderBy = null,
-        int top = 0,
+        int offset = 0,
+        int take = 0,
         string? hints = null)
     {
+        ArgumentNullException.ThrowIfNull(fields);
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThan(take, 0);
 
         // Validate the hints
         GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new EmptyException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
 
         // Initialize the builder
         var builder = new QueryBuilder();
@@ -245,13 +235,8 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
             .From()
             .TableNameFrom(tableName, DbSetting)
             .WhereFrom(where, DbSetting)
-            .OrderByFrom(orderBy, DbSetting);
-
-        if (top > 0)
-        {
-            builder
-                .FetchFirstRowsOnly(top);
-        }
+            .OrderByFrom(orderBy, DbSetting)
+            .OffsetRowsFetchNextRowsOnly(offset, take);
 
         // Return the query
         return builder.ToString();
@@ -281,7 +266,30 @@ public sealed class OracleStatementBuilder : BaseStatementBuilder
         return builder.ToString();
     }
 
-    public override string? JsonColumnType => "JSON";
+    public override string CombineQueries(ICollection<string> commandTexts)
+    {
+        StringBuilder sb = new();
+
+        sb.AppendLine(
+#if NET
+            CultureInfo.InvariantCulture,
+#endif
+            $"/*ASCURSOR:{commandTexts.Count}*/BEGIN");
+
+        int n = 0;
+        foreach(var s in commandTexts)
+        {
+            sb.Append($" OPEN :c{n++} FOR ");
+            sb.Append(s);
+            sb.AppendLine(";");
+        }
+
+        sb.Append("END;");
+
+        return sb.ToString();
+    }
+
+    public override string? JsonColumnType => "CLOB";
     public override string? VectorColumnType => "VECTOR ({0}, FLOAT32)";
     public override string IdentityDefinition => "GENERATED ALWAYS AS IDENTITY(START WITH 1 INCREMENT BY 1)";
     public override bool? PrimaryBeforeIdentity => false;

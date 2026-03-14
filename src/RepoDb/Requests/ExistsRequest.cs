@@ -79,7 +79,9 @@ internal sealed class ExistsRequest : BaseRequest
         {
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(ExistsRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Where,
                 Hints);
         }

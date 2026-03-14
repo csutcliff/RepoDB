@@ -176,7 +176,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .ExecuteNonQuery("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -187,7 +187,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .ExecuteNonQueryAsync("", trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -202,7 +202,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .ExecuteQuery("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -213,7 +213,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .ExecuteQueryAsync("", trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -228,7 +228,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .ExecuteScalar("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -239,7 +239,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .ExecuteScalarAsync("", trace: new ErroneousCancellationTrace(),
             cancellationToken: TestContext.CancellationToken));
     }
@@ -255,7 +255,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .ExecuteQueryMultiple("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -266,7 +266,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .ExecuteQueryMultipleAsync("", trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -281,7 +281,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Average("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -292,7 +292,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .AverageAsync("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -307,7 +307,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .AverageAll("", (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -318,7 +318,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .AverageAllAsync("", (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -333,7 +333,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .BatchQuery("", 0, 100, null, (object?)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -344,7 +344,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .BatchQueryAsync("", 0, 100, null, (object?)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -359,7 +359,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Count("", (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -370,7 +370,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .CountAsync("", (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -385,7 +385,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .CountAll("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -396,7 +396,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .CountAllAsync("", trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -411,7 +411,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Delete("", (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -422,7 +422,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .DeleteAsync("", (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -437,7 +437,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .DeleteAll("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -448,7 +448,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .DeleteAllAsync("", trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -463,7 +463,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Exists("", (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -474,7 +474,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .ExistsAsync("", (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -489,7 +489,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Insert(tableName: "", "", null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -500,7 +500,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .InsertAsync(tableName: "", "", null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -520,7 +520,7 @@ public class CancellableTraceLogTest
 
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .InsertAll("", entities, trace: new ErroneousCancellationTrace()));
     }
 
@@ -535,7 +535,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .InsertAll("", entities, trace: new ErroneousCancellationTrace()));
     }
 
@@ -552,7 +552,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .InsertAllAsync("", entities, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -569,7 +569,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .InsertAllAsync("", entities, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -584,7 +584,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Max("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -595,7 +595,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .MaxAsync("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -610,7 +610,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .MaxAll("", (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -621,7 +621,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .MaxAllAsync("", (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -636,7 +636,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Merge("", new { Id = 1 }, (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -647,7 +647,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .MergeAsync("", new { Id = 1 }, (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -666,7 +666,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .MergeAll("", entities, trace: new ErroneousCancellationTrace()));
     }
 
@@ -681,7 +681,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .MergeAllAsync("", entities, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -698,7 +698,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .MergeAll("", entities, trace: new ErroneousCancellationTrace()));
     }
 
@@ -715,7 +715,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .MergeAllAsync("", entities, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -730,7 +730,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Min("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -741,7 +741,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .MinAsync("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -756,7 +756,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .MinAll("", (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -767,7 +767,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .MinAllAsync("", (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -782,7 +782,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Query("", (QueryField)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -793,7 +793,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryAsync("", (QueryField)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -808,7 +808,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .QueryAll("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -819,7 +819,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryAllAsync("", trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -836,7 +836,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .QueryMultiple("", (QueryField)null,
                 "", (QueryField)null,
                 trace: new ErroneousCancellationTrace()));
@@ -849,7 +849,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryMultipleAsync("", (QueryField)null,
                 "", (QueryField)null,
                 trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
@@ -866,7 +866,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .QueryMultiple("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -880,7 +880,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryMultipleAsync("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -898,7 +898,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .QueryMultiple("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -913,7 +913,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryMultipleAsync("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -932,7 +932,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .QueryMultiple("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -948,7 +948,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryMultipleAsync("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -968,7 +968,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .QueryMultiple("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -985,7 +985,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryMultipleAsync("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -1006,7 +1006,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .QueryMultiple("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -1024,7 +1024,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .QueryMultipleAsync("", (QueryField)null,
                 "", (QueryField)null,
                 "", (QueryField)null,
@@ -1048,7 +1048,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Sum("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -1059,7 +1059,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .SumAsync("", (Field)null, (object?)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -1074,7 +1074,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .SumAll("", (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -1085,7 +1085,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .SumAllAsync("", (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -1100,7 +1100,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Truncate("", trace: new ErroneousCancellationTrace()));
     }
 
@@ -1111,7 +1111,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .TruncateAsync("", trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -1126,7 +1126,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .Update("", new { Id = 1 }, (Field)null, trace: new ErroneousCancellationTrace()));
     }
 
@@ -1137,7 +1137,7 @@ public class CancellableTraceLogTest
         var connection = new TraceDbConnection();
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .UpdateAsync("", new { Id = 1 }, (Field)null, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -1156,7 +1156,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .UpdateAll("", entities, trace: new ErroneousCancellationTrace()));
     }
 
@@ -1171,7 +1171,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .UpdateAllAsync("", entities, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 
@@ -1188,7 +1188,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        Assert.ThrowsExactly<CancelledExecutionException>(() => connection
+        Assert.Throws<OperationCanceledException>(() => connection
             .UpdateAll("", entities, trace: new ErroneousCancellationTrace()));
     }
 
@@ -1205,7 +1205,7 @@ public class CancellableTraceLogTest
         };
 
         // Act
-        await Assert.ThrowsExactlyAsync<CancelledExecutionException>(async () => await connection
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await connection
             .UpdateAllAsync("", entities, trace: new ErroneousCancellationTrace(), cancellationToken: TestContext.CancellationToken));
     }
 

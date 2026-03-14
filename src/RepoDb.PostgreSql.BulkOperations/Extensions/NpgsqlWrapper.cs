@@ -8,14 +8,14 @@ using RepoDb.PostgreSql.BulkOperations;
 namespace RepoDb;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static partial class NpgsqlConnectionExtension
 {
     #region PseudoBasedBinaryImport
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -128,7 +128,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -256,7 +256,7 @@ public static partial class NpgsqlConnectionExtension
     #region TransactionalExecute
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="connection"></param>
@@ -319,7 +319,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="connection"></param>

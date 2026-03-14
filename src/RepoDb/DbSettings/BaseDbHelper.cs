@@ -7,11 +7,19 @@ using System.Linq.Expressions;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
 using RepoDb.Reflection;
+using RepoDb.StatementBuilders;
 
 namespace RepoDb.DbSettings;
 
+/// <summary>
+///
+/// </summary>
 public abstract class BaseDbHelper : IDbHelper
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="dbResolver"></param>
     protected BaseDbHelper(IResolver<string, Type> dbResolver)
     {
         ArgumentNullException.ThrowIfNull(dbResolver);
@@ -19,23 +27,62 @@ public abstract class BaseDbHelper : IDbHelper
         DbTypeResolver = dbResolver;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public IResolver<string, Type> DbTypeResolver { get; protected init; }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="fieldType"></param>
+    /// <param name="values"></param>
+    /// <param name="parameterName"></param>
+    /// <returns></returns>
     public virtual DbParameter? CreateTableParameter(IDbConnection connection, IDbTransaction? transaction, Type? fieldType, IEnumerable values, string parameterName)
     {
         return null;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="fieldType"></param>
+    /// <param name="values"></param>
+    /// <param name="parameterName"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public ValueTask<DbParameter?> CreateTableParameterAsync(IDbConnection connection, IDbTransaction? transaction, Type? fieldType, IEnumerable values, string parameterName, CancellationToken cancellationToken = default)
     {
         return new(CreateTableParameter(connection, transaction, fieldType, values, parameterName));
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="fieldType"></param>
+    /// <param name="parameterName"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public virtual string? CreateTableParameterText(IDbConnection connection, IDbTransaction? transaction, Type? fieldType, string parameterName, IEnumerable values)
     {
         return null;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="fieldType"></param>
+    /// <param name="values"></param>
+    /// <returns></returns>
     public virtual bool CanCreateTableParameter(IDbConnection connection, IDbTransaction? transaction, Type? fieldType, IEnumerable values)
     {
         return CreateTableParameter(connection, transaction, fieldType, values, "Q") is not null;
@@ -45,6 +92,12 @@ public abstract class BaseDbHelper : IDbHelper
     public virtual void DynamicHandler<TEventInstance>(TEventInstance instance, string key)
     { }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <returns></returns>
     public virtual DbRuntimeSetting GetDbConnectionRuntimeInformation(IDbConnection connection, IDbTransaction? transaction)
     {
         return new()
@@ -52,6 +105,13 @@ public abstract class BaseDbHelper : IDbHelper
         };
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="transaction"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public virtual ValueTask<DbRuntimeSetting> GetDbConnectionRuntimeInformationAsync(IDbConnection connection, IDbTransaction? transaction, CancellationToken cancellationToken)
     {
         return new(GetDbConnectionRuntimeInformation(connection, transaction));
@@ -73,6 +133,7 @@ public abstract class BaseDbHelper : IDbHelper
     /// Converts a raw value to a db valid valuetype. Used for setting <see cref="DbParameter.Value"/> on <see cref="DbParameter"/>
     /// </summary>
     /// <param name="value">The value to be converted.</param>
+    /// <param name="parameter"></param>
     /// <returns>The converted value.</returns>
     public virtual object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
@@ -92,8 +153,21 @@ public abstract class BaseDbHelper : IDbHelper
 
     /// <inheritdoc />
     public virtual Func<object?>? PrepareForIdentityOutput(DbCommand command) => null;
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="count"></param>
     public virtual void PrepareForBatchOperation(DbCommand command, int count) { }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="dbParameterExpression"></param>
+    /// <param name="propertyExpression"></param>
+    /// <param name="dbField"></param>
+    /// <returns></returns>
     public virtual Expression? GetParameterPostCreationExpression(ParameterExpression dbParameterExpression, ParameterExpression? propertyExpression, DbField dbField)
     {
         var method = StaticType.IDbHelper.GetMethod(nameof(IDbHelper.DynamicHandler))!
@@ -102,5 +176,16 @@ public abstract class BaseDbHelper : IDbHelper
             method, dbParameterExpression, Expression.Constant("RepoDb.Internal.Compiler.Events[AfterCreateDbParameter]"));
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="sql"></param>
+    /// <param name="transaction"></param>
+    /// <returns></returns>
+    public virtual string? GetJsonColumnType(DbConnection sql, DbTransaction transaction) => (sql.GetStatementBuilder() as BaseStatementBuilder)?.JsonColumnType;
+
+    /// <summary>
+    ///
+    /// </summary>
     protected static ConcurrentDictionary<(Type fromType, Type toType), Func<Expression, Expression?>> ProviderSpecificTypeTransforms => Compiler.ProviderSpecificTransforms;
 }

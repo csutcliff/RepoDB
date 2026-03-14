@@ -89,7 +89,7 @@ public class MappingSequenceTest
 
     #endregion
 
-    #region property 
+    #region property
 
     public enum WithPropertyEnum { A, B }
     public class WithPropertyModel
@@ -185,5 +185,5 @@ public class MappingSequenceTest
         Assert.AreEqual(DbType.Decimal, command.Parameters["@V"].DbType);
     }
 
-    #endregion 
+    #endregion
 }

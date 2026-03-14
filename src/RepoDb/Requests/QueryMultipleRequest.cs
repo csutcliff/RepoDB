@@ -125,12 +125,16 @@ internal sealed class QueryMultipleRequest : BaseRequest
             // Get first the entity hash code
             hashCode = System.HashCode.Combine(
                 typeof(QueryMultipleRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Index,
                 Where,
-                Top,
-                Hints,
-                Fields);
+                System.HashCode.Combine(
+                    Top,
+                    Hints,
+                    Fields)
+                );
 
             // Add the order fields
             if (OrderBy is not null)

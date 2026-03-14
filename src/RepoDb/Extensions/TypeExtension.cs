@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 using RepoDb.Attributes;
 using RepoDb.Attributes.Parameter;
 using RepoDb.Exceptions;
-using RepoDb.Interfaces;
 
 namespace RepoDb.Extensions;
 
@@ -129,10 +127,10 @@ public static class TypeExtension
 
         var props = type.GetProperties();
 
-        if (!props.Any(x => x.GetCustomAttribute<NotMappedAttribute>() is { }))
+        if (!props.Any(x => x.GetCustomAttribute<NotMappedAttribute>() is { } || x.GetCustomAttribute<IgnoreAttribute>() is { }))
             return props;
 
-        return props.Where(x => x.GetCustomAttribute<NotMappedAttribute>() is not { }).ToArray();
+        return props.Where(x => x.GetCustomAttribute<NotMappedAttribute>() is not { } && x.GetCustomAttribute<IgnoreAttribute>() is not { }).ToArray();
     }
 
     internal static bool ImplementsIParsable(this Type type)
@@ -140,7 +138,14 @@ public static class TypeExtension
         if (type == typeof(object))
             return false;
 #if NET
-        return typeof(IParsable<>).MakeGenericType(type).IsAssignableFrom(type); // May fail if type is not 'ok'
+        try
+        {
+            return typeof(IParsable<>).MakeGenericType(type).IsAssignableFrom(type); // May fail if type is not 'ok'
+        }
+        catch
+        {
+            return false;
+        }
 #else
         return
             typeof(IFormattable).IsAssignableFrom(type)
@@ -243,12 +248,7 @@ public static class TypeExtension
     /// <param name="type">The current type.</param>
     /// <returns>A list of <see cref="ClassProperty"/> objects.</returns>
     public static IEnumerable<ClassProperty> GetClassProperties(this Type type)
-    {
-        foreach (var property in TypeCache.Get(type).GetProperties().Distinct(PropertyNameComparer.Instance).Where(x => x.GetCustomAttribute<IgnoreAttribute>() is null))
-        {
-            yield return new ClassProperty(type, property);
-        }
-    }
+        => TypeCache.Get(type).GetProperties().Select(property => new ClassProperty(type, property));
 
     /// <summary>
     /// Returns the underlying type of the current type. If there is no underlying type, this will return the current type.
@@ -261,6 +261,11 @@ public static class TypeExtension
         return Nullable.GetUnderlyingType(type) ?? type;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public static bool IsTuple(this Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
@@ -278,7 +283,7 @@ public static class TypeExtension
     /// <param name="currentType">The current type.</param>
     /// <param name="sourceType">The source type.</param>
     /// <returns>The newly created generic type.</returns>
-    public static Type? MakeGenericTypeFrom(this Type currentType,
+    private static Type? MakeGenericTypeFrom(this Type currentType,
         Type? sourceType)
     {
         ArgumentNullException.ThrowIfNull(currentType);

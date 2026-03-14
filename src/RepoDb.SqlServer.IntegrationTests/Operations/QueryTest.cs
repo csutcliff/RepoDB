@@ -535,7 +535,7 @@ public class QueryTest
         var table = Database.CreateCompleteTables(1).First();
         using var connection = new SqlConnection(Database.ConnectionString).EnsureOpen();
 
-        var info = DbRuntimeSettingCache.Get(connection, null);
+        var info = connection.GetDbRuntimeSetting(null);
 
         Assert.IsNotNull(info);
         Assert.IsTrue(info.ParameterTypeMap.ContainsKey(typeof(int)), "INT TVP defined");
@@ -602,7 +602,7 @@ public class QueryTest
         var table = Database.CreateCompleteTables(1).First();
         using var connection = new SqlConnection(Database.ConnectionString).EnsureOpen();
 
-        var info = DbRuntimeSettingCache.Get(connection, null);
+        var info = connection.GetDbRuntimeSetting(null);
 
         Assert.IsNotNull(info);
         Assert.IsTrue(info.ParameterTypeMap.ContainsKey(typeof(int)), "INT TVP defined");
@@ -621,7 +621,7 @@ public class QueryTest
         var table = Database.CreateCompleteTables(1).First();
         using var connection = new SqlConnection(Database.ConnectionString).EnsureOpen();
 
-        var info = DbRuntimeSettingCache.Get(connection, null);
+        var info = connection.GetDbRuntimeSetting(null);
 
         Assert.IsNotNull(info);
         Assert.IsTrue(info.ParameterTypeMap.ContainsKey(typeof(int)), "INT TVP defined");

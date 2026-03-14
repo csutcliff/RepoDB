@@ -13,7 +13,7 @@ internal partial class Compiler
     /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
     /// <param name="dbSetting"></param>
     /// <param name="dbHelper"></param>
-    /// 
+    ///
     /// <returns></returns>
     internal static Action<DbCommand, IList<object?>> CompileDictionaryStringObjectListDbParameterSetter(
         IEnumerable<DbField> inputFields,

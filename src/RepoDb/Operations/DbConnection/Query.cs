@@ -56,6 +56,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -112,6 +113,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -166,6 +168,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -220,6 +223,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -274,6 +278,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -328,6 +333,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -380,6 +386,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -434,6 +441,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -486,6 +494,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -537,6 +546,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -589,6 +599,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -641,6 +652,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -662,6 +674,7 @@ public static partial class DbConnectionExtension
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
     /// <param name="orderBy">The order definition of the fields to be used.</param>
     /// <param name="top">The number of rows to be returned.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="cacheKey">The key to the cache item. By setting this argument, it will return the item from the cache if present, otherwise it will query the database. This will only work if the 'cache' argument is set.</param>
     /// <param name="cacheItemExpiration">The expiration in minutes of the cache item.</param>
@@ -678,6 +691,7 @@ public static partial class DbConnectionExtension
         IEnumerable<Field>? fields = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         string? cacheKey = null,
         int cacheItemExpiration = Constant.DefaultCacheItemExpirationInMinutes,
@@ -700,6 +714,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: offset,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -760,6 +775,7 @@ public static partial class DbConnectionExtension
             where: await WhatToQueryGroupAsync(typeof(TEntity), connection, what, transaction, cancellationToken).ConfigureAwait(false),
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -819,6 +835,7 @@ public static partial class DbConnectionExtension
             where: await WhatToQueryGroupAsync(typeof(TEntity), connection, what, transaction, cancellationToken).ConfigureAwait(false),
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -876,6 +893,7 @@ public static partial class DbConnectionExtension
             where: connection.ToQueryGroup(where, transaction, tableName),
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -933,6 +951,7 @@ public static partial class DbConnectionExtension
             where: ToQueryGroup(where),
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -990,6 +1009,7 @@ public static partial class DbConnectionExtension
             where: ToQueryGroup(where),
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1047,6 +1067,7 @@ public static partial class DbConnectionExtension
             where: where,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1102,6 +1123,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1159,6 +1181,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1214,6 +1237,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1269,6 +1293,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1324,6 +1349,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1379,6 +1405,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1401,6 +1428,7 @@ public static partial class DbConnectionExtension
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
     /// <param name="orderBy">The order definition of the fields to be used.</param>
     /// <param name="top">The number of rows to be returned.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="cacheKey">The key to the cache item. By setting this argument, it will return the item from the cache if present, otherwise it will query the database. This will only work if the 'cache' argument is set.</param>
     /// <param name="cacheItemExpiration">The expiration in minutes of the cache item.</param>
@@ -1418,6 +1446,7 @@ public static partial class DbConnectionExtension
         IEnumerable<Field>? fields = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         string? cacheKey = null,
         int cacheItemExpiration = Constant.DefaultCacheItemExpirationInMinutes,
@@ -1441,6 +1470,7 @@ public static partial class DbConnectionExtension
             where: where,
             orderBy: orderBy,
             top: top,
+            offset: offset,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1500,6 +1530,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1552,6 +1583,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1604,6 +1636,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1656,6 +1689,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1708,6 +1742,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1728,6 +1763,7 @@ public static partial class DbConnectionExtension
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
     /// <param name="orderBy">The order definition of the fields to be used.</param>
     /// <param name="top">The number of rows to be returned.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="cacheKey">The key to the cache item. By setting this argument, it will return the item from the cache if present, otherwise it will query the database. This will only work if the 'cache' argument is set.</param>
     /// <param name="cacheItemExpiration">The expiration in minutes of the cache item.</param>
@@ -1744,6 +1780,7 @@ public static partial class DbConnectionExtension
         IEnumerable<Field>? fields = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         string? cacheKey = null,
         int cacheItemExpiration = Constant.DefaultCacheItemExpirationInMinutes,
@@ -1760,6 +1797,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: offset,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1820,6 +1858,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1875,6 +1914,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1930,6 +1970,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -1985,6 +2026,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -2040,6 +2082,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: 0,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -2061,6 +2104,7 @@ public static partial class DbConnectionExtension
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
     /// <param name="orderBy">The order definition of the fields to be used.</param>
     /// <param name="top">The number of rows to be returned.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="cacheKey">The key to the cache item. By setting this argument, it will return the item from the cache if present, otherwise it will query the database. This will only work if the 'cache' argument is set.</param>
     /// <param name="cacheItemExpiration">The expiration in minutes of the cache item.</param>
@@ -2078,6 +2122,7 @@ public static partial class DbConnectionExtension
         IEnumerable<Field>? fields = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         string? cacheKey = null,
         int cacheItemExpiration = Constant.DefaultCacheItemExpirationInMinutes,
@@ -2095,6 +2140,7 @@ public static partial class DbConnectionExtension
             fields: fields,
             orderBy: orderBy,
             top: top,
+            offset: offset,
             hints: hints,
             cacheKey: cacheKey,
             cacheItemExpiration: cacheItemExpiration,
@@ -2121,6 +2167,7 @@ public static partial class DbConnectionExtension
     /// <param name="where">The query expression to be used.</param>
     /// <param name="orderBy">The order definition of the fields to be used.</param>
     /// <param name="top">The number of rows to be returned.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="cacheKey">The key to the cache item. By setting this argument, it will return the item from the cache if present, otherwise it will query the database. This will only work if the 'cache' argument is set.</param>
     /// <param name="cacheItemExpiration">The expiration in minutes of the cache item.</param>
@@ -2137,6 +2184,7 @@ public static partial class DbConnectionExtension
         IEnumerable<Field>? fields = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         string? cacheKey = null,
         int cacheItemExpiration = Constant.DefaultCacheItemExpirationInMinutes,
@@ -2167,13 +2215,14 @@ public static partial class DbConnectionExtension
             where,
             orderBy,
             top,
+            offset,
             hints,
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo<TEntity>()], connection, transaction, tableName) : null;
+        var param = (where != null) ? QueryGroup.AsMappedObject([where.MapTo<TEntity>(tableName)], connection, transaction, tableName) : null;
 
-        var commandText = CommandTextCache.GetQueryText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetQueryText);
 
         // Actual Execution
         var result = ExecuteQueryInternal<TEntity>(connection: connection,
@@ -2214,6 +2263,7 @@ public static partial class DbConnectionExtension
     /// <param name="where">The query expression to be used.</param>
     /// <param name="orderBy">The order definition of the fields to be used.</param>
     /// <param name="top">The number of rows to be returned.</param>
+    /// <param name="offset"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="cacheKey">The key to the cache item. By setting this argument, it will return the item from the cache if present, otherwise it will query the database. This will only work if the 'cache' argument is set.</param>
     /// <param name="cacheItemExpiration">The expiration in minutes of the cache item.</param>
@@ -2231,6 +2281,7 @@ public static partial class DbConnectionExtension
         IEnumerable<Field>? fields = null,
         IEnumerable<OrderField>? orderBy = null,
         int top = 0,
+        int offset = 0,
         string? hints = null,
         string? cacheKey = null,
         int cacheItemExpiration = Constant.DefaultCacheItemExpirationInMinutes,
@@ -2262,13 +2313,14 @@ public static partial class DbConnectionExtension
             where,
             orderBy,
             top,
+            offset,
             hints,
             statementBuilder);
 
         // Converts to property mapped object
-        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo<TEntity>()], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
+        var param = (where != null) ? await QueryGroup.AsMappedObjectAsync([where.MapTo<TEntity>(tableName)], connection, transaction, tableName, cancellationToken).ConfigureAwait(false) : null;
 
-        var commandText = await CommandTextCache.GetQueryTextAsync(request, cancellationToken).ConfigureAwait(false);
+        var commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetQueryText, cancellationToken).ConfigureAwait(false);
 
         // Actual Execution
         var result = await ExecuteQueryInternalAsync<TEntity>(connection: connection,

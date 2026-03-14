@@ -11,7 +11,7 @@ public static partial class SqlConnectionExtension
     #region WriteToServerInternal
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="connection"></param>
@@ -23,7 +23,7 @@ public static partial class SqlConnectionExtension
     /// <param name="batchSize"></param>
     /// <param name="hasOrderingColumn"></param>
     /// <param name="transaction"></param>
-    /// 
+    ///
     /// <returns></returns>
     private static int WriteToServerInternal<TEntity>(SqlConnection connection,
         string tableName,
@@ -96,7 +96,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -163,7 +163,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -250,7 +250,7 @@ public static partial class SqlConnectionExtension
     #region WriteToServerAsync
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="connection"></param>
@@ -337,7 +337,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -406,7 +406,7 @@ public static partial class SqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>

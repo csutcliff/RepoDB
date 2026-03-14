@@ -90,7 +90,7 @@ internal static class InsertAllExecutionContextProvider
                 batchSize,
                 hints,
                 statementBuilder);
-            commandText = CommandTextCache.GetInsertAllText(request);
+            commandText = CommandTextCache.GetCached(request, CommandTextCache.GetInsertAllText);
         }
         else
         {
@@ -101,7 +101,7 @@ internal static class InsertAllExecutionContextProvider
                 fields,
                 hints,
                 statementBuilder);
-            commandText = CommandTextCache.GetInsertText(request);
+            commandText = CommandTextCache.GetCached(request, CommandTextCache.GetInsertText);
         }
 
         // Call
@@ -171,7 +171,7 @@ internal static class InsertAllExecutionContextProvider
                 batchSize,
                 hints,
                 statementBuilder);
-            commandText = await CommandTextCache.GetInsertAllTextAsync(request, cancellationToken).ConfigureAwait(false);
+            commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetInsertAllText, cancellationToken).ConfigureAwait(false);
         }
         else
         {
@@ -181,7 +181,7 @@ internal static class InsertAllExecutionContextProvider
                 fields,
                 hints,
                 statementBuilder);
-            commandText = await CommandTextCache.GetInsertTextAsync(request, cancellationToken).ConfigureAwait(false);
+            commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetInsertText, cancellationToken).ConfigureAwait(false);
         }
 
         // Call

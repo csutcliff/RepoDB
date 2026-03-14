@@ -7,7 +7,7 @@ public class UpdateAllRepoDbBenchmarks : RepoDbBaseBenchmarks
 {
     private readonly List<Person> persons = [];
 
-    [Params(10, 100, 1000)] 
+    [Params(10, 100, 1000)]
     public int Rows { get; set; }
 
     protected override void Bootstrap()

@@ -28,7 +28,7 @@ internal static class OracleBootstrap
     public static void Initialize() => InitializeInternal();
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     internal static void InitializeInternal()
     {

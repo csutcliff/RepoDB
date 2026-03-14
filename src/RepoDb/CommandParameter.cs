@@ -24,7 +24,7 @@ internal sealed record class CommandParameter
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="field"></param>
     /// <param name="parameter"></param>

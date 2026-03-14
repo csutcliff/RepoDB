@@ -9,7 +9,7 @@ namespace RepoDb;
 public static partial class NpgsqlConnectionExtension
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -40,7 +40,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -74,7 +74,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="getMergeToPseudoCommandText"></param>
@@ -94,7 +94,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="getMergeToPseudoCommandText"></param>
@@ -115,7 +115,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="getMergeToPseudoCommandText"></param>
@@ -137,7 +137,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="getMergeToPseudoCommandText"></param>
@@ -160,7 +160,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -185,7 +185,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -213,7 +213,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -241,7 +241,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -273,7 +273,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="fields"></param>
@@ -291,7 +291,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="pseudoTableName"></param>
@@ -310,7 +310,7 @@ public static partial class NpgsqlConnectionExtension
         $"WHERE (1 = 0);";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="pseudoTableName"></param>
@@ -329,7 +329,7 @@ public static partial class NpgsqlConnectionExtension
         $"WHERE (1 = 0);";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="mappings"></param>
     /// <param name="identityBehavior"></param>
@@ -344,7 +344,7 @@ public static partial class NpgsqlConnectionExtension
                 $"{mappings.Select(field => field.DestinationColumn.AsQuoted(true, dbSetting)).Join(", ")}";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="dbSetting"></param>

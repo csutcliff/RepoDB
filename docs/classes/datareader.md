@@ -1,0 +1,56 @@
+
+# DataReader
+
+---
+
+This class is used to convert the [DbDataReader](https://learn.microsoft.com/en-us/dotnet/api/system.data.common.dbdatareader?view=net-6.0) object into an [IEnumerable<T>](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.ienumerable-1?view=net-7.0) or `IEnumerable<dynamic>` object. This is the heart of the library when it comes to data extraction from the database.
+
+It only contains one method named `ToEnumerable`. This method is pre-compiled AOT using `Linq.Expressions`.
+> This class is high-performant and efficient. It understands and caches the schema of your database into the memory. It also reuses all the other caches within the library during the extraction to construct and generate the most-optimal AOT compilation.
+
+## Extract as Entity Model
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    using (var reader = connection.ExecuteReader("SELECT * FROM [dbo].[Person];"))
+    {
+        var people = DataReader.ToEnumerable<Person>((DbDataReader) reader);
+        // Do the stuffs for 'people' here
+    }
+}
+```
+
+## Extract as Dynamic/ExpandoObject
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    using (var reader = connection.ExecuteReader("SELECT * FROM [dbo].[Person];"))
+    {
+        var people = DataReader.ToEnumerable((DbDataReader) reader);
+        // Do the stuffs for 'people' here
+    }
+}
+```
+
+## DbFields
+
+It is also quitely important to pass the list of the [DbField](/class/dbfield) object in order for the compiler to skip the unnecessary DB-NULL checks.
+
+To do this, simply pass the list of the DB fields in the `dbFields` argument.
+
+```csharp
+using (var connection = new SqlConnection(connectionString))
+{
+    var dbFields = DbFieldCache.Get(connection, ClassMappedNameCache.Get<Person>(), null);
+    using (var reader = connection.ExecuteReader("SELECT * FROM [dbo].[Person];"))
+    {
+        var people = DataReader.ToEnumerable<Person>((DbDataReader) reader,
+            dbFields,
+            connection.GetDbSetting());
+        // Do the stuffs for 'people' here
+    }
+}
+```
+> Please note to always pass the [IDbSetting](/interface/idbsetting) object when using the `dbFields` argument.

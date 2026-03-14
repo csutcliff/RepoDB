@@ -103,7 +103,9 @@ internal sealed class UpdateAllRequest : BaseRequest
             // Get first the entity hash code
             hashCode = System.HashCode.Combine(
                 typeof(UpdateAllRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 BatchSize,
                 Hints,
                 Fields,

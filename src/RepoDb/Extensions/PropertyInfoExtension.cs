@@ -62,7 +62,7 @@ public static class PropertyInfoExtension
             {
                 var nn = mappedName.Substring(1, mappedName.Length - 2);
 
-                if (nn.IndexOfAny(['[', ']']) < 0)
+                if (!nn.ContainsAny(['[', ']']))
                     mappedName = nn;
             }
             else

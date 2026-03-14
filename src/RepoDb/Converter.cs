@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Data.SqlTypes;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
@@ -28,7 +29,7 @@ public static class Converter
     /// <param name="value">The value to be checked for <see cref="DBNull.Value"/>.</param>
     /// <returns>The converted value.</returns>
     public static object? DbNullToNull(object? value) =>
-        Convert.IsDBNull(value) ? null : value;
+        Convert.IsDBNull(value) || (value is INullable n && n.IsNull) ? null : value;
 
     /// <summary>
     /// Converts a value to a target type if the value is equals to null or <see cref="DBNull.Value"/>.
@@ -193,11 +194,17 @@ public static class Converter
 
     #endregion
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new()
     {
         WriteIndented = false,
     };
 
+    /// <summary>
+    ///
+    /// </summary>
     public static JsonSerializerOptions JsonSerializerOptions => GlobalConfiguration.Options?.JsonSerializerOptions ?? DefaultJsonSerializerOptions;
 
 

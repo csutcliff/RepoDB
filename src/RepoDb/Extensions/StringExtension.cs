@@ -211,8 +211,7 @@ public static partial class StringExtension
         {
             value = value.Trim();
         }
-        var firstIndex = value.IndexOf('.', StringComparison.Ordinal);
-        if (ignoreSchema || firstIndex < 0)
+        if (ignoreSchema || !value.Contains('.', StringComparison.Ordinal))
         {
             return value.AsQuotedInternal(dbSetting);
         }
@@ -334,6 +333,13 @@ public static partial class StringExtension
         IDbSetting? dbSetting) =>
         AsParameter(value, 0, dbSetting);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="index"></param>
+    /// <param name="dbSetting"></param>
+    /// <returns></returns>
     public static string AsParameter(this string value,
         int index,
         IDbSetting? dbSetting) => AsParameter(value, index, dbSetting, suffix: null);
@@ -344,6 +350,7 @@ public static partial class StringExtension
     /// <param name="value">The string to be converted.</param>
     /// <param name="index">The parameter index.</param>
     /// <param name="dbSetting">The <see cref="IDbSetting"/> object to be used.</param>
+    /// <param name="suffix"></param>
     /// <returns>The string value represented as database parameter.</returns>
     internal static string AsParameter(this string value,
         int index,
@@ -426,26 +433,12 @@ public static partial class StringExtension
         IDbSetting dbSetting) =>
         string.Concat(alias, ".", value.AsQuoted(true, true, dbSetting));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="index"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static string AsParameterAsField(this string value,
         int index,
         bool quote,
         IDbSetting dbSetting) =>
         string.Concat(AsParameter(value, index, dbSetting), " AS ", AsField(value, dbSetting));
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="index"></param>
-    /// <param name="dbSetting"></param>
-    /// <returns></returns>
     internal static string AsFieldAndParameter(this string value,
         int index,
         bool quote,

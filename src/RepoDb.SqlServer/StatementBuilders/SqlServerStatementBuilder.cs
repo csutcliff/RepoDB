@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Azure;
 using RepoDb.Exceptions;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -37,78 +38,6 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
               averageableClientTypeResolver ?? ClientTypeToAverageableClientTypeResolver.Instance)
     { }
 
-    #region CreateBatchQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for batch query operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be queried.</param>
-    /// <param name="page">The page of the batch.</param>
-    /// <param name="rowsPerBatch">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public override string CreateBatchQuery(string tableName,
-        IEnumerable<Field> fields,
-        int page,
-        int rowsPerBatch,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // There should be fields
-        if (!fields.Any())
-        {
-            throw new MissingFieldsException();
-        }
-
-        // Validate order by
-        if (orderBy == null || !orderBy.Any())
-        {
-            throw new EmptyException(nameof(orderBy), "The argument 'orderBy' is required.");
-        }
-
-        // Validate the page
-        if (page < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(page), "The page must be equals or greater than 0.");
-        }
-
-        // Validate the page
-        if (rowsPerBatch < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowsPerBatch), "The rows per batch must be equals or greater than 1.");
-        }
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .FieldsFrom(fields, DbSetting)
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
-            .WhereFrom(where, DbSetting)
-            .OrderByFrom(orderBy, DbSetting)
-            .WriteText(string.Concat("OFFSET ", page * rowsPerBatch))
-            .WriteText(string.Concat("ROWS FETCH NEXT " + rowsPerBatch + " ROWS ONLY"))
-            .End();
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
     #region CreateCount
 
     /// <summary>
@@ -139,42 +68,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
             .TableNameFrom(tableName, DbSetting)
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
-            .End();
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateCountAll
-
-    /// <summary>
-    /// Creates a SQL Statement for count-all operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for count-all operation.</returns>
-    public override string CreateCountAll(string tableName,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .CountBig(null, DbSetting)
-            .WriteText("AS [CountValue]")
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
-            .End();
+            .End(DbSetting);
 
         // Return the query
         return builder.ToString();
@@ -483,7 +377,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
                 .WriteText("IDENTITY_INSERT")
                 .TableNameFrom(tableName, DbSetting)
                 .On()
-                .End()
+                .End(DbSetting)
                 .WriteText("END TRY BEGIN CATCH END CATCH");
         }
         else
@@ -549,7 +443,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
         }
 
         // End the builder
-        builder.End();
+        builder.End(DbSetting);
 
         if (insertingIdentity && SqlServerOptions.Current.UseIdentityInsert)
         {
@@ -559,7 +453,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
                 .WriteText("IDENTITY_INSERT")
                 .TableNameFrom(tableName, DbSetting)
                 .Off()
-                .End()
+                .End(DbSetting)
                 .WriteText("END TRY BEGIN CATCH END CATCH");
         }
 
@@ -655,7 +549,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
                 .WriteText("IDENTITY_INSERT")
                 .TableNameFrom(tableName, DbSetting)
                 .On()
-                .End()
+                .End(DbSetting)
                 .WriteText("END TRY BEGIN CATCH END CATCH");
         }
         else
@@ -775,7 +669,7 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
                 .WriteText("IDENTITY_INSERT")
                 .TableNameFrom(tableName, DbSetting)
                 .Off()
-                .End()
+                .End(DbSetting)
                 .WriteText("END TRY BEGIN CATCH END CATCH");
         }
 
@@ -785,92 +679,42 @@ public sealed class SqlServerStatementBuilder : BaseStatementBuilder
 
     #endregion
 
-    #region CreateSkipQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for 'BatchQuery' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
-    /// <param name="skip">The number of rows to skip.</param>
-    /// <param name="take">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public override string CreateSkipQuery(string tableName,
+    public override string CreateQuery(
+        string tableName,
         IEnumerable<Field> fields,
-        int skip,
-        int take,
-        IEnumerable<OrderField>? orderBy = null,
         QueryGroup? where = null,
+        IEnumerable<OrderField>? orderBy = null,
+        int offset = 0,
+        int take = 0,
         string? hints = null)
     {
+        ArgumentNullException.ThrowIfNull(fields);
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThan(take, 0);
 
         // Validate the hints
         GuardHints(hints);
-
-        // There should be fields
-        if (!fields.Any())
-        {
-            throw new MissingFieldsException();
-        }
-
-        // Validate order by
-        if (orderBy == null || !orderBy.Any())
-        {
-            throw new EmptyException(nameof(orderBy), "The argument 'orderBy' is required.");
-        }
-
-        // Validate the skip
-        if (skip < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(skip), "The rows skipped must be equals or greater than 0.");
-        }
-
-        // Validate the take
-        if (take < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(take), "The rows per batch must be equals or greater than 1.");
-        }
 
         // Initialize the builder
         var builder = new QueryBuilder();
 
         // Build the query
         builder
-            .With()
-            .WriteText("CTE")
-            .As()
-            .OpenParen()
             .Select()
-            .TopFrom(take + skip)
-            .RowNumber()
-            .Over()
-            .OpenParen()
-            .OrderByFrom(orderBy, DbSetting)
-            .CloseParen()
-            .As("[RowNumber],")
+            .If(offset == 0, b => b.TopFrom(take)) // Prefer `TOP 12` syntax over FETCH NEXT 12 rows only
             .FieldsFrom(fields, DbSetting)
             .From()
             .TableNameFrom(tableName, DbSetting)
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
             .OrderByFrom(orderBy, DbSetting)
-            .CloseParen()
-            .Select()
-            .FieldsFrom(fields, DbSetting)
-            .From()
-            .WriteText("CTE")
-            .WriteText(string.Concat("WHERE ([RowNumber] BETWEEN ", skip + 1, " AND ", take + skip, ")"))
-            .End();
+            .If(offset != 0, b => b.OffsetRowsFetchNextRowsOnly(offset, take))
+            .End(DbSetting);
 
         // Return the query
         return builder.ToString();
     }
-
-    #endregion
 
     /// <inheritdoc />
     public override string CreateUpdateAll(

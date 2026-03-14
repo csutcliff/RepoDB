@@ -10,7 +10,7 @@ namespace RepoDb.Requests;
 internal sealed class SkipQueryRequest : BaseRequest
 {
     /// <summary>
-    /// Creates a new instance of <see cref="BatchQueryRequest"/> object.
+    /// Creates a new instance of <see cref="SkipQueryRequest"/> object.
     /// </summary>
     /// <param name="type">The target type.</param>
     /// <param name="connection">The connection object.</param>
@@ -47,7 +47,7 @@ internal sealed class SkipQueryRequest : BaseRequest
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="BatchQueryRequest"/> object.
+    /// Creates a new instance of <see cref="SkipQueryRequest"/> object.
     /// </summary>
     /// <param name="name">The name of the request.</param>
     /// <param name="connection">The connection object.</param>
@@ -115,7 +115,7 @@ internal sealed class SkipQueryRequest : BaseRequest
     #region Equality and comparers
 
     /// <summary>
-    /// Returns the hashcode for this <see cref="BatchQueryRequest"/>.
+    /// Returns the hashcode for this <see cref="SkipQueryRequest"/>.
     /// </summary>
     /// <returns>The hashcode value.</returns>
     public override int GetHashCode()
@@ -125,12 +125,16 @@ internal sealed class SkipQueryRequest : BaseRequest
             // Get first the entity hash code
             hashCode = System.HashCode.Combine(
                 typeof(SkipQueryRequest),
-                Name,
+                StatementBuilder?.GetType(),
+                Connection.GetType(),
+                TableName,
                 Where,
                 Skip,
-                RowsPerBatch,
-                Hints,
-                Fields);
+                System.HashCode.Combine(
+                    RowsPerBatch,
+                    Hints,
+                    Fields)
+                );
 
             // Add the order fields
             if (OrderBy is not null)

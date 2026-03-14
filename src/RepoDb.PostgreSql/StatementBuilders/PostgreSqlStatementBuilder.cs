@@ -35,79 +35,6 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
               averageableClientTypeResolver)
     { }
 
-    #region CreateBatchQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for batch query operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be queried.</param>
-    /// <param name="page">The page of the batch.</param>
-    /// <param name="rowsPerBatch">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public override string CreateBatchQuery(string tableName,
-        IEnumerable<Field> fields,
-        int page,
-        int rowsPerBatch,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new EmptyException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
-
-        // Validate order by
-        if (orderBy == null || orderBy.Any() != true)
-        {
-            throw new EmptyException("The argument 'orderBy' is required.");
-        }
-
-        // Validate the page
-        if (page < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(page), "The page must be equals or greater than 0.");
-        }
-
-        // Validate the page
-        if (rowsPerBatch < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowsPerBatch), "The rows per batch must be equals or greater than 1.");
-        }
-
-        // Skipping variables
-        var skip = (page * rowsPerBatch);
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .FieldsFrom(fields, DbSetting)
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .WhereFrom(where, DbSetting)
-            .OrderByFrom(orderBy, DbSetting)
-            .LimitOffset(rowsPerBatch, skip)
-            .End();
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
     #region CreateExists
 
     /// <summary>
@@ -138,7 +65,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
             .Limit(1)
-            .End();
+            .End(DbSetting);
 
         // Return the query
         return builder.ToString();
@@ -307,7 +234,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
 
         // Return the query
         return builder
-            .End()
+            .End(DbSetting)
             .ToString();
     }
 
@@ -418,7 +345,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
         }
 
         // End the builder
-        builder.End();
+        builder.End(DbSetting);
 
         // Return the query
         return builder.ToString();
@@ -535,7 +462,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
             }
 
             // End the builder
-            builder.End();
+            builder.End(DbSetting);
         }
 
         // Return the query
@@ -553,99 +480,25 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
     /// <param name="fields">The list of fields.</param>
     /// <param name="where">The query expression.</param>
     /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="top">The number of rows to be returned.</param>
-    /// <param name="hints">The table hints to be used.</param>
+    /// <param name="offset"></param>
+    /// <param name="take">The number of rows to be returned.</param>
     /// <returns>A sql statement for query operation.</returns>
+    /// <param name="hints">The table hints to be used.</param>
     public override string CreateQuery(string tableName,
         IEnumerable<Field> fields,
         QueryGroup? where = null,
         IEnumerable<OrderField>? orderBy = null,
-        int top = 0,
+        int offset = 0,
+        int take = 0,
         string? hints = null)
     {
+        ArgumentNullException.ThrowIfNull(fields);
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThan(take, 0);
 
         // Validate the hints
         GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new EmptyException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .FieldsFrom(fields, DbSetting)
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .WhereFrom(where, DbSetting)
-            .OrderByFrom(orderBy, DbSetting);
-        if (top > 0)
-        {
-            builder.Limit(top);
-        }
-        builder.End();
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateSkipQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for 'BatchQuery' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
-    /// <param name="skip">The number of rows to skip.</param>
-    /// <param name="take">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public override string CreateSkipQuery(string tableName,
-        IEnumerable<Field> fields,
-        int skip,
-        int take,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new EmptyException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
-
-        // Validate order by
-        if (orderBy == null || orderBy.Any() != true)
-        {
-            throw new EmptyException("The argument 'orderBy' is required.");
-        }
-
-        // Validate the skip
-        if (skip < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(skip), "The rows skipped must be equals or greater than 0.");
-        }
-
-        // Validate the take
-        if (take < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(take), "The rows per batch must be equals or greater than 1.");
-        }
 
         // Initialize the builder
         var builder = new QueryBuilder();
@@ -658,8 +511,8 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
             .TableNameFrom(tableName, DbSetting)
             .WhereFrom(where, DbSetting)
             .OrderByFrom(orderBy, DbSetting)
-            .LimitOffset(take, skip)
-            .End();
+            .LimitOffset(take, offset)
+            .End(DbSetting);
 
         // Return the query
         return builder.ToString();
@@ -687,7 +540,7 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
             .Table()
             .TableNameFrom(tableName, DbSetting)
             .WriteText("RESTART IDENTITY")
-            .End();
+            .End(DbSetting);
 
         // Return the query
         return builder.ToString();
@@ -778,5 +631,6 @@ public sealed class PostgreSqlStatementBuilder : BaseStatementBuilder
     #endregion
 
     public override string? JsonColumnType => "json";
+    public override string? VectorColumnType => "vector";
     public override string IdentityDefinition => "GENERATED ALWAYS AS IDENTITY";
 }

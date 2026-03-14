@@ -5,6 +5,9 @@ using RepoDb.Extensions.QueryFields;
 
 namespace RepoDb;
 
+/// <summary>
+///
+/// </summary>
 public static partial class JsonQueryExtensions
 {
     /// <summary>
@@ -42,7 +45,7 @@ public static partial class JsonQueryExtensions
     /// <param name="source"></param>
     /// <param name="mapping"></param>
     /// <returns></returns>
-    public static TResult? ExtractValue<TEntity, TResult>(this JsonNode source, Expression<Func<TEntity, TResult>> mapping) where TResult: notnull where TEntity : notnull
+    public static TResult? ExtractValue<TEntity, TResult>(this JsonNode source, Expression<Func<TEntity, TResult>> mapping) where TResult : notnull where TEntity : notnull
     {
         return ExtractValue<TResult>(source, JsonExtractQueryField.ParsePath(mapping));
     }
@@ -69,39 +72,28 @@ public static partial class JsonQueryExtensions
         {
             JsonNode? n = node;
             // Split path by dots, but preserve array indexing like [0]
-            var segments = Regex.Split(path, @"\.(?![^\[]*\])");
 
-            foreach (var segment in segments)
+            foreach (var segment in SegmentRegex.Split(path))
             {
                 if (n is null)
                     return null;
 
                 // Check if segment has array indexing
-                var arrayMatch = Regex.Match(segment, @"^(\w+)\[(\d+)\]$");
-                if (arrayMatch.Success)
+                if (ItemArrayRegex.Match(segment) is { Success: true } arrayMatch)
                 {
-                    var propertyName = arrayMatch.Groups[1].Value;
                     if (!int.TryParse(arrayMatch.Groups[2].Value, out var index))
                         return null;
 
-                    n = n[propertyName];
+                    n = n[arrayMatch.Groups[1].Value];
                     if (n is null)
                         return null;
 
                     n = n[index];
                 }
-                else if (Regex.IsMatch(segment, @"^\[\d+\]$"))
+                else if (JustArrayRegex.Match(segment) is { Success: true } indexMatch
+                    && int.TryParse(indexMatch.Groups[1].Value, out var index))
                 {
-                    // Just array indexing without property name
-                    var indexMatch = Regex.Match(segment, @"^\[(\d+)\]$");
-                    if (indexMatch.Success && int.TryParse(indexMatch.Groups[1].Value, out var index))
-                    {
-                        n = n[index];
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    n = n[index];
                 }
                 else
                 {
@@ -117,4 +109,40 @@ public static partial class JsonQueryExtensions
             return null;
         }
     }
+
+#if NET9_0_OR_GREATER
+    [GeneratedRegex(@"\.(?![^\[]*\])")]
+    private static partial
+#else
+    private static
+#endif
+    Regex SegmentRegex
+    { get; }
+#if !NET9_0_OR_GREATER
+        = new Regex(@"\.(?![^\[]*\])", RegexOptions.Compiled);
+#endif
+
+#if NET9_0_OR_GREATER
+    [GeneratedRegex(@"^(\w+)\[(\d+)\]$")]
+    private static partial
+#else
+    private static
+#endif
+    Regex ItemArrayRegex
+    { get; }
+#if !NET9_0_OR_GREATER
+        = new Regex(@"^(\w+)\[(\d+)\]$", RegexOptions.Compiled);
+#endif
+
+#if NET9_0_OR_GREATER
+    [GeneratedRegex(@"^\[\d+\]$")]
+    private static partial
+#else
+    private static
+#endif
+    Regex JustArrayRegex
+    { get; }
+#if !NET9_0_OR_GREATER
+        = new Regex(@"^\[(\d+)\]$", RegexOptions.Compiled);
+#endif
 }

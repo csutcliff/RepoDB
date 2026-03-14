@@ -86,10 +86,7 @@ public static class Database
                         CONSTRAINT ""BulkOperationIdentityTable_PrimaryKey"" PRIMARY KEY (""Id"")
                     )
 
-                    TABLESPACE pg_default;
-
-                    ALTER TABLE public.""BulkOperationIdentityTable""
-                        OWNER to postgres;";
+                    TABLESPACE pg_default;";
         using var connection = new NpgsqlConnection(ConnectionStringForRepoDb);
         connection.ExecuteNonQuery(commandText);
     }

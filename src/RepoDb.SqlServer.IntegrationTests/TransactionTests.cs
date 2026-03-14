@@ -59,7 +59,7 @@ public class TransactionTests
 
     #endregion
 
-    #endregion  
+    #endregion
 
     #region Count
 
@@ -91,7 +91,7 @@ public class TransactionTests
 
     #endregion
 
-    #endregion  
+    #endregion
 
     #region CountAll
 

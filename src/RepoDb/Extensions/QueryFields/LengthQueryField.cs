@@ -9,6 +9,9 @@ namespace RepoDb.Extensions.QueryFields;
 /// </summary>
 public sealed class LengthQueryField : FunctionalQueryField
 {
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly string LengthFormat = "LENGTH({0})";
 
     #region Constructors

@@ -9,6 +9,7 @@ using RepoDb.Enumerations;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
 using RepoDb.Resolvers;
+using OracleINullable = Oracle.ManagedDataAccess.Types.INullable;
 
 namespace RepoDb.DbHelpers;
 
@@ -50,15 +51,15 @@ public sealed class OracleDbHelper : BaseDbHelper
     }
 
     private const string GetFieldsQuery = @"
-        SELECT 
+        SELECT
             C.COLUMN_NAME,
             CASE WHEN PK.COLUMN_NAME IS NOT NULL THEN 1 ELSE 0 END AS IsPrimary,
             CASE WHEN C.IDENTITY_COLUMN = 'YES' THEN 1 ELSE 0 END AS IsIdentity,
             CASE WHEN C.NULLABLE = 'Y' THEN 1 ELSE 0 END AS IsNullable,
             C.DATA_TYPE AS DataType,
-    
+
             -- Return character length for character types, otherwise use byte length
-            CASE 
+            CASE
                 WHEN C.CHAR_USED = 'C' THEN C.CHAR_LENGTH
                 ELSE C.DATA_LENGTH
             END AS ""Size"",
@@ -73,17 +74,16 @@ public sealed class OracleDbHelper : BaseDbHelper
         LEFT JOIN (
             SELECT CC.OWNER, CC.TABLE_NAME, CC.COLUMN_NAME
             FROM ALL_CONSTRAINTS CONS
-            JOIN ALL_CONS_COLUMNS CC 
-              ON CONS.CONSTRAINT_NAME = CC.CONSTRAINT_NAME 
+            JOIN ALL_CONS_COLUMNS CC
+              ON CONS.CONSTRAINT_NAME = CC.CONSTRAINT_NAME
              AND CONS.OWNER = CC.OWNER
             WHERE CONS.CONSTRAINT_TYPE = 'P'
-        ) PK ON PK.OWNER = C.OWNER 
-            AND PK.TABLE_NAME = C.TABLE_NAME 
+        ) PK ON PK.OWNER = C.OWNER
+            AND PK.TABLE_NAME = C.TABLE_NAME
             AND PK.COLUMN_NAME = C.COLUMN_NAME
         WHERE C.TABLE_NAME = :TableName
             AND C.OWNER = :Schema
-ORDER BY C.COLUMN_ID
-    ";
+        ORDER BY C.COLUMN_ID";
 
     public override DbFieldCollection GetFields(IDbConnection connection, string tableName, IDbTransaction? transaction = null)
     {
@@ -150,7 +150,7 @@ ORDER BY C.COLUMN_ID
             object_type ""Type"",
             object_name ""Name"",
             owner ""Schema"",
-            (owner = USER) AS ""IsCurrentUser""
+            CASE WHEN owner = USER THEN 1 ELSE 0 END AS ""IsCurrentSchema""
         FROM all_objects
         WHERE object_type IN ('TABLE', 'VIEW')
           AND owner NOT IN (
@@ -158,8 +158,8 @@ ORDER BY C.COLUMN_ID
             'EXFSYS', 'DBSNMP', 'APPQOSSYS', 'OUTLN', 'AUDSYS', 'GSMADMIN_INTERNAL',
             'OJVMSYS', 'ANONYMOUS', 'DVSYS', 'DVF', 'REMOTE_SCHEDULER_AGENT',
             'MGMT_VIEW', 'SI_INFORMTN_SCHEMA', 'APEX_PUBLIC_USER', 'FLOWS_FILES',
-            'APEX_040000', 'APEX_050000', 'XS$NULL'
-)
+            'APEX_040000', 'APEX_050000', 'XS$NULL', 'LBACSYS'
+        ) AND INSTR(owner, '$') = 0
 ";
 
     private DbField ReaderToDbField(DbDataReader reader)
@@ -184,17 +184,17 @@ ORDER BY C.COLUMN_ID
 
     public override IEnumerable<DbSchemaObject> GetSchemaObjects(IDbConnection connection, IDbTransaction? transaction = null)
     {
-        return connection.ExecuteQuery<(string Type, string Name, string Schema, bool IsCurrentUser)>(GetSchemaQuery, transaction)
+        return connection.ExecuteQuery<(string Type, string Name, string Schema, bool IsCurrentSchema)>(GetSchemaQuery, transaction)
                          .SelectMany(MapSchemaQueryResult);
     }
 
     public override async ValueTask<IEnumerable<DbSchemaObject>> GetSchemaObjectsAsync(IDbConnection connection, IDbTransaction? transaction = null, CancellationToken cancellationToken = default)
     {
-        var results = await connection.ExecuteQueryAsync<(string Type, string Name, string Schema, bool IsCurrentUser)>(GetSchemaQuery, transaction, cancellationToken: cancellationToken);
+        var results = await connection.ExecuteQueryAsync<(string Type, string Name, string Schema, bool IsCurrentSchema)>(GetSchemaQuery, transaction, cancellationToken: cancellationToken);
         return results.SelectMany(MapSchemaQueryResult);
     }
 
-    private static IEnumerable<DbSchemaObject> MapSchemaQueryResult((string Type, string Name, string Schema, bool IsCurrentUser) r)
+    private static IEnumerable<DbSchemaObject> MapSchemaQueryResult((string Type, string Name, string Schema, bool IsCurrentSchema) r)
     {
         var rr = new DbSchemaObject
         {
@@ -210,7 +210,7 @@ ORDER BY C.COLUMN_ID
 
         yield return rr;
 
-        if (r.IsCurrentUser)
+        if (r.IsCurrentSchema)
             yield return rr with { Schema = null };
     }
     #endregion
@@ -286,9 +286,14 @@ ORDER BY C.COLUMN_ID
             {
                 var value = p.Value;
 
-                if (value is OracleDecimal od)
+                if (value is OracleINullable { IsNull: true })
+                    return null;
+                else if (value is OracleDecimal od)
                 {
-                    return od.ToInt64();
+                    if (od.IsInt)
+                        return od.ToInt64();
+                    else
+                        return od.Value;
                 }
                 else if (value is OracleDecimal[] oda)
                 {
@@ -307,7 +312,21 @@ ORDER BY C.COLUMN_ID
     public override void PrepareForBatchOperation(DbCommand command, int count)
     {
         OracleCommand cmd = (OracleCommand)command;
-        if (count <= 1 || !command.CommandText.StartsWith("/*FORALL*/", StringComparison.Ordinal))
+        var commandText = cmd.CommandText;
+        cmd.BindByName = true;
+
+        if (commandText is not { })
+            return;
+
+        if (commandText.StartsWith("/*ASCURSOR:", StringComparison.Ordinal) && commandText.IndexOf("*/", 11, StringComparison.Ordinal) is { } nEnd
+            && int.TryParse(commandText.Substring(11, nEnd - 11), out int nItems))
+        {
+            for(int i = 0; i < nItems; i++)
+            {
+                cmd.Parameters.Add($":c{i}", OracleDbType.RefCursor, ParameterDirection.Output);
+            }
+        }
+        else if (count <= 1 || !commandText.StartsWith("/*FORALL*/", StringComparison.Ordinal))
         {
             cmd.ArrayBindCount = 0;
         }
@@ -329,6 +348,18 @@ ORDER BY C.COLUMN_ID
         }
     }
 
+
+    public override string? GetJsonColumnType(DbConnection sql, DbTransaction transaction)
+    {
+        if (sql.GetDbRuntimeSetting(transaction) is { } info)
+        {
+            if (info.EngineVersion.Major >= 21)
+                return "JSON";
+        }
+
+        return "CLOB";
+    }
+
     private const string QueryVersion = @"SELECT banner FROM v$version";
     private const string QueryProduct = @"SELECT PRODUCT, VERSION FROM PRODUCT_COMPONENT_VERSION WHERE PRODUCT LIKE 'Oracle%'";
 
@@ -337,6 +368,8 @@ ORDER BY C.COLUMN_ID
         string? banner = null;
         string? productName = null;
         string? productVersion = null;
+
+        connection.EnsureOpen();
 
         // Execute first query
         using (var command = connection.CreateCommand(QueryVersion, transaction: transaction))

@@ -109,6 +109,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -154,6 +155,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -287,6 +289,7 @@ public static partial class DbConnectionExtension
     /// <param name="tableName">The name of the target table to be used.</param>
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
@@ -334,6 +337,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -460,6 +464,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -503,6 +508,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -628,6 +634,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -670,6 +677,7 @@ public static partial class DbConnectionExtension
     /// <param name="connection">The connection object to be used.</param>
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
@@ -715,6 +723,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -875,6 +884,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -922,6 +932,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1062,6 +1073,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1110,6 +1122,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1242,6 +1255,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1287,6 +1301,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1421,6 +1436,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1467,6 +1483,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The expression for the qualifier fields.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1514,6 +1531,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The object to be merged.</param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1666,6 +1684,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The dynamic object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1791,6 +1810,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The dynamic object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -1923,6 +1943,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The dynamic object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -2057,6 +2078,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The dynamic object to be merged.</param>
     /// <param name="qualifiers">The qualifier <see cref="Field"/> objects to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -2108,6 +2130,7 @@ public static partial class DbConnectionExtension
     /// <param name="entity">The data entity or dynamic object to be merged.</param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>
     /// <param name="commandTimeout">The command timeout in seconds to be used.</param>
@@ -2206,6 +2229,7 @@ public static partial class DbConnectionExtension
     /// <param name="tableName">The name of the target table to be used.</param>
     /// <param name="entity">The data entity or dynamic object to be merged.</param>
     /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="qualifiers">The list of qualifier fields to be used.</param>
     /// <param name="hints">The table hints to be used.</param>
     /// <param name="traceKey">The tracing key to be used.</param>

@@ -125,6 +125,24 @@ public class CancellableTraceLog : TraceLog
             sb.Append(']');
             return sb.ToString();
         }
+        else if (value is ReadOnlyMemory<float> vector)
+        {
+            StringBuilder sb = new();
+            sb.Append("Vector[");
+            bool first = true;
+            foreach (var f in vector.Span)
+            {
+                if (first)
+                    first = false;
+                else
+                    sb.Append(", ");
+
+                sb.Append(", ");
+                sb.Append(ParamValueToString(f));
+            }
+            sb.Append(']');
+            return sb.ToString();
+        }
         else if (value is string)
         {
             return $"\"{value}\"";
@@ -132,6 +150,10 @@ public class CancellableTraceLog : TraceLog
         else if (value.GetType() is { IsArray: true } arrayType)
         {
             return $"{arrayType.GetElementType()}[{((Array)value).Length}]";
+        }
+        else if (value is IFormattable f)
+        {
+            return f.ToString(null, CultureInfo.InvariantCulture);
         }
         else
             return value.ToString();

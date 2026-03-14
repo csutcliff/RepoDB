@@ -83,7 +83,7 @@ public class TransactionTests
 
     #endregion
 
-    #endregion  
+    #endregion
 
     #region Count
 
@@ -121,7 +121,7 @@ public class TransactionTests
 
     #endregion
 
-    #endregion  
+    #endregion
 
     #region CountAll
 
@@ -1132,8 +1132,8 @@ public class TransactionTests
     #region Truncate
 
     /*
-     * Message: Test method RepoDb.SQLite.System.IntegrationTests.TransactionTests.TestSqlTransactionForTruncateAsync threw exception: 
-     * System.AggregateException: One or more errors occurred. (SQL logic error cannot VACUUM from within a transaction) ---> 
+     * Message: Test method RepoDb.SQLite.System.IntegrationTests.TransactionTests.TestSqlTransactionForTruncateAsync threw exception:
+     * System.AggregateException: One or more errors occurred. (SQL logic error cannot VACUUM from within a transaction) --->
      * System.Data.SQLite.SQLiteException: SQL logic error cannot VACUUM from within a transaction
      */
 

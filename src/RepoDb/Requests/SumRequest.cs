@@ -90,7 +90,9 @@ internal sealed class SumRequest : BaseRequest
         {
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(SumRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Field,
                 Where,
                 Hints);

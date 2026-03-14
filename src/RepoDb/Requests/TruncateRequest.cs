@@ -52,21 +52,25 @@ internal sealed class TruncateRequest : BaseRequest
     /// <returns>The hashcode value.</returns>
     public override int GetHashCode()
     {
-        if (this.HashCode is not { } hashCode)
+        if (HashCode is not { } hashCode)
         {
             // Get first the entity hash code
-            hashCode = System.HashCode.Combine(typeof(TruncateRequest), Name, ".Truncate");
+            HashCode = hashCode = System.HashCode.Combine(
+                typeof(TruncateRequest),
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName);
 
         }
 
         // Set and return the hashcode
-        return this.HashCode ??= hashCode;
+        return hashCode;
     }
 
     protected override bool StrictEquals(BaseRequest other)
     {
-        // TODO: Implement Equals() and use from here.
-        return other is TruncateRequest;
+        return other is TruncateRequest
+            && other.TableName == TableName;
     }
 
     #endregion

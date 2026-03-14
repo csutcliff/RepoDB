@@ -48,6 +48,9 @@ public sealed class CachedType
         lazyIsTuple = lazyFalse;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly CachedType Null = new();
 
     /// <summary>

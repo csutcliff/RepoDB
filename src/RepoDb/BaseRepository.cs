@@ -295,6 +295,10 @@ public abstract partial class BaseRepository<TEntity, TDbConnection> : IDisposab
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="disposing"></param>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)

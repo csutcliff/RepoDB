@@ -22,5 +22,8 @@ public class PropertyMappedNameResolver : IResolver<PropertyInfo, Type, string>
         return PropertyInfoExtension.GetMappedName(propertyInfo, declaringType ?? propertyInfo.DeclaringType!);
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly PropertyMappedNameResolver Instance = new();
 }

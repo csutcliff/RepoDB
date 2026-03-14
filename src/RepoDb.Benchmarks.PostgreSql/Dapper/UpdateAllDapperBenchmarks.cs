@@ -28,7 +28,7 @@ public class UpdateAllDapperBenchmarks : DapperBaseBenchmarks
     {
         using var connection = GetConnection();
 
-        connection.Execute(@"update ""Person"" 
+        connection.Execute(@"update ""Person""
                                 set ""CreatedDateUtc"" = @CreatedDateUtc, ""Name"" = @Name, ""Age"" = @Age
                                 where ""Id"" = @Id", persons);
     }

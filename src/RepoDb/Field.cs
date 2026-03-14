@@ -48,6 +48,9 @@ public class Field : IEquatable<Field>
     public string FieldName { get; }
 
 
+    /// <summary>
+    ///
+    /// </summary>
     [Obsolete("Use .FieldName"), EditorBrowsable(EditorBrowsableState.Never)]
     public string Name => FieldName;
 

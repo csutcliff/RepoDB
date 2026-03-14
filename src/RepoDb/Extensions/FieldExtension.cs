@@ -36,7 +36,7 @@ public static class FieldExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="name"></param>
@@ -47,7 +47,7 @@ public static class FieldExtension
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="name"></param>
@@ -57,7 +57,7 @@ public static class FieldExtension
         => source.Any(p => string.Equals(p.FieldName, name, stringComparison));
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="fields"></param>
     /// <returns></returns>
@@ -67,7 +67,7 @@ public static class FieldExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="fields"></param>

@@ -25,7 +25,7 @@ public class BaseStatementBuilderCreateDeleteAllTest
         var tableName = "Table";
 
         // Act
-        var actual = statementBuilder.CreateDeleteAll(tableName: tableName);
+        var actual = statementBuilder.CreateDelete(tableName: tableName);
         var expected = "DELETE FROM [Table];";
 
         // Assert
@@ -40,7 +40,7 @@ public class BaseStatementBuilderCreateDeleteAllTest
         var tableName = "[dbo].[Table]";
 
         // Act
-        var actual = statementBuilder.CreateDeleteAll(tableName: tableName);
+        var actual = statementBuilder.CreateDelete(tableName: tableName);
         var expected = "DELETE FROM [dbo].[Table];";
 
         // Assert
@@ -55,7 +55,7 @@ public class BaseStatementBuilderCreateDeleteAllTest
         var tableName = "dbo.Table";
 
         // Act
-        var actual = statementBuilder.CreateDeleteAll(tableName: tableName);
+        var actual = statementBuilder.CreateDelete(tableName: tableName);
         var expected = "DELETE FROM [dbo].[Table];";
 
         // Assert
@@ -70,7 +70,7 @@ public class BaseStatementBuilderCreateDeleteAllTest
         var tableName = "Table";
 
         // Act
-        var actual = statementBuilder.CreateDeleteAll(tableName: tableName,
+        var actual = statementBuilder.CreateDelete(tableName: tableName,
             hints: "WITH (TABLOCK)");
         var expected = "DELETE FROM [Table] WITH (TABLOCK);";
 
@@ -86,7 +86,7 @@ public class BaseStatementBuilderCreateDeleteAllTest
         string? tableName = null;
 
         // Act
-        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateDeleteAll(tableName: tableName));
+        Assert.ThrowsExactly<ArgumentNullException>(() => statementBuilder.CreateDelete(tableName: tableName));
     }
 
     [TestMethod]
@@ -98,7 +98,7 @@ public class BaseStatementBuilderCreateDeleteAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateDeleteAll(tableName: tableName));
+        () => statementBuilder.CreateDelete(tableName: tableName));
     }
 
     [TestMethod]
@@ -110,6 +110,6 @@ public class BaseStatementBuilderCreateDeleteAllTest
 
         // Act
         Assert.Throws<ArgumentException>(
-        () => statementBuilder.CreateDeleteAll(tableName: tableName));
+        () => statementBuilder.CreateDelete(tableName: tableName));
     }
 }

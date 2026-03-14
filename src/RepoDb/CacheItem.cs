@@ -9,7 +9,7 @@ namespace RepoDb;
 public class CacheItem<T> : IExpirable
 {
     /// <summary>
-    /// Creates a new instance of <see cref="CacheItem"/> object.
+    /// Creates a new instance of <see cref="CacheItem{T}"/> object.
     /// </summary>
     /// <param name="key">The key of the cache.</param>
     /// <param name="value">The value of the cache.</param>
@@ -21,7 +21,7 @@ public class CacheItem<T> : IExpirable
     { }
 
     /// <summary>
-    /// Creates a new instance of <see cref="CacheItem"/> object.
+    /// Creates a new instance of <see cref="CacheItem{T}"/> object.
     /// </summary>
     /// <param name="key">The key of the cache item.</param>
     /// <param name="value">The value of the cache item.</param>

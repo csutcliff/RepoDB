@@ -14,19 +14,9 @@ namespace RepoDb.Contexts.Providers;
 /// </summary>
 internal static class MergeAllExecutionContextProvider
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="tableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="fields"></param>
-    /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="hints"></param>
-    /// <returns></returns>
     private static string GetKey(Type entityType,
         string tableName,
-        IEnumerable<Field>? qualifiers,
+        IEnumerable<Field> qualifiers,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
         int batchSize,
@@ -104,7 +94,7 @@ internal static class MergeAllExecutionContextProvider
                 batchSize,
                 hints,
                 statementBuilder);
-            commandText = CommandTextCache.GetMergeAllText(request);
+            commandText = CommandTextCache.GetCached(request, CommandTextCache.GetMergeAllText);
         }
         else
         {
@@ -116,7 +106,7 @@ internal static class MergeAllExecutionContextProvider
                 qualifiers,
                 hints,
                 statementBuilder);
-            commandText = CommandTextCache.GetMergeText(request);
+            commandText = CommandTextCache.GetCached(request, CommandTextCache.GetMergeText);
         }
 
         // Call
@@ -196,7 +186,7 @@ internal static class MergeAllExecutionContextProvider
                 batchSize,
                 hints,
                 statementBuilder);
-            commandText = await CommandTextCache.GetMergeAllTextAsync(request, cancellationToken).ConfigureAwait(false);
+            commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetMergeAllText, cancellationToken).ConfigureAwait(false);
         }
         else
         {
@@ -208,7 +198,7 @@ internal static class MergeAllExecutionContextProvider
                 qualifiers,
                 hints,
                 statementBuilder);
-            commandText = await CommandTextCache.GetMergeTextAsync(request, cancellationToken).ConfigureAwait(false);
+            commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetMergeText, cancellationToken).ConfigureAwait(false);
         }
 
         // Call
@@ -247,7 +237,7 @@ internal static class MergeAllExecutionContextProvider
         IEnumerable<object> entities,
         DbFieldCollection dbFields,
         string tableName,
-        IEnumerable<Field>? qualifiers,
+        IEnumerable<Field> qualifiers,
         int batchSize,
         IEnumerable<Field> fields,
         string commandText)
@@ -289,12 +279,6 @@ internal static class MergeAllExecutionContextProvider
         {
             keyPropertySetterFunc = FunctionCache
                 .GetDataEntityPropertySetterCompiledFunction(entityType, keyField);
-        }
-
-        // Check the qualifiers
-        if (qualifiers?.Any() != true)
-        {
-            qualifiers = dbFields.PrimaryFields?.AsFields() ?? keyField?.AsEnumerable();
         }
 
         // Identity which objects to set

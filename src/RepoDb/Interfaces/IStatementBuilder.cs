@@ -24,70 +24,6 @@ public interface IStatementBuilder
 
     #endregion
 
-    #region CreateAverageAll
-
-    /// <summary>
-    /// Creates a SQL Statement for 'AverageAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be averaged.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for average-all operation.</returns>
-    string CreateAverageAll(
-        string tableName,
-        Field field,
-        string? hints = null);
-
-    #endregion
-
-    #region CreateBatchQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for 'BatchQuery' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
-    /// <param name="page">The page of the batch.</param>
-    /// <param name="rowsPerBatch">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    string CreateBatchQuery(
-        string tableName,
-        IEnumerable<Field> fields,
-        int page,
-        int rowsPerBatch,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null);
-
-    #endregion
-
-    #region CreateSkipQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for 'BatchQuery' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
-    /// <param name="skip">The number of rows to skip.</param>
-    /// <param name="take">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    string CreateSkipQuery(
-        string tableName,
-        IEnumerable<Field> fields,
-        int skip,
-        int take,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null);
-
-    #endregion
-
     #region CreateCount
 
     /// <summary>
@@ -104,20 +40,6 @@ public interface IStatementBuilder
 
     #endregion
 
-    #region CreateCountAll
-
-    /// <summary>
-    /// Creates a SQL Statement for 'CountAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for count-all operation.</returns>
-    string CreateCountAll(
-        string tableName,
-        string? hints = null);
-
-    #endregion
-
     #region CreateDelete
 
     /// <summary>
@@ -130,20 +52,6 @@ public interface IStatementBuilder
     string CreateDelete(
         string tableName,
         QueryGroup? where = null,
-        string? hints = null);
-
-    #endregion
-
-    #region CreateDeleteAll
-
-    /// <summary>
-    /// Creates a SQL Statement for 'DeleteAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for delete-all operation.</returns>
-    string CreateDeleteAll(
-        string tableName,
         string? hints = null);
 
     #endregion
@@ -171,8 +79,7 @@ public interface IStatementBuilder
     /// </summary>
     /// <param name="tableName">The name of the target table.</param>
     /// <param name="fields">The list of fields to be inserted.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
+    /// <param name="keyFields">The primary field from the database.</param>
     /// <param name="hints">The table hints to be used.</param>
     /// <returns>A sql statement for insert operation.</returns>
     string CreateInsert(
@@ -191,8 +98,7 @@ public interface IStatementBuilder
     /// <param name="tableName">The name of the target table.</param>
     /// <param name="fields">The list of fields to be inserted.</param>
     /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
+    /// <param name="keyFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <returns>A sql statement for insert operation.</returns>
     string CreateInsertAll(
@@ -222,22 +128,6 @@ public interface IStatementBuilder
 
     #endregion
 
-    #region CreateMaxAll
-
-    /// <summary>
-    /// Creates a SQL Statement for 'MaxAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be maximized.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for maximum-all operation.</returns>
-    string CreateMaxAll(
-        string tableName,
-        Field field,
-        string? hints = null);
-
-    #endregion
-
     #region CreateMerge
 
     /// <summary>
@@ -247,8 +137,7 @@ public interface IStatementBuilder
     /// <param name="fields">The list of fields to be merged.</param>
     /// <param name="noUpdateFields">The fields not to update on collisions</param>
     /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
+    /// <param name="keyFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <returns>A sql statement for merge operation.</returns>
     string CreateMerge(
@@ -268,10 +157,10 @@ public interface IStatementBuilder
     /// </summary>
     /// <param name="tableName">The name of the target table.</param>
     /// <param name="fields">The list of fields to be updated.</param>
+    /// <param name="noUpdateFields"></param>
     /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
     /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
+    /// <param name="keyFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <returns>A sql statement for update-all operation.</returns>
     string CreateMergeAll(
@@ -280,7 +169,8 @@ public interface IStatementBuilder
         IEnumerable<Field>? noUpdateFields,
         IEnumerable<Field> qualifiers,
         int batchSize,
-        IEnumerable<DbField> keyFields, string? hints = null);
+        IEnumerable<DbField> keyFields,
+        string? hints = null);
 
     #endregion
 
@@ -302,22 +192,6 @@ public interface IStatementBuilder
 
     #endregion
 
-    #region CreateMinAll
-
-    /// <summary>
-    /// Creates a SQL Statement for 'MinAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be minimized.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for minimum-all operation.</returns>
-    string CreateMinAll(
-        string tableName,
-        Field field,
-        string? hints = null);
-
-    #endregion
-
     #region CreateQuery
 
     /// <summary>
@@ -327,33 +201,17 @@ public interface IStatementBuilder
     /// <param name="fields">The list of fields.</param>
     /// <param name="where">The query expression.</param>
     /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="top">The number of rows to be returned.</param>
-    /// <param name="hints">The table hints to be used.</param>
+    /// <param name="offset"></param>
+    /// <param name="take">The number of rows to be returned.</param>
     /// <returns>A sql statement for query operation.</returns>
+    /// <param name="hints">The table hints to be used.</param>
     string CreateQuery(
         string tableName,
         IEnumerable<Field> fields,
         QueryGroup? where = null,
         IEnumerable<OrderField>? orderBy = null,
-        int top = 0,
-        string? hints = null);
-
-    #endregion
-
-    #region CreateQueryAll
-
-    /// <summary>
-    /// Creates a SQL Statement for 'QueryAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for query operation.</returns>
-    string CreateQueryAll(
-        string tableName,
-        IEnumerable<Field> fields,
-        IEnumerable<OrderField>? orderBy = null,
+        int offset = 0,
+        int take = 0,
         string? hints = null);
 
     #endregion
@@ -372,22 +230,6 @@ public interface IStatementBuilder
         string tableName,
         Field field,
         QueryGroup? where = null,
-        string? hints = null);
-
-    #endregion
-
-    #region CreateSumAll
-
-    /// <summary>
-    /// Creates a SQL Statement for 'SumAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="field">The field to be summarized.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for sum-all operation.</returns>
-    string CreateSumAll(
-        string tableName,
-        Field field,
         string? hints = null);
 
     #endregion
@@ -442,6 +284,16 @@ public interface IStatementBuilder
         int batchSize,
         IEnumerable<DbField> keyFields,
         string? hints = null);
-
     #endregion
+
+    /// <summary>
+    /// Combines multiple queries for QueryMultiple
+    /// </summary>
+    /// <param name="commandTexts"></param>
+    /// <returns></returns>
+    string CombineQueries(ICollection<string> commandTexts)
+#if NET
+        => string.Join(" ", commandTexts)
+#endif
+    ;
 }

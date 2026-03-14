@@ -68,7 +68,7 @@ public sealed class RightQueryField : FunctionalQueryField
     /// <param name="value">The value to be used for the query expression.</param>
     /// <param name="dbType">The database type to be used for the query expression.</param>
     /// <param name="charCount">The number of characters from the right to be evaluated.</param>
-    private RightQueryField(string fieldName,
+    internal RightQueryField(string fieldName,
         Operation operation,
         object? value,
         DbType? dbType,

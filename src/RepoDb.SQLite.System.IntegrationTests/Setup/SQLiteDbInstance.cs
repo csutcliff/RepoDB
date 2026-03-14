@@ -25,6 +25,9 @@ public class SQLiteDbInstance : DbInstance<SQLiteConnection>
         AdminConnectionString = ConnectionString = "Data Source=" +Path.GetFullPath(Path.GetTempFileName()).Replace(Path.DirectorySeparatorChar, '/');
 #endif
 
+        // SQLite doesn't have user-level security; limited connection uses same database
+        LimitedConnectionString = ConnectionString;
+
         // Keep one connection open, but don't use it
         _conn = new SQLiteConnection(AdminConnectionString);
         _conn.Open();

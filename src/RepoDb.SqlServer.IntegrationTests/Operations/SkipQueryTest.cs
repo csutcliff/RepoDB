@@ -1,7 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Diagnostics.Tracing;
+using Microsoft.Data.SqlClient;
 using RepoDb.Extensions;
 using RepoDb.SqlServer.IntegrationTests.Models;
 using RepoDb.SqlServer.IntegrationTests.Setup;
+using RepoDb.Trace;
 
 namespace RepoDb.SqlServer.IntegrationTests.Operations;
 
@@ -137,7 +139,7 @@ public class SkipQueryTest
             0,
             3,
             OrderField.Ascending<CompleteTable>(c => c.Id).AsEnumerable(),
-            (object?)null, cancellationToken: TestContext.CancellationToken);
+            (object?)null, cancellationToken: TestContext.CancellationToken, trace: new DiagnosticsTracer());
 
         // Assert
         Helper.AssertPropertiesEquality(tables.ElementAt(0), result.ElementAt(0));

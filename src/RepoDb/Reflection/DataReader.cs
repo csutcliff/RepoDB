@@ -16,7 +16,7 @@ public static class DataReader
     /// <typeparam name="TResult">The type of the result.</typeparam>
     /// <param name="reader">The <see cref="DbDataReader"/> to be converted.</param>
     /// <param name="dbFields">The list of the <see cref="DbField"/> objects to be used.</param>
-    /// 
+    ///
     /// <returns>A list of the target result type.</returns>
     public static IEnumerable<TResult> ToEnumerable<TResult>(DbDataReader reader,
         DbFieldCollection? dbFields = null)
@@ -43,7 +43,7 @@ public static class DataReader
     /// <param name="reader">The <see cref="DbDataReader"/> to be converted.</param>
     /// <param name="dbFields">The list of the <see cref="DbField"/> objects to be used.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// 
+    ///
     /// <returns>A list of the target result type.</returns>
     public static async IAsyncEnumerable<TResult> ToEnumerableAsync<TResult>(DbDataReader reader,
         DbFieldCollection? dbFields = null,
@@ -69,7 +69,7 @@ public static class DataReader
     /// </summary>
     /// <param name="reader">The <see cref="DbDataReader"/> to be converted.</param>
     /// <param name="dbFields">The list of the <see cref="DbField"/> objects to be used.</param>
-    /// 
+    ///
     /// <returns>An array of dynamic objects.</returns>
     public static IEnumerable<dynamic> ToEnumerable(DbDataReader reader,
         DbFieldCollection? dbFields = null)
@@ -95,7 +95,7 @@ public static class DataReader
     /// <param name="reader">The <see cref="DbDataReader"/> to be converted.</param>
     /// <param name="dbFields">The list of the <see cref="DbField"/> objects to be used.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> object to be used during the asynchronous operation.</param>
-    /// 
+    ///
     /// <returns>An array of dynamic objects.</returns>
     public static async IAsyncEnumerable<dynamic> ToEnumerableAsync(DbDataReader reader,
         DbFieldCollection? dbFields = null,

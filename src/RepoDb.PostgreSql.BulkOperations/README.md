@@ -1,25 +1,24 @@
 [![MSBuild-CI](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml/badge.svg)](https://github.com/AmpScm/RepoDB/actions/workflows/build.yml)
-[![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb.PostgreSql.BulkOperations)
+[![Version](https://img.shields.io/nuget/v/AmpScm.RepoDb.PostgreSql.BulkOperations?&logo=nuget)](https://www.nuget.org/packages/AmpScm.RepoDb.PostgreSql.BulkOperations)
 [![GitterChat](https://img.shields.io/gitter/room/mikependon/RepoDb?&logo=gitter&color=48B293)](https://gitter.im/RepoDb/community)
 
-# [RepoDb.PostgreSql.BulkOperations](https://www.nuget.org/packages/RepoDb.PostgreSql.BulkOperations)
+# RepoDb.PostgreSql.BulkOperations
 
 An extension library that contains the official Bulk Operations of RepoDB for PostgreSQL.
 
 ## Important Pages
 
 - [GitHub Home Page](https://github.com/AmpScm/RepoDb) - to learn more about the core library.
-- [Website](https://repodb.net) - docs, features, classes, references, releases and blogs.
+- [Bulk Operations Guide](/docs/features/bulkoperations/postgresql.md) - PostgreSQL bulk operations reference
+- [All Documentation](/docs) - comprehensive guides and references
 
 ## Why use the Bulk Operations?
 
-Basically, you do the normal [Delete](https://repodb.net/operation/delete), [Insert](https://repodb.net/operation/insert), [Merge](https://repodb.net/operation/merge) and [Update](https://repodb.net/operation/update) operations when interacting with the database. Through this, the data is processed in an atomic way.
+Bulk operations allow you to perform high-performance insert, update, delete, and merge operations on large datasets. Unlike regular operations, bulk operations bypass database constraints and logging to maximize performance—often improving performance by more than 90% when processing large datasets.
 
-If you use the [Batch Operations](https://repodb.net/feature/batchoperations) (the process of wrapping the multiple single operations and executing one-go), it does not completely eliminate the round-trips between your application and your database, thus does not give you the maximum performance during the CRUD operations.
+Basically, with normal Delete, Insert, Merge, and Update operations, the data is processed in an atomic way. With batch operations, multiple single operations are batched and executed together, but this still involves round-trips between your application and the database.
 
-With the [Bulk Operations](https://repodb.net/feature/bulkoperations), all data is brought from your client application towards your database in one-go via the [BinaryImport](https://repodb.net/operation/binaryimport) operation (a real bulk process). It then post processed the data altogether in the database server to maximize the performance.
-
-During the operation, the process ignores the audit, logs, constraints and any other database special handling. It hugely improve the performance of your application by more than 90%, especially when processing the large datasets.
+With bulk operations, all data is brought from your client application to your database in one go via the BinaryImport operation (a real bulk process). It then post processes the data altogether in the database server to maximize performance. During the operation, the process ignores the audit, logs, constraints and any other database special handling.
 
 ## Core Features
 
@@ -36,12 +35,11 @@ During the operation, the process ignores the audit, logs, constraints and any o
 
 - [GitHub](https://github.com/AmpScm/RepoDb/issues) - for any issues, requests and problems.
 - [StackOverflow](https://stackoverflow.com/search?q=RepoDB) - for any technical questions.
-- [Twitter](https://twitter.com/search?q=%23repodb) - for the latest news.
 - [Gitter Chat](https://gitter.im/RepoDb/community) - for direct and live Q&A.
 
 ## License
 
-[Apache-2.0](http://apache.org/licenses/LICENSE-2.0.html) 
+[Apache-2.0](http://apache.org/licenses/LICENSE-2.0.html)
 - Copyright © 2019 - 2024 [Michael Camara Pendon](https://github.com/mikependon)
 - Copyright © 2025 - now [Bert Huijben](https://github.com/rhuijben)
 
@@ -55,23 +53,26 @@ At the Package Manager Console, write the command below.
 > Install-Package AmpScm.RepoDb.PostgreSql.BulkOperations
 ```
 
-Then call the bootstrapper once.
+Then call the setup once.
 
 ```csharp
-RepoDb.PostgreSqlBootstrap.Initialize();
+using RepoDb;
+using Npgsql;
+
+GlobalConfiguration.Setup().UsePostgreSql();
 ```
 
-Or, visit our [installation](https://repodb.net/tutorial/installation) page for more information.
+See the [Bulk Operations Guide](/docs/features/bulkoperations/postgresql.md) for more information.
 
 ## Special Arguments
 
-The arguments `qualifiers`, `keepIdentity`, `identityBehavior`, `pseudoTableType` and `mergeCommanType` were provided in most operations.
+The arguments `qualifiers`, `keepIdentity`, `identityBehavior`, `pseudoTableType` and `mergeCommandType` are provided in most operations (see [Bulk Operations Guide](../../tree/main/docs/features/bulkoperations/postgresql.md)).
 
 The argument `qualifiers` is used to define the qualifier fields to be used in the operations. It usually refers to the `WHERE` expression of SQL Statements. If not given, the primary key field will be used.
 
 The argument `keepIdentity` is used to define a value whether the identity property of the entity/model will be kept during the operation.
 
-The argument `identityBehavior` is used to define a value like with the `keepIdentity` argument, together-with, a value that is used to return the newly generated identity values from the database. 
+The argument `identityBehavior` is used to define a value like with the `keepIdentity` argument, together-with, a value that is used to return the newly generated identity values from the database.
 
 The argument `pseudoTableType` is used to define a value whether a physical pseudo-table will be created during the operation. By default, a temporary table is used.
 
@@ -83,7 +84,7 @@ Behind the scene, the library has enforced an additional logic to ensure the ide
 
 During the bulk operation, a dedicated index (entity model index) value is passed to this column, thus ensuring that the index value is really equating to the index of the item from the `IEnumerable<T>` object. The resultsets of the pseudo-temporary table are being ordered using this column, prior the actual merge to the underlying table.
 
-For both the [BinaryBulkInsert](https://repodb.net/operation/binarybulkinsert) and [BinaryBulkMerge](https://repodb.net/operation/binarybulkmerge) operations, when the newly generated identity value is being set back to the data model, the value of the `__RepoDb_OrderColumn` column is being used to look-up the proper index of the equating item from the `IEnumerable<T>` object, then, the compiled identity-setter function is used to assign back the identity value into the identity property.
+For both the BinaryBulkInsert and BinaryBulkMerge operations, when the newly generated identity value is being set back to the data model, the value of the `__RepoDb_OrderColumn` column is being used to look-up the proper index of the equating item from the `IEnumerable<T>` object, then, the compiled identity-setter function is used to assign back the identity value into the identity property.
 
 ## BatchSize
 

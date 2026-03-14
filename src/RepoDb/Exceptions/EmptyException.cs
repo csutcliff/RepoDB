@@ -11,11 +11,15 @@ public class EmptyException : ArgumentOutOfRangeException
     /// <param name="message">The exception message.</param>
     public EmptyException(string? message) : base(message: message, innerException: null) { }
 
+    /// <inheritdoc />
     public EmptyException(string? paramName, string? message) : base(paramName, message) { }
 
+    /// <inheritdoc />
     public EmptyException()
     {
     }
+
+    /// <inheritdoc />
     public EmptyException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

@@ -17,7 +17,7 @@ internal static class FunctionFactory
     /// <typeparam name="TResult"></typeparam>
     /// <param name="reader"></param>
     /// <param name="dbFields">The list of the <see cref="DbField"/> objects to be used.</param>
-    /// 
+    ///
     /// <returns></returns>
     public static Func<DbDataReader, TResult> CompileDataReaderToType<TResult>(DbDataReader reader,
         DbFieldCollection? dbFields) =>
@@ -32,7 +32,7 @@ internal static class FunctionFactory
     /// </summary>
     /// <param name="reader"></param>
     /// <param name="dbFields"></param>
-    /// 
+    ///
     /// <returns></returns>
     public static Func<DbDataReader, ExpandoObject> CompileDataReaderToExpandoObject(DbDataReader reader,
         DbFieldCollection? dbFields) =>
@@ -170,7 +170,7 @@ internal static class FunctionFactory
         Compiler.CompileDataEntityPropertySetter(entityType, field);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="entityType"></param>
     /// <param name="field"></param>

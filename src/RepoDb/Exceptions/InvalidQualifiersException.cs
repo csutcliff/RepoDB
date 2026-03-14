@@ -11,9 +11,13 @@ public class InvalidQualifiersException : ArgumentOutOfRangeException
     /// <param name="message">The exception message.</param>
     public InvalidQualifiersException(string? message)
         : base(message: message, innerException: null) { }
+
+    /// <inheritdoc />
     public InvalidQualifiersException()
     {
     }
+
+    /// <inheritdoc />
     public InvalidQualifiersException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

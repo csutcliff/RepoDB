@@ -27,7 +27,7 @@ public sealed class IdentityResolver : IResolver<Type, ClassProperty>
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static IdentityResolver Instance { get; } = new();
 }

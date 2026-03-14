@@ -11,9 +11,13 @@ public class InvalidTypeException : ArgumentOutOfRangeException
     /// <param name="message">The exception message.</param>
     public InvalidTypeException(string? message)
         : base(message: message, innerException: null) { }
+
+    /// <inheritdoc />
     public InvalidTypeException()
     {
     }
+
+    /// <inheritdoc />
     public InvalidTypeException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

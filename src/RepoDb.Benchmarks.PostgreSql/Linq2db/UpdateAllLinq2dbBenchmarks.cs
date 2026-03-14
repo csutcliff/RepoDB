@@ -8,13 +8,13 @@ public class UpdateAllLinq2dbBenchmarks : Linq2dbBaseBenchmarks
 {
     private readonly List<Person> persons = [];
 
-    [Params(10, 100, 1000)] 
+    [Params(10, 100, 1000)]
     public int Rows { get; set; }
 
     protected override void Bootstrap()
     {
         using var db = GetDb();
-        
+
         foreach (var person in (from p in db.People select p).Take(Rows))
         {
             person.CreatedDateUtc = DateTime.UtcNow + TimeSpan.FromDays(365);
@@ -29,7 +29,7 @@ public class UpdateAllLinq2dbBenchmarks : Linq2dbBaseBenchmarks
 
         foreach (var person in persons)
         {
-            db.Update(person);   
+            db.Update(person);
         }
     }
 }

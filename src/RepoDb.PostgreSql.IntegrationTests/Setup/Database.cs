@@ -198,10 +198,7 @@ public static class Database
                         CONSTRAINT ""CompleteTable_pkey"" PRIMARY KEY (""Id"")
                     )
 
-                    TABLESPACE pg_default;
-
-                    ALTER TABLE public.""CompleteTable""
-                        OWNER to postgres;");
+                    TABLESPACE pg_default;");
     }
 
     private static void CreateNonIdentityCompleteTable()
@@ -351,10 +348,7 @@ public static class Database
                         CONSTRAINT ""NonIdentityCompleteTable_pkey"" PRIMARY KEY (""Id"")
                     )
 
-                    TABLESPACE pg_default;
-
-                    ALTER TABLE public.""NonIdentityCompleteTable""
-                        OWNER to postgres;");
+                    TABLESPACE pg_default;");
     }
 
     #endregion

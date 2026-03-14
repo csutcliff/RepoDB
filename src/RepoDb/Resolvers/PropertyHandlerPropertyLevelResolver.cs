@@ -43,5 +43,8 @@ public class PropertyHandlerPropertyLevelResolver : IResolver<Type, PropertyInfo
         return propertyHandler;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly PropertyHandlerPropertyLevelResolver Instance = new();
 }

@@ -65,15 +65,13 @@ public class FunctionalQueryField : QueryField
 
     #region Equality and comparers
 
-    /// <summary>
-    /// Returns the hashcode for this <see cref="FunctionalQueryField"/>.
-    /// </summary>
-    /// <returns>The hashcode value.</returns>
+    /// <inheritdoc/>>
     public override int GetHashCode()
     {
         return HashCode.Combine(base.GetHashCode(), Format);
     }
 
+    /// <inheritdoc/>>
     public override bool Equals(QueryField? other)
     {
         return other is FunctionalQueryField fqf

@@ -20,6 +20,9 @@ public class SqliteDbInstance : DbInstance<SqliteConnection>
         // Database is shared when cache key is shared, until last connection dies
         AdminConnectionString = ConnectionString = $"Data Source=file:{cacheKey}?mode=memory&cache=shared;";
 
+        // SQLite doesn't have user-level security; limited connection uses same database
+        LimitedConnectionString = ConnectionString;
+
         // Keep one connection open, but don't use it
         _conn = new SqliteConnection(AdminConnectionString);
         _conn.Open();

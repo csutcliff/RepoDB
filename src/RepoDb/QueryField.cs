@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using RepoDb.Enumerations;
 using RepoDb.Extensions;
 using RepoDb.Interfaces;
@@ -162,25 +163,25 @@ public partial class QueryField : IEquatable<QueryField>
         string? functionFormat,
         IDbSetting? dbSetting)
     {
-        if (Operation == Operation.IsNull || (Operation == Operation.Equal && Parameter.Value == null))
+        if (Operation is Operation.IsNull || (Operation is Operation.Equal && Parameter.Value == null))
         {
             return string.Concat(this.AsField(functionFormat, dbSetting), " IS NULL");
         }
 
         // <> AND NULL
-        else if (Operation == Operation.IsNotNull || (Operation == Operation.NotEqual && Parameter.Value == null))
+        else if (Operation is Operation.IsNotNull || (Operation is Operation.NotEqual && Parameter.Value == null))
         {
             return string.Concat(this.AsField(functionFormat, dbSetting), " IS NOT NULL");
         }
 
         // BETWEEN @LeftValue AND @RightValue
-        else if (Operation == Operation.Between || Operation == Operation.NotBetween)
+        else if (Operation is Operation.Between or Operation.NotBetween)
         {
             return this.AsFieldAndParameterForBetween(index, functionFormat, dbSetting);
         }
 
         // IN (@Value1, @Value2)
-        else if (Operation == Operation.In || Operation == Operation.NotIn)
+        else if (Operation is Operation.In or Operation.NotIn)
         {
             return this.AsFieldAndParameterForIn(index, functionFormat, dbSetting);
         }

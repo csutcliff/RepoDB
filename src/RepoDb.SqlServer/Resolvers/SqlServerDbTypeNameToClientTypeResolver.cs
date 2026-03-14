@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlTypes;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using Microsoft.Data.SqlTypes;
 using RepoDb.Interfaces;
 using RepoDb.Types;
 
@@ -50,6 +52,10 @@ public class SqlServerDbTypeNameToClientTypeResolver : IResolver<string, Type>
             "tinyint" => typeof(byte),
             "uniqueidentifier" => typeof(Guid),
             "vector" => typeof(SqlVector<float>),
+#if NET
+            "half" => typeof(Half),
+#endif
+            "json" => typeof(string), // SQL 2025+
             _ => typeof(object),
         };
     }

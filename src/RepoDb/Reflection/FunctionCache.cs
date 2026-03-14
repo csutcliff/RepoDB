@@ -43,7 +43,7 @@ internal static class FunctionCache
     /// <typeparam name="TResult"></typeparam>
     /// <param name="reader"></param>
     /// <param name="dbFields">The list of the <see cref="DbField"/> objects to be used.</param>
-    /// 
+    ///
     /// <returns></returns>
     internal static Func<DbDataReader, TResult> GetDataReaderToTypeCompiledFunction<TResult>(DbDataReader reader,
         DbFieldCollection? dbFields = null) =>
@@ -64,7 +64,7 @@ internal static class FunctionCache
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="dbFields">The list of the <see cref="DbField"/> objects to be used.</param>
-        /// 
+        ///
         /// <returns></returns>
         internal static Func<DbDataReader, TResult> Get(DbDataReader reader,
             DbFieldCollection? dbFields = null)
@@ -93,7 +93,7 @@ internal static class FunctionCache
     /// </summary>
     /// <param name="reader"></param>
     /// <param name="dbFields"></param>
-    /// 
+    ///
     /// <returns></returns>
     internal static Func<DbDataReader, dynamic> GetDataReaderToExpandoObjectCompileFunction(DbDataReader reader,
         DbFieldCollection? dbFields = null) =>
@@ -113,7 +113,7 @@ internal static class FunctionCache
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="dbFields"></param>
-        /// 
+        ///
         /// <returns></returns>
         internal static Func<DbDataReader, dynamic> Get(DbDataReader reader,
             DbFieldCollection? dbFields = null)

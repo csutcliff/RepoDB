@@ -11,9 +11,13 @@ public class InvalidParameterException : ArgumentException
     /// <param name="message">The exception message.</param>
     public InvalidParameterException(string? message)
         : base(message: message, innerException: null) { }
+
+    /// <inheritdoc />
     public InvalidParameterException()
     {
     }
+
+    /// <inheritdoc />
     public InvalidParameterException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

@@ -59,6 +59,13 @@ public static class DbFieldExtension
         return item;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="dbFields"></param>
+    /// <param name="name"></param>
+    /// <param name="stringComparison"></param>
+    /// <returns></returns>
     public static DbField? GetByFieldName(this IEnumerable<DbField> dbFields, string? name, StringComparison stringComparison = StringComparison.OrdinalIgnoreCase)
     {
         return dbFields.FirstOrDefault(dbField => string.Equals(dbField.FieldName, name, stringComparison));

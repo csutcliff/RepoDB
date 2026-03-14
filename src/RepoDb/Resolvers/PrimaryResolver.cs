@@ -57,5 +57,8 @@ public sealed class PrimaryResolver : IResolver<Type, IEnumerable<ClassProperty>
         return Resolve(input)?.FirstOrDefault();
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static PrimaryResolver Instance { get; } = new();
 }

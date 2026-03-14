@@ -16,6 +16,7 @@ internal sealed class MergeRequest : BaseRequest
     /// <param name="connection">The connection object.</param>
     /// <param name="transaction">The transaction object.</param>
     /// <param name="fields">The list of the target fields.</param>
+    /// <param name="noUpdateFields">The fields to exclude from the update operation.</param>
     /// <param name="qualifiers">The list of qualifier <see cref="Field"/> objects.</param>
     /// <param name="hints">The hints for the table.</param>
     /// <param name="statementBuilder">The statement builder.</param>
@@ -45,6 +46,7 @@ internal sealed class MergeRequest : BaseRequest
     /// <param name="connection">The connection object.</param>
     /// <param name="transaction">The transaction object.</param>
     /// <param name="fields">The list of the target fields.</param>
+    /// <param name="noUpdateFields">The fields to exclude from the update operation.</param>
     /// <param name="qualifiers">The list of qualifier <see cref="Field"/> objects.</param>
     /// <param name="hints">The hints for the table.</param>
     /// <param name="statementBuilder">The statement builder.</param>
@@ -75,6 +77,7 @@ internal sealed class MergeRequest : BaseRequest
     /// <param name="connection">The connection object.</param>
     /// <param name="transaction">The transaction object.</param>
     /// <param name="fields">The list of the target fields.</param>
+    /// <param name="noUpdateFields">The fields to exclude from the update operation.</param>
     /// <param name="qualifiers">The list of qualifier <see cref="Field"/> objects.</param>
     /// <param name="hints">The hints for the table.</param>
     /// <param name="statementBuilder">The statement builder.</param>
@@ -129,7 +132,9 @@ internal sealed class MergeRequest : BaseRequest
             // Get first the entity hash code
             HashCode = hashCode = System.HashCode.Combine(
                 typeof(MergeRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Hints,
                 Fields,
                 Qualifiers,

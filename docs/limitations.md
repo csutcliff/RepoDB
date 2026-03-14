@@ -364,7 +364,7 @@ The good thing to this is controlled by you, and that is a very important case t
 
 Though it is quietly important for the cache to get invalidated at some point in time, we in RepoDB decided not to introduce the additional layer that checks the cache invalidity. The reason is to keep the library as light as possible without it allowing to do some extra validations or any background processes that does the hidden jobs.
 
-By default, the length of the cache item expiration is 180 minutes. It uses the value of [Constant.DefaultCacheItemExpirationInMinutes](https://github.com/mikependon/RepoDb/blob/0c3d4b503a0a7da30b344341cbf6860e98955d9e/RepoDb.Core/RepoDb/Constant.cs#L16) property.
+By default, the length of the cache item expiration is 180 minutes. It uses the value of [Constant.DefaultCacheItemExpirationInMinutes](/src/RepoDb.Core/RepoDb/Constant.cs#L16) property.
 
 **Example**
 

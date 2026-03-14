@@ -17,7 +17,7 @@ public static partial class NpgsqlConnectionExtension
     private readonly static ClientTypeToNpgsqlDbTypeResolver clientTypeToNpgsqlDbTypeResolver = new();
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dbFields"></param>
     /// <param name="properties"></param>
@@ -51,7 +51,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sourceName"></param>
     /// <param name="destinationName"></param>
@@ -96,7 +96,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="name"></param>
     /// <param name="dbFields"></param>
@@ -132,7 +132,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dbFields"></param>
     /// <param name="properties"></param>
@@ -171,7 +171,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dictionary"></param>
     /// <param name="dbFields"></param>
@@ -204,7 +204,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <param name="dbFields"></param>
@@ -237,7 +237,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="reader"></param>
     /// <param name="dbFields"></param>
@@ -271,7 +271,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="propertyValueAttributes"></param>
     /// <returns></returns>
@@ -287,7 +287,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <param name="rowState"></param>
@@ -305,7 +305,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TData"></typeparam>
     /// <param name="data"></param>
@@ -316,7 +316,7 @@ public static partial class NpgsqlConnectionExtension
         GetExpandoObjectData<TData>(data, field.FieldName);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TData"></typeparam>
     /// <param name="data"></param>
@@ -334,7 +334,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="mappings"></param>
     private static List<NpgsqlBulkInsertMapItem> AddOrderColumnMapping(IEnumerable<NpgsqlBulkInsertMapItem> mappings)
@@ -346,7 +346,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entityType"></param>
@@ -373,7 +373,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entities"></param>
@@ -388,7 +388,7 @@ public static partial class NpgsqlConnectionExtension
         SetEntityIdentities<TEntity>(entities, GetEntityIdentityField<TEntity>(dbFields, dbSetting), identityResults);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entities"></param>
@@ -456,7 +456,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="dbFields"></param>
@@ -487,7 +487,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <param name="dbFields"></param>
@@ -519,7 +519,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dbFields"></param>
@@ -544,7 +544,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dbFields"></param>
@@ -569,7 +569,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     /// <param name="identityField"></param>
@@ -597,7 +597,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dbFields"></param>
     /// <returns></returns>
@@ -605,7 +605,7 @@ public static partial class NpgsqlConnectionExtension
         IsPrimaryAnIdentity(dbFields.PrimaryFields?.OneOrDefault());
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="primary"></param>
     /// <returns></returns>
@@ -613,7 +613,7 @@ public static partial class NpgsqlConnectionExtension
         primary?.IsPrimary == true && primary?.IsIdentity == true;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="enumerable"></param>

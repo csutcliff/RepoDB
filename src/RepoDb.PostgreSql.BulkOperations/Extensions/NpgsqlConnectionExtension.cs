@@ -17,7 +17,7 @@ public static partial class NpgsqlConnectionExtension
     #region Sync
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -50,7 +50,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="importer"></param>
@@ -80,7 +80,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="dictionaries"></param>
@@ -107,7 +107,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="rows"></param>
@@ -135,7 +135,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="reader"></param>
@@ -160,7 +160,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="importer"></param>
@@ -193,7 +193,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="data"></param>
@@ -253,7 +253,7 @@ public static partial class NpgsqlConnectionExtension
     #region Async
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="connection"></param>
     /// <param name="tableName"></param>
@@ -293,7 +293,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="importer"></param>
@@ -326,7 +326,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="dictionaries"></param>
@@ -358,7 +358,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="rows"></param>
@@ -389,7 +389,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="reader"></param>
@@ -418,7 +418,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="importer"></param>
@@ -454,7 +454,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="importer"></param>
     /// <param name="data"></param>
@@ -507,7 +507,7 @@ public static partial class NpgsqlConnectionExtension
     #region Others
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="tableName"></param>
     /// <param name="mappings"></param>
@@ -532,7 +532,7 @@ public static partial class NpgsqlConnectionExtension
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="mappings"></param>
     /// <param name="dbSetting"></param>
@@ -542,7 +542,7 @@ public static partial class NpgsqlConnectionExtension
         mappings.Select(mapping => mapping.DestinationColumn.AsQuoted(true, dbSetting)).Join(", ");
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="row"></param>
     /// <param name="columnName"></param>

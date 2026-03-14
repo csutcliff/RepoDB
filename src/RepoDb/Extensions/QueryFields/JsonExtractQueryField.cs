@@ -17,6 +17,9 @@ namespace RepoDb.Extensions.QueryFields;
 /// </summary>
 public sealed partial class JsonExtractQueryField : FunctionalQueryField
 {
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly string JsonExtractFormat = "JSON_EXTRACT({0}, @@path@@)";
 
     #region Constructors
@@ -81,9 +84,13 @@ public sealed partial class JsonExtractQueryField : FunctionalQueryField
         Path = path;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public string Path { get; }
 
 
+    /// <inheritdoc/>>
     public override string GetString(int index, IDbSetting? dbSetting)
     {
         if (dbSetting is BaseDbSetting bs
@@ -97,6 +104,7 @@ public sealed partial class JsonExtractQueryField : FunctionalQueryField
 
     #endregion
 
+    /// <inheritdoc/>
     public override bool Equals(QueryField? other)
     {
         return other is JsonExtractQueryField jef
@@ -104,6 +112,7 @@ public sealed partial class JsonExtractQueryField : FunctionalQueryField
             && Path == jef.Path;
     }
 
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return HashCode.Combine(base.GetHashCode(), Path);
@@ -124,7 +133,7 @@ public sealed partial class JsonExtractQueryField : FunctionalQueryField
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
@@ -143,7 +152,7 @@ public sealed partial class JsonExtractQueryField : FunctionalQueryField
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>

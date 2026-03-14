@@ -11,9 +11,13 @@ public class InvalidExpressionException : Exception
     /// <param name="message">The exception message.</param>
     public InvalidExpressionException(string message)
         : base(message) { }
+
+    /// <inheritdoc />
     public InvalidExpressionException()
     {
     }
+
+    /// <inheritdoc />
     public InvalidExpressionException(string? message, Exception? innerException) : base(message, innerException)
     {
     }

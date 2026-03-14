@@ -9,6 +9,9 @@ namespace RepoDb.StatementBuilders;
 /// </summary>
 public abstract class BaseStatementBuilder : IStatementBuilder
 {
+    /// <summary>
+    ///
+    /// </summary>
     public const string RepoDbOrderColumn = "__RepoDb_OrderColumn";
 
     /// <summary>
@@ -43,11 +46,24 @@ public abstract class BaseStatementBuilder : IStatementBuilder
     /// Gets the resolver that is being used to resolve the type to be averageable type.
     /// </summary>
     protected IResolver<Type, Type?>? AverageableClientTypeResolver { get; }
+
+    /// <summary>
+    ///
+    /// </summary>
     public virtual string? JsonColumnType => null;
+    /// <summary>
+    ///
+    /// </summary>
     public virtual string? VectorColumnType => null;
 
+    /// <summary>
+    ///
+    /// </summary>
     public virtual string? IdentityDefinition => null;
 
+    /// <summary>
+    ///
+    /// </summary>
     public virtual bool? PrimaryBeforeIdentity => true;
 
     #endregion
@@ -92,41 +108,6 @@ public abstract class BaseStatementBuilder : IStatementBuilder
 
     #endregion
 
-    #region CreateAverageAll
-
-    /// <inheritdoc />
-    public virtual string CreateAverageAll(
-        string tableName,
-        Field field,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-        ArgumentNullException.ThrowIfNull(field);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // Check the field
-        field = new(field.FieldName, AverageableClientTypeResolver?.Resolve(field.Type ?? DbSetting.AverageableType));
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .Average(field, DbSetting, ConvertFieldResolver)
-            .WriteText($"AS {"AverageValue".AsQuoted(DbSetting)}")
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
-            .End(DbSetting);
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
 
     #region CreateCount
 
@@ -153,37 +134,6 @@ public abstract class BaseStatementBuilder : IStatementBuilder
             .TableNameFrom(tableName, DbSetting)
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
-            .End(DbSetting);
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateCountAll
-
-    /// <inheritdoc />
-    public virtual string CreateCountAll(
-        string tableName,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .Count(null, DbSetting)
-            .WriteText($"AS {"CountValue".AsQuoted(DbSetting)}")
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
             .End(DbSetting);
 
         // Return the query
@@ -470,39 +420,6 @@ public abstract class BaseStatementBuilder : IStatementBuilder
 
     #endregion
 
-    #region CreateMaxAll
-
-    /// <inheritdoc />
-    public virtual string CreateMaxAll(
-        string tableName,
-        Field field,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-        ArgumentNullException.ThrowIfNull(field);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .Max(field, DbSetting)
-            .WriteText($"AS {"MaxValue".AsQuoted(DbSetting)}")
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
-            .End(DbSetting);
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
     #region CreateMin
 
     /// <inheritdoc />
@@ -538,39 +455,6 @@ public abstract class BaseStatementBuilder : IStatementBuilder
 
     #endregion
 
-    #region CreateMinAll
-
-    /// <inheritdoc />
-    public virtual string CreateMinAll(
-        string tableName,
-        Field field,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-        ArgumentNullException.ThrowIfNull(field);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .Min(field, DbSetting)
-            .WriteText($"AS {"MinValue".AsQuoted(DbSetting)}")
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
-            .End(DbSetting);
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
     #region CreateQuery
 
     /// <inheritdoc />
@@ -579,19 +463,17 @@ public abstract class BaseStatementBuilder : IStatementBuilder
         IEnumerable<Field> fields,
         QueryGroup? where = null,
         IEnumerable<OrderField>? orderBy = null,
-        int top = 0,
+        int offset = 0,
+        int take = 0,
         string? hints = null)
     {
+        ArgumentNullException.ThrowIfNull(fields);
         ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThan(take, 0);
 
         // Validate the hints
         GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new ArgumentNullException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
 
         // Initialize the builder
         var builder = new QueryBuilder();
@@ -599,52 +481,14 @@ public abstract class BaseStatementBuilder : IStatementBuilder
         // Build the query
         builder
             .Select()
-            .TopFrom(top)
+            .If(offset == 0, b => b.TopFrom(take))
             .FieldsFrom(fields, DbSetting)
             .From()
             .TableNameFrom(tableName, DbSetting)
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
             .OrderByFrom(orderBy, DbSetting)
-            .End(DbSetting);
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateQueryAll
-
-    /// <inheritdoc />
-    public virtual string CreateQueryAll(
-        string tableName,
-        IEnumerable<Field> fields,
-        IEnumerable<OrderField>? orderBy = null,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // There should be fields
-        if (fields?.Any() != true)
-        {
-            throw new ArgumentNullException($"The list of queryable fields must not be null for '{tableName}'.");
-        }
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .FieldsFrom(fields, DbSetting)
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
-            .OrderByFrom(orderBy, DbSetting)
+            .If(offset != 0, b => b.OffsetRowsFetchNextRowsOnly(offset, take))
             .End(DbSetting);
 
         // Return the query
@@ -680,39 +524,6 @@ public abstract class BaseStatementBuilder : IStatementBuilder
             .TableNameFrom(tableName, DbSetting)
             .HintsFrom(hints)
             .WhereFrom(where, DbSetting)
-            .End(DbSetting);
-
-        // Return the query
-        return builder.ToString();
-    }
-
-    #endregion
-
-    #region CreateSumAll
-
-    /// <inheritdoc />
-    public virtual string CreateSumAll(
-        string tableName,
-        Field field,
-        string? hints = null)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
-        ArgumentNullException.ThrowIfNull(field);
-
-        // Validate the hints
-        GuardHints(hints);
-
-        // Initialize the builder
-        var builder = new QueryBuilder();
-
-        // Build the query
-        builder
-            .Select()
-            .Sum(field, DbSetting)
-            .WriteText($"AS {"SumValue".AsQuoted(DbSetting)}")
-            .From()
-            .TableNameFrom(tableName, DbSetting)
-            .HintsFrom(hints)
             .End(DbSetting);
 
         // Return the query
@@ -806,8 +617,7 @@ public abstract class BaseStatementBuilder : IStatementBuilder
     /// <param name="fields">The list of fields to be updated.</param>
     /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
     /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
+    /// <param name="keyFields"></param>
     /// <param name="hints">The table hints to be used.</param>
     /// <returns>A sql statement for update-all operation.</returns>
     public virtual string CreateUpdateAll(
@@ -867,42 +677,9 @@ public abstract class BaseStatementBuilder : IStatementBuilder
 
     #region Abstract
 
-    #region CreateBatchQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for 'BatchQuery' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
-    /// <param name="page">The page of the batch.</param>
-    /// <param name="rowsPerBatch">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public abstract string CreateBatchQuery(
-        string tableName,
-        IEnumerable<Field> fields,
-        int page,
-        int rowsPerBatch,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null);
-
-    #endregion
-
     #region CreateMerge
 
-    /// <summary>
-    /// Creates a SQL Statement for 'Merge' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public abstract string CreateMerge(
         string tableName,
         IEnumerable<Field> fields,
@@ -914,17 +691,7 @@ public abstract class BaseStatementBuilder : IStatementBuilder
 
     #region CreateMergeAll
 
-    /// <summary>
-    /// Creates a SQL Statement for 'MergeAll' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The list of fields to be merged.</param>
-    /// <param name="qualifiers">The list of the qualifier <see cref="Field"/> objects.</param>
-    /// <param name="batchSize">The batch to use. Use 0 for auto-chunking.</param>
-    /// <param name="primaryField">The primary field from the database.</param>
-    /// <param name="identityField">The identity field from the database.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for merge operation.</returns>
+    /// <inheritdoc />
     public abstract string CreateMergeAll(
         string tableName,
         IEnumerable<Field> fields,
@@ -935,29 +702,11 @@ public abstract class BaseStatementBuilder : IStatementBuilder
 
     #endregion
 
-    #region CreateSkipQuery
-
-    /// <summary>
-    /// Creates a SQL Statement for 'BatchQuery' operation.
-    /// </summary>
-    /// <param name="tableName">The name of the target table.</param>
-    /// <param name="fields">The mapping list of <see cref="Field"/> objects to be used.</param>
-    /// <param name="skip">The number of rows to skip.</param>
-    /// <param name="take">The number of rows per batch.</param>
-    /// <param name="orderBy">The list of fields for ordering.</param>
-    /// <param name="where">The query expression.</param>
-    /// <param name="hints">The table hints to be used.</param>
-    /// <returns>A sql statement for batch query operation.</returns>
-    public abstract string CreateSkipQuery(
-        string tableName,
-        IEnumerable<Field> fields,
-        int skip,
-        int take,
-        IEnumerable<OrderField>? orderBy = null,
-        QueryGroup? where = null,
-        string? hints = null);
-
-    #endregion
+    /// <inheritdoc />
+    public virtual string CombineQueries(ICollection<string> commandTexts)
+    {
+        return string.Join(" ", commandTexts);
+    }
 
     #endregion
 

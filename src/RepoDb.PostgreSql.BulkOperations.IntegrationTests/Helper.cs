@@ -38,7 +38,7 @@ public static class Helper
     #region TEntity
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -74,7 +74,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -108,7 +108,7 @@ public static class Helper
     #region IDictionary<string, object?>
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="items1"></param>
     /// <param name="items2"></param>
@@ -141,7 +141,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="item1"></param>
     /// <param name="item2"></param>
@@ -155,7 +155,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="items1"></param>
     /// <param name="items2"></param>
@@ -184,7 +184,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="obj1"></param>
     /// <param name="obj2"></param>
@@ -218,7 +218,7 @@ public static class Helper
     #endregion
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="p1"></param>
     /// <param name="p2"></param>
@@ -236,7 +236,7 @@ public static class Helper
     #region BulkOperationIdentityTable
 
     ///// <summary>
-    ///// 
+    /////
     ///// </summary>
     ///// <param name="count"></param>
     ///// <param name="hasId"></param>
@@ -280,7 +280,7 @@ public static class Helper
     #region BulkOperationLightIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -310,7 +310,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -334,7 +334,7 @@ public static class Helper
     #region BulkOperationMappedIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -364,7 +364,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -388,7 +388,7 @@ public static class Helper
     #region BulkOperationUnmatchedIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -418,7 +418,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -442,7 +442,7 @@ public static class Helper
     #region EnumTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -476,7 +476,7 @@ public static class Helper
     #region BulkOperationAnonymousLightIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -506,7 +506,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -537,7 +537,7 @@ public static class Helper
     #region BulkOperationAnonymousUnmatchedIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -567,7 +567,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -596,7 +596,7 @@ public static class Helper
     #region EnumTableAnonymousTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -630,7 +630,7 @@ public static class Helper
     #region BulkOperationExpandoObjectLightIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -659,7 +659,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name=""></param>
     /// <returns></returns>
@@ -684,7 +684,7 @@ public static class Helper
     #region BulkOperationExpandoObjectUnmatchedIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -713,7 +713,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name=""></param>
     /// <returns></returns>
@@ -738,7 +738,7 @@ public static class Helper
     #region EnumTableExpandoObjectTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -769,7 +769,7 @@ public static class Helper
     #region DataTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entities"></param>
@@ -808,7 +808,7 @@ public static class Helper
     #region BulkOperationDataTableLightIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -823,7 +823,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -835,7 +835,7 @@ public static class Helper
     #region BulkOperationDataTableUnmatchedIdentityTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>
@@ -850,7 +850,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -862,7 +862,7 @@ public static class Helper
     #region EnumTableDataTableTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <param name="hasId"></param>

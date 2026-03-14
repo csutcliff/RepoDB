@@ -64,6 +64,7 @@ public static class ExpressionExtension
     /// Gets the <see cref="Field"/> defined on the current instance of <see cref="UnaryExpression"/>
     /// </summary>
     /// <param name="expression"></param>
+    /// <param name="coalesceValue"></param>
     /// <returns></returns>
     /// <exception cref="NotSupportedException"></exception>
     public static Field GetField(this Expression expression, out object? coalesceValue)
@@ -89,9 +90,9 @@ public static class ExpressionExtension
             {
                 return objectMemberExpression.GetField();
             }
-            else if (expression.Method.Name == "Contains")
+            else if (expression.Method.Name == nameof(Enumerable.Contains))
             {
-                var last = expression.Arguments.Last();
+                var last = expression.Object is { } ? expression.Arguments[0] : expression.Arguments[1];
                 if (last is MemberExpression memberExpression)
                 {
                     return memberExpression.GetField();
@@ -172,11 +173,11 @@ public static class ExpressionExtension
         }
         else
         {
-            if (expression.Method.Name == "Contains" ||
-                expression.Method.Name == "StartsWith" ||
-                expression.Method.Name == "EndsWith")
+            if (expression.Method.Name == nameof(string.Contains) ||
+                expression.Method.Name == nameof(string.StartsWith) ||
+                expression.Method.Name == nameof(string.EndsWith))
             {
-                var last = expression.Arguments.Last();
+                var last = expression.Object is { } ? expression.Arguments[0] : expression.Arguments[1];
                 if (last is MemberExpression memberExpression)
                 {
                     return memberExpression.Member.GetMappedName();
@@ -527,7 +528,7 @@ public static class ExpressionExtension
     /// <summary>
     /// Gets a value from the current instance of <see cref="DefaultExpression"/> object.
     /// </summary>
-    /// <param name="expression">The instance of <see cref="DefaultE"/> object where the value is to be extracted.</param>
+    /// <param name="expression">The instance of <see cref="DefaultExpression"/> object where the value is to be extracted.</param>
     /// <returns>The extracted value from <see cref="DefaultExpression"/> object.</returns>
     public static object? GetValue(this DefaultExpression expression)
     {

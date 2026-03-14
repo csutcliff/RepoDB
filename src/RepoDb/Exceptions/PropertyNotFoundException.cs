@@ -8,15 +8,20 @@ public class PropertyNotFoundException : ArgumentException
     /// <summary>
     /// Creates a new instance of <see cref="PropertyNotFoundException"/> class.
     /// </summary>
+    /// <param name="paramName"></param>
     /// <param name="message">The exception message.</param>
     public PropertyNotFoundException(string? paramName, string? message)
         : base(message: message, paramName: paramName) { }
+
+    /// <inheritdoc />
     public PropertyNotFoundException()
     {
     }
+    /// <inheritdoc />
     public PropertyNotFoundException(string? message, Exception? innerException) : base(message, innerException)
     {
     }
+    /// <inheritdoc />
     public PropertyNotFoundException(string message) : base(message)
     {
     }

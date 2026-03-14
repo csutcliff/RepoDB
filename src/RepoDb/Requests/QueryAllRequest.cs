@@ -92,7 +92,9 @@ internal class QueryAllRequest : BaseRequest
             // Get first the entity hash code
             hashCode = System.HashCode.Combine(
                 typeof(QueryAllRequest),
-                Name,
+                StatementBuilder?.GetType(),
+				Connection.GetType(),
+                TableName,
                 Hints,
                 Fields);
 

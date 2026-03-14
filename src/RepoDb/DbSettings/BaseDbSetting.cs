@@ -1,4 +1,5 @@
-﻿using RepoDb.Interfaces;
+﻿using RepoDb.Extensions.QueryFields;
+using RepoDb.Interfaces;
 
 namespace RepoDb.DbSettings;
 
@@ -82,6 +83,9 @@ public abstract record BaseDbSetting : IDbSetting, IEquatable<BaseDbSetting>
     /// <inheritdoc />
     public int? UseInValuesTreshold { get; protected init; }
 
+    /// <summary>
+    ///
+    /// </summary>
     public int MaxArrayParameterValueCount { get; protected init; } = ushort.MaxValue;
 
     #endregion
@@ -100,6 +104,7 @@ public abstract record BaseDbSetting : IDbSetting, IEquatable<BaseDbSetting>
     /// Called by <see cref="JsonExtractQueryField"/> to create a JSON extract expression. By default, it returns null. This can be overridden by derived classes to provide specific implementations for different RDBMS data providers.
     /// </summary>
     /// <param name="path"></param>
+    /// <param name="parameter"></param>
     /// <returns></returns>
     protected internal virtual string? CreateJsonExtract(string path, Parameter parameter)
     {

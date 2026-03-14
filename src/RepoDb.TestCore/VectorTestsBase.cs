@@ -33,7 +33,6 @@ public abstract class VectorTestsBase<TDbInstance> : DbTestBase<TDbInstance> whe
             return;
 
         using var sql = await CreateOpenConnectionAsync();
-
         if (!await sql.SchemaObjectExistsAsync<VectorDataClass>(cancellationToken: TestContext.CancellationToken))
         {
             await sql.CreateTableAsync<VectorDataClass>(trace: new DiagnosticsTracer());
@@ -56,10 +55,17 @@ public abstract class VectorTestsBase<TDbInstance> : DbTestBase<TDbInstance> whe
         Assert.HasCount(2, data);
         Assert.HasCount(3, data.First().FloatVector.ToArray());
 
+        foreach (var v in items)
+        {
+            await sql.UpdateAsync(v);
+        }
+
         if (sql.GetType().Name.Contains("Oracle") == false)
         {
             // Oracle doesn't support batch update for vector type
             await sql.UpdateAllAsync(items, trace: new DiagnosticsTracer());
         }
+
+        var singleItems = await sql.ExecuteQueryAsync<ReadOnlyMemory<float>>(sql.ReplaceForTests($"SELECT [{nameof(VectorDataClass.FloatVector)}] FROM [{nameof(VectorDataClass)}]"), cancellationToken: TestContext.CancellationToken);
     }
 }

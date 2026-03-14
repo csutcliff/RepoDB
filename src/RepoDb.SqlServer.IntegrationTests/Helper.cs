@@ -136,7 +136,7 @@ public static class Helper
     #region CompleteTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -191,7 +191,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateCompleteTableProperties(CompleteTable table)
@@ -236,7 +236,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -291,7 +291,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateCompleteTableAsDynamicProperties(dynamic table)
@@ -336,7 +336,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -390,7 +390,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateCompleteTableAsExpandoObjectProperties(ExpandoObject table)
@@ -440,7 +440,7 @@ public static class Helper
     #region NonIdentityCompleteTable
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -495,7 +495,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateNonIdentityCompleteTableProperties(NonIdentityCompleteTable table)
@@ -540,7 +540,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -595,7 +595,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateNonIdentityCompleteTableAsDynamicProperties(dynamic table)
@@ -640,7 +640,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
@@ -694,7 +694,7 @@ public static class Helper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="table"></param>
     public static void UpdateNonIdentityCompleteTableAsExpandoObjectProperties(ExpandoObject table)

@@ -16,6 +16,9 @@ public class TypeMapTypeLevelResolver : IResolver<Type, DbType?>
     public DbType? Resolve(Type type) =>
         TypeMapper.Get(type);
 
+    /// <summary>
+    ///
+    /// </summary>
     public static readonly TypeMapTypeLevelResolver Instance = new();
 
 }

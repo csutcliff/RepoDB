@@ -75,12 +75,17 @@ public sealed class QueryMultipleExtractor : IDisposable, IAsyncDisposable
     }
 
 #if !NET
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
     public ValueTask DisposeAsync()
     {
         Dispose();
         return new();
     }
 #else
+    /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
         // Reader
@@ -194,6 +199,7 @@ public sealed class QueryMultipleExtractor : IDisposable, IAsyncDisposable
     /// </summary>
     /// <typeparam name="TEntity">The type of data entity to be extracted.</typeparam>
     /// <param name="isMoveToNextResult">A flag to use whether the operation would call the <see cref="System.Data.IDataReader.NextResult()"/> method.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>An enumerable of extracted data entity.</returns>
     public async Task<IEnumerable<TEntity>> ExtractAsync<TEntity>(bool isMoveToNextResult = true, CancellationToken cancellationToken = default)
     {
@@ -213,6 +219,14 @@ public sealed class QueryMultipleExtractor : IDisposable, IAsyncDisposable
         return result;
     }
 
+    /// <summary>
+    /// Asynchronously extracts a collection of entities of the specified type from the current data source result set.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entities to extract from the result set.</typeparam>
+    /// <param name="isMoveToNextResult">true to advance to the next result set before extracting entities; otherwise, false to extract from the current
+    /// result set.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an enumerable collection of
+    /// extracted entities of type TEntity.</returns>
     public Task<IEnumerable<TEntity>> ExtractAsync<TEntity>(bool isMoveToNextResult)
         => this.ExtractAsync<TEntity>(isMoveToNextResult, this.CancellationToken);
 
@@ -241,6 +255,12 @@ public sealed class QueryMultipleExtractor : IDisposable, IAsyncDisposable
         return result;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="isMoveToNextResult"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<dynamic>> ExtractAsync(bool isMoveToNextResult = true, CancellationToken cancellationToken=default)
     {
         if (!TryGetCacheItem<IEnumerable<dynamic>>(out var result))
@@ -356,6 +376,11 @@ public sealed class QueryMultipleExtractor : IDisposable, IAsyncDisposable
         _reader is { } && ((Position = await _reader.NextResultAsync(CancellationToken).ConfigureAwait(false) ? Position + 1 : -1) >= 0);
 
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task<bool> NextResultAsync(CancellationToken? cancellationToken) =>
         _reader is { } && ((Position = await _reader.NextResultAsync(cancellationToken ?? CancellationToken).ConfigureAwait(false) ? Position + 1 : -1) >= 0);
 

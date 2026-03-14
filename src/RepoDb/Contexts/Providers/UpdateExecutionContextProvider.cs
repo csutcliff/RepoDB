@@ -84,7 +84,7 @@ internal static class UpdateExecutionContextProvider
             fields,
             hints,
             statementBuilder);
-        var commandText = CommandTextCache.GetUpdateText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetUpdateText);
 
         // Call
         context = CreateInternal(entityType,
@@ -148,7 +148,7 @@ internal static class UpdateExecutionContextProvider
             fields,
             hints,
             statementBuilder);
-        var commandText = await CommandTextCache.GetUpdateTextAsync(request, cancellationToken).ConfigureAwait(false);
+        var commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetUpdateText, cancellationToken).ConfigureAwait(false);
 
         // Call
         context = CreateInternal(entityType,

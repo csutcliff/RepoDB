@@ -12,18 +12,9 @@ namespace RepoDb.Contexts.Providers;
 /// </summary>
 internal static class MergeExecutionContextProvider
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="tableName"></param>
-    /// <param name="qualifiers"></param>
-    /// <param name="fields"></param>
-    /// <param name="hints"></param>
-    /// <returns></returns>
     private static string GetKey(Type entityType,
         string tableName,
-        IEnumerable<Field>? qualifiers,
+        IEnumerable<Field> qualifiers,
         IEnumerable<Field> fields,
         IEnumerable<Field>? noUpdateFields,
         string? hints)
@@ -88,7 +79,7 @@ internal static class MergeExecutionContextProvider
             qualifiers,
             hints,
             statementBuilder);
-        var commandText = CommandTextCache.GetMergeText(request);
+        var commandText = CommandTextCache.GetCached(request, CommandTextCache.GetMergeText);
 
         // Call
         context = CreateInternal(entityType,
@@ -154,7 +145,7 @@ internal static class MergeExecutionContextProvider
             qualifiers,
             hints,
             statementBuilder);
-        var commandText = await CommandTextCache.GetMergeTextAsync(request, cancellationToken).ConfigureAwait(false);
+        var commandText = await CommandTextCache.GetCachedAsync(request, CommandTextCache.GetMergeText, cancellationToken).ConfigureAwait(false);
 
         // Call
         context = CreateInternal(entityType,

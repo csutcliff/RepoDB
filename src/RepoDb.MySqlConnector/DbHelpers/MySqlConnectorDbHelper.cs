@@ -64,7 +64,7 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
     #region Helpers
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     private const string FieldCommandText = @"
@@ -91,7 +91,7 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
         ORDER BY ORDINAL_POSITION";
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     private static readonly HashSet<string> BlobTypes = new([
@@ -107,7 +107,7 @@ public sealed class MySqlConnectorDbHelper : BaseDbHelper
     ], StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="reader"></param>
     /// <returns></returns>
