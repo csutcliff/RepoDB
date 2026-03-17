@@ -795,9 +795,12 @@ public static class DbCommandExtension
             {
                 return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException)
             {
-                throw new InvalidCastException($"While converting from {value?.GetType().FullName} to {targetType.FullName}: " + e.Message, e);
+                // No conversion available — return the original value unchanged.
+                // The ADO.NET provider may handle this type natively (e.g. Npgsql
+                // with UseNodaTime() handles LocalDate/Instant for date/timestamptz).
+                return value;
             }
         }
     }

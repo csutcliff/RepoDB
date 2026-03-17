@@ -137,12 +137,12 @@ public abstract class BaseDbHelper : IDbHelper
     /// <returns>The converted value.</returns>
     public virtual object? ParameterValueToDb(object? value, IDbDataParameter parameter)
     {
-        if (value is IFormattable f && value.GetType().HandleAsStringForDB())
-        {
-            return f.ToString(null, CultureInfo.InvariantCulture);
-        }
+        // Note: HandleAsStringForDB was removed here because it converts any non-System
+        // IFormattable value type to string, breaking ADO.NET provider type plugins
+        // (e.g. Npgsql's UseNodaTime() which handles LocalDate/Instant natively).
+        // Provider-specific overrides handle their own conversions.
 #if NET
-        else if (value is Half h)
+        if (value is Half h)
         {
             return (float)h;
         }

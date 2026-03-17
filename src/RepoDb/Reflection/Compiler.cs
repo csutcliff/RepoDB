@@ -773,10 +773,14 @@ internal sealed partial class Compiler
         {
             return Expression.Convert(expression, underlyingToType);
         }
-        else
+        else if (IsKnownConvertibleType(underlyingFromType))
         {
             return ConvertExpressionToSystemConvertExpression();
         }
+        // else: Source type is unknown to RepoDb (e.g. NodaTime.LocalDate) —
+        // pass through unchanged and let the ADO.NET provider handle it natively.
+        // This preserves pre-3424b01 behaviour where provider-specific types
+        // were not coerced.
 
         // Return
         return expression;
@@ -1004,6 +1008,31 @@ internal sealed partial class Compiler
             return result;
         }
     }
+
+    /// <summary>
+    /// Returns true if the type is a standard .NET type that RepoDb knows how to convert from.
+    /// Returns false for provider-specific types (e.g. NodaTime, NetTopologySuite) which should
+    /// be passed through to the ADO.NET provider unchanged. This preserves pre-3424b01 behaviour.
+    /// </summary>
+    private static bool IsKnownConvertibleType(Type type) =>
+        type.IsPrimitive
+        || type.IsEnum
+        || type == StaticType.String
+        || type == StaticType.DateTime
+        || type == StaticType.DateTimeOffset
+        || type == StaticType.TimeSpan
+        || type == typeof(Guid)
+        || type == typeof(bool)
+        || type == typeof(decimal)
+        || type == StaticType.ByteArray
+        || type.IsJsonNode()
+        || typeof(IDbJsonValue).IsAssignableFrom(type)
+#if NET
+        || type == typeof(DateOnly)
+        || type == typeof(TimeOnly)
+        || type == typeof(Half)
+#endif
+        ;
 
     private static object? WrapConvertChangeType(object? value, Type fromType, Type conversionType)
     {
